@@ -1,12 +1,13 @@
 import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
 import { Line, Logo, Row, Text } from "@once-ui-system/core";
+import { getImagePath } from "@/utils/image";
 
 const person: Person = {
   firstName: "Nathanael",
   lastName: "Johnson",
   name: `Nathanael Johnson`,
   role: "Applied AI Graduate Student",
-  avatar: "/images/avatar.jpg",
+  avatar: getImagePath("/images/avatar.jpg"),
   email: "njjohnson1@mail.lipscomb.edu",
   location: "America/Chicago", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
   languages: ["English"], // optional: Leave the array empty if you don't want to display languages
@@ -50,7 +51,7 @@ const social: Social = [
 
 const home: Home = {
   path: "/",
-  image: "/images/projects/mental-health-llm/cover.png",
+  image: getImagePath("/images/projects/mental-health-llm/cover.png"),
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
@@ -257,42 +258,42 @@ const gallery: Gallery = {
   // These are placeholder images, replace with your own
   images: [
     {
-      src: "/images/gallery/horizontal-1.jpg",
+      src: getImagePath("/images/gallery/horizontal-1.jpg"),
       alt: "image",
       orientation: "horizontal",
     },
     {
-      src: "/images/gallery/vertical-4.jpg",
+      src: getImagePath("/images/gallery/vertical-4.jpg"),
       alt: "image",
       orientation: "vertical",
     },
     {
-      src: "/images/gallery/horizontal-3.jpg",
+      src: getImagePath("/images/gallery/horizontal-3.jpg"),
       alt: "image",
       orientation: "horizontal",
     },
     {
-      src: "/images/gallery/vertical-1.jpg",
+      src: getImagePath("/images/gallery/vertical-1.jpg"),
       alt: "image",
       orientation: "vertical",
     },
     {
-      src: "/images/gallery/vertical-2.jpg",
+      src: getImagePath("/images/gallery/vertical-2.jpg"),
       alt: "image",
       orientation: "vertical",
     },
     {
-      src: "/images/gallery/horizontal-2.jpg",
+      src: getImagePath("/images/gallery/horizontal-2.jpg"),
       alt: "image",
       orientation: "horizontal",
     },
     {
-      src: "/images/gallery/horizontal-4.jpg",
+      src: getImagePath("/images/gallery/horizontal-4.jpg"),
       alt: "image",
       orientation: "horizontal",
     },
     {
-      src: "/images/gallery/vertical-3.jpg",
+      src: getImagePath("/images/gallery/vertical-3.jpg"),
       alt: "image",
       orientation: "vertical",
     },
