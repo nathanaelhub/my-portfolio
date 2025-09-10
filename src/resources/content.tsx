@@ -2,20 +2,20 @@ import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/
 import { Line, Logo, Row, Text } from "@once-ui-system/core";
 
 const person: Person = {
-  firstName: "Selene",
-  lastName: "Yu",
-  name: `Selene Yu`,
-  role: "Design Engineer",
+  firstName: "Nathanael",
+  lastName: "Johnson",
+  name: `Nathanael Johnson`,
+  role: "Applied AI Graduate Student",
   avatar: "/images/avatar.jpg",
-  email: "example@gmail.com",
-  location: "Asia/Jakarta", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
-  languages: ["English", "Bahasa"], // optional: Leave the array empty if you don't want to display languages
+  email: "njjohnson1@mail.lipscomb.edu",
+  location: "America/Chicago", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
+  languages: ["English"], // optional: Leave the array empty if you don't want to display languages
 };
 
 const newsletter: Newsletter = {
-  display: true,
+  display: false,
   title: <>Subscribe to {person.firstName}'s Newsletter</>,
-  description: <>My weekly newsletter about creativity and engineering</>,
+  description: <>Updates on AI research and data science projects</>,
 };
 
 const social: Social = [
@@ -24,17 +24,22 @@ const social: Social = [
   {
     name: "GitHub",
     icon: "github",
-    link: "https://github.com/once-ui-system",
+    link: "https://github.com/nathanaelhub",
   },
   {
     name: "LinkedIn",
     icon: "linkedin",
-    link: "https://www.linkedin.com/company/once-ui/",
+    link: "https://www.linkedin.com/in/nathanaeljdjohnson/",
   },
   {
-    name: "Threads",
-    icon: "threads",
-    link: "https://www.threads.com/@once_ui",
+    name: "Medium",
+    icon: "medium",
+    link: "https://medium.com/@nathanaeljdj",
+  },
+  {
+    name: "Twitter",
+    icon: "twitter",
+    link: "https://x.com/Natex07",
   },
   {
     name: "Email",
@@ -49,30 +54,24 @@ const home: Home = {
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Building bridges between design and code</>,
+  headline: <>Building AI solutions for tomorrow's challenges</>,
   featured: {
     display: true,
     title: (
       <Row gap="12" vertical="center">
-        <strong className="ml-4">Once UI</strong>{" "}
+        <strong className="ml-4">Mental Health LLM Evaluation</strong>{" "}
         <Line background="brand-alpha-strong" vert height="20" />
         <Text marginRight="4" onBackground="brand-medium">
           Featured work
         </Text>
       </Row>
     ),
-    href: "/work/building-once-ui-a-customizable-design-system",
+    href: "/work/mental-health-llm-evaluation",
   },
   subline: (
     <>
-      I'm Selene, a design engineer at{" "}
-      <Logo
-        dark
-        icon="/trademarks/wordmark-dark.svg"
-        style={{ display: "inline-flex", top: "0.25em", marginLeft: "-0.25em" }}
-      />
-      , where I craft intuitive
-      <br /> user experiences. After hours, I build my own projects.
+      I'm Nathanael, an Applied AI graduate student from Saba, Netherlands Antilles, currently studying at Lipscomb University.
+      <br /> I'm passionate about AI applications in healthcare, finance, and data science.
     </>
   ),
 };
@@ -81,7 +80,7 @@ const about: About = {
   path: "/about",
   label: "About",
   title: `About – ${person.name}`,
-  description: `Meet ${person.name}, ${person.role} from ${person.location}`,
+  description: `Meet ${person.name}, ${person.role} from Saba, Netherlands Antilles`,
   tableOfContent: {
     display: true,
     subItems: false,
@@ -90,7 +89,7 @@ const about: About = {
     display: true,
   },
   calendar: {
-    display: true,
+    display: false,
     link: "https://cal.com",
   },
   intro: {
@@ -98,52 +97,44 @@ const about: About = {
     title: "Introduction",
     description: (
       <>
-        Selene is a Jakarta-based design engineer with a passion for transforming complex challenges
-        into simple, elegant design solutions. Her work spans digital interfaces, interactive
-        experiences, and the convergence of design and technology.
+        Nathanael is a passionate Applied AI graduate student from Saba, Netherlands Antilles, currently pursuing his M.S. in Applied Artificial Intelligence at Lipscomb University. 
+        With a strong background in Data Science and a keen interest in AI applications across healthcare, finance, and data analytics, 
+        he enjoys working out, hiking, cinematography, drawing, video games, and board games in his free time.
       </>
     ),
   },
   work: {
     display: true, // set to false to hide this section
-    title: "Work Experience",
+    title: "Academic & Research Experience",
     experiences: [
       {
-        company: "FLY",
-        timeframe: "2022 - Present",
-        role: "Senior Design Engineer",
+        company: "Lipscomb University",
+        timeframe: "2023 - Present",
+        role: "M.S. Applied AI Student",
         achievements: [
           <>
-            Redesigned the UI/UX for the FLY platform, resulting in a 20% increase in user
-            engagement and 30% faster load times.
+            Conducting research on bias and fairness in Large Language Models for mental health applications,
+            contributing to advancing responsible AI deployment in healthcare.
           </>,
           <>
-            Spearheaded the integration of AI tools into design workflows, enabling designers to
-            iterate 50% faster.
+            Developing predictive models and machine learning systems across various domains including
+            healthcare, finance, and transportation optimization.
           </>,
         ],
-        images: [
-          // optional: leave the array empty if you don't want to display images
-          {
-            src: "/images/projects/project-01/cover-01.jpg",
-            alt: "Once UI Project",
-            width: 16,
-            height: 9,
-          },
-        ],
+        images: [],
       },
       {
-        company: "Creativ3",
-        timeframe: "2018 - 2022",
-        role: "Lead Designer",
+        company: "Middle Tennessee State University",
+        timeframe: "2022 - 2023",
+        role: "M.S. Data Science Student",
         achievements: [
           <>
-            Developed a design system that unified the brand across multiple platforms, improving
-            design consistency by 40%.
+            Completed advanced coursework in statistical methods, predictive modeling, and large-scale
+            data analysis, building expertise in applied analytics.
           </>,
           <>
-            Led a cross-functional team to launch a new product line, contributing to a 15% increase
-            in overall company revenue.
+            Developed multiple data science projects including market analysis, customer segmentation,
+            and business intelligence dashboards.
           </>,
         ],
         images: [],
@@ -152,15 +143,19 @@ const about: About = {
   },
   studies: {
     display: true, // set to false to hide this section
-    title: "Studies",
+    title: "Education",
     institutions: [
       {
-        name: "University of Jakarta",
-        description: <>Studied software engineering.</>,
+        name: "Lipscomb University",
+        description: <>M.S. - Applied Artificial Intelligence (Currently enrolled, expected July 2025)</>,
       },
       {
-        name: "Build the Future",
-        description: <>Studied online marketing and personal branding.</>,
+        name: "Middle Tennessee State University",
+        description: <>M.S. - Data Science</>,
+      },
+      {
+        name: "Lipscomb University",
+        description: <>B.S. - Data Science (Graduated December 2022)</>,
       },
     ],
   },
@@ -169,36 +164,51 @@ const about: About = {
     title: "Technical skills",
     skills: [
       {
-        title: "Figma",
+        title: "Python & Machine Learning",
         description: (
-          <>Able to prototype in Figma with Once UI with unnatural speed.</>
+          <>Proficient in Python for data science, machine learning, and AI applications including predictive modeling, data analysis, and neural networks.</>
         ),
         tags: [
           {
-            name: "Figma",
-            icon: "figma",
-          },
-        ],
-        // optional: leave the array empty if you don't want to display images
-        images: [
-          {
-            src: "/images/projects/project-01/cover-02.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
+            name: "Python",
+            icon: "python",
           },
           {
-            src: "/images/projects/project-01/cover-03.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
+            name: "TensorFlow",
+            icon: "tensorflow",
+          },
+          {
+            name: "Scikit-learn",
+            icon: "scikitlearn",
           },
         ],
+        images: [],
       },
       {
-        title: "Next.js",
+        title: "Data Science & Analytics",
         description: (
-          <>Building next gen apps with Next.js + Once UI + Supabase.</>
+          <>Experienced in statistical analysis, data visualization, and building predictive models for business insights and decision-making.</>
+        ),
+        tags: [
+          {
+            name: "Tableau",
+            icon: "tableau",
+          },
+          {
+            name: "SQL",
+            icon: "sql",
+          },
+          {
+            name: "R",
+            icon: "r",
+          },
+        ],
+        images: [],
+      },
+      {
+        title: "Web Development",
+        description: (
+          <>Building responsive web applications and dashboards using modern frameworks and technologies.</>
         ),
         tags: [
           {
@@ -206,23 +216,15 @@ const about: About = {
             icon: "javascript",
           },
           {
-            name: "Next.js",
-            icon: "nextjs",
+            name: "React",
+            icon: "react",
           },
           {
-            name: "Supabase",
-            icon: "supabase",
+            name: "HTML/CSS",
+            icon: "html",
           },
         ],
-        // optional: leave the array empty if you don't want to display images
-        images: [
-          {
-            src: "/images/projects/project-01/cover-04.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
-        ],
+        images: [],
       },  
     ],
   },
