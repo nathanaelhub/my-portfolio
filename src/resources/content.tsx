@@ -33,7 +33,7 @@ const social: Social = [
   },
   {
     name: "Medium",
-    icon: "x",
+    icon: "link",
     link: "https://medium.com/@nathanaeljdj",
   },
   {
