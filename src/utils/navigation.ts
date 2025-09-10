@@ -1,20 +1,14 @@
 export function getInternalPath(path: string): string {
-  // For GitHub Pages, we need to ensure paths are correct
-  const basePath = process.env.NODE_ENV === 'production' ? '/my-portfolio' : '';
-  
-  // If path already has basePath, don't add it again
-  if (path.startsWith(basePath)) {
-    return path;
-  }
+  // Since Next.js basePath automatically adds the prefix in production,
+  // we only need to normalize the path without adding basePath manually
   
   // Ensure path starts with /
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
   
   // Add trailing slash for GitHub Pages static hosting (except for root)
-  const fullPath = `${basePath}${normalizedPath}`;
-  if (process.env.NODE_ENV === 'production' && fullPath !== basePath && !fullPath.endsWith('/')) {
-    return `${fullPath}/`;
+  if (process.env.NODE_ENV === 'production' && normalizedPath !== '/' && !normalizedPath.endsWith('/')) {
+    return `${normalizedPath}/`;
   }
   
-  return fullPath;
+  return normalizedPath;
 }
