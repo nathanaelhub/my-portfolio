@@ -4,7 +4,7 @@ This is Nathanael Johnson's personal portfolio website, built on the Magic Portf
 
 **Live Site:** [nathanaelhub.github.io/my-portfolio](https://nathanaelhub.github.io/my-portfolio)
 
-![Portfolio Preview](public/images/projects/mental-health-llm/cover.png)
+![Portfolio Homepage](public/images/portfolio-homepage.png)
 
 ## About This Portfolio
 
