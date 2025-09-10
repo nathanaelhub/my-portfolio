@@ -1,91 +1,148 @@
-# Magic Portfolio
+# Nathanael Johnson's Portfolio
 
-Magic Portfolio is a simple, clean, beginner-friendly portfolio template. It supports an MDX-based content system for projects and blog posts, an about / CV page and a gallery.
+This is Nathanael Johnson's personal portfolio website, built on the Magic Portfolio template. It showcases his work as an Applied AI graduate student, research projects, and technical skills.
 
-View the demo [here](https://demo.magic-portfolio.com).
+**Live Site:** [nathanaelhub.github.io/my-portfolio](https://nathanaelhub.github.io/my-portfolio)
 
-![Magic Portfolio](public/images/og/home.jpg)
+![Portfolio Preview](public/images/projects/mental-health-llm/cover.png)
 
-## Getting started
+## About This Portfolio
+
+This portfolio features:
+- **Mental Health LLM Evaluation** - Research on bias and fairness in Large Language Models for mental health applications
+- **AI/ML Projects** - Including airline revenue optimization, F1 race prediction, portfolio optimization, and Airbnb analysis
+- **Personal Information** - About page with education, experience, and technical skills
+- **Photo Gallery** - Collection of personal photography and interests
+
+## Technical Stack
+
+Built with:
+- **Next.js 15.5.2** - React framework with static export for GitHub Pages
+- **Once UI** - Design system and components
+- **MDX** - Content management for projects and blog posts
+- **TypeScript** - Type-safe development
+- **GitHub Pages** - Static hosting with automated deployment
+
+## Getting Started
 
 **1. Clone the repository**
-```
-git clone https://github.com/once-ui-system/magic-portfolio.git
+```bash
+git clone https://github.com/nathanaelhub/my-portfolio.git
+cd my-portfolio
 ```
 
 **2. Install dependencies**
-```
+```bash
 npm install
 ```
 
-**3. Run dev server**
-```
+**3. Run development server**
+```bash
 npm run dev
 ```
 
-**4. Edit config**
-```
-src/resources/once-ui.config.js
-```
-
-**5. Edit content**
-```
-src/resources/content.js
+**4. Build for production**
+```bash
+npm run build
 ```
 
-**6. Create blog posts / projects**
+## Configuration
+
+### Content Configuration
+Edit personal information and content:
 ```
-Add a new .mdx file to src/app/blog/posts or src/app/work/projects
+src/resources/content.tsx
 ```
 
-Magic Portfolio was built with [Once UI](https://once-ui.com) for [Next.js](https://nextjs.org). It requires Node.js v18.17+.
+### Site Configuration
+Update site settings and styling:
+```
+src/resources/once-ui.config.ts
+```
 
-## Documentation
+### Creating New Projects
+Add new project pages:
+```
+src/app/work/projects/[your-project].mdx
+```
 
-Docs available at: [docs.once-ui.com](https://docs.once-ui.com/docs/magic-portfolio/quick-start)
+### Creating Blog Posts
+Add new blog posts:
+```
+src/app/blog/posts/[your-post].mdx
+```
 
-## Features
+## GitHub Pages Deployment
 
-### Once UI
-- All tokens, components & features of [Once UI](https://once-ui.com)
+This portfolio is configured for automatic deployment to GitHub Pages:
 
-### SEO
-- Automatic open-graph and X image generation with next/og
-- Automatic schema and metadata generation based on the content file
+1. **Static Export**: The site uses Next.js static export (`output: "export"`) for GitHub Pages compatibility
+2. **Base Path**: Production builds include `/my-portfolio` base path for GitHub Pages subdirectory
+3. **GitHub Actions**: Automated deployment workflow in `.github/workflows/deploy.yml`
+4. **Image Handling**: Custom image path utility for proper asset loading on GitHub Pages
 
-### Design
-- Responsive layout optimized for all screen sizes
-- Timeless design without heavy animations and motion
-- Endless customization options through [data attributes](https://once-ui.com/docs/theming)
+### Manual Deployment
 
-### Content
-- Render sections conditionally based on the content file
-- Enable or disable pages for blog, work, gallery and about / CV
-- Generate and display social links automatically
-- Set up password protection for URLs
+To deploy manually:
+```bash
+npm run build
+git add .
+git commit -m "Update portfolio"
+git push origin main
+```
 
-### Localization
-- A localized, earlier version of Magic Portfolio is available with the next-intl library
-- To use localization, switch to the 'i18n' branch
+The GitHub Action will automatically build and deploy to the `gh-pages` branch.
 
-## Creators
+## Image Management
 
-Lorant One: [Threads](https://www.threads.net/@lorant.one) / [LinkedIn](https://www.linkedin.com/in/lorant-one/)
+- **Avatar**: Replace `public/images/avatar.jpg` with your profile photo
+- **Project Images**: Add project images to `public/images/projects/[project-name]/`
+- **Gallery Images**: Add personal photos to `public/images/gallery/`
+- **Favicon**: Update `public/favicon.png` with your personal icon
 
-## Get involved
+All images automatically include the correct base path for GitHub Pages deployment.
 
-- Join the Design Engineers Club on [Discord](https://discord.com/invite/5EyAQ4eNdS) and share your project with us!
-- Deployed your docs? Share it on the [Once UI Hub](https://once-ui.com/hub) too! We feature our favorite apps on our landing page.
+## Project Structure
+
+```
+src/
+├── app/                 # Next.js app directory
+│   ├── about/          # About page
+│   ├── blog/           # Blog posts
+│   ├── work/           # Project showcase
+│   └── gallery/        # Photo gallery
+├── components/         # Reusable UI components
+├── resources/          # Content and configuration
+└── utils/              # Utility functions
+```
+
+## Personal Branding
+
+This portfolio represents Nathanael Johnson:
+- **Role**: Applied AI Graduate Student at Lipscomb University
+- **Location**: Saba, Netherlands Antilles
+- **Interests**: AI applications in healthcare, finance, and data science
+- **Contact**: njjohnson1@mail.lipscomb.edu
+
+## Social Links
+
+- **GitHub**: [nathanaelhub](https://github.com/nathanaelhub)
+- **LinkedIn**: [nathanaeljdjohnson](https://www.linkedin.com/in/nathanaeljdjohnson/)
+- **Medium**: [@nathanaeljdj](https://medium.com/@nathanaeljdj)
+- **Twitter**: [@Natex07](https://x.com/Natex07)
+
+## Credits
+
+Built on the Magic Portfolio template by [Once UI](https://once-ui.com) for [Next.js](https://nextjs.org).
+
+Original template creators:
+- Lorant One: [Threads](https://www.threads.net/@lorant.one) / [LinkedIn](https://www.linkedin.com/in/lorant-one/)
 
 ## License
 
-Distributed under the CC BY-NC 4.0 License.
-- Attribution is required.
-- Commercial usage is not allowed.
-- You can extend the license to [Dopler CC](https://dopler.app/license) by purchasing a [Once UI Pro](https://once-ui.com/pricing) license.
+This portfolio follows the CC BY-NC 4.0 License from the original Magic Portfolio template.
+- Attribution is required
+- Commercial usage is not allowed
+- Extends to [Dopler CC](https://dopler.app/license) with [Once UI Pro](https://once-ui.com/pricing) license
 
 See `LICENSE.txt` for more information.
-
-## Deploy with Vercel
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fonce-ui-system%2Fmagic-portfolio&project-name=portfolio&repository-name=portfolio&redirect-url=https%3A%2F%2Fgithub.com%2Fonce-ui-system%2Fmagic-portfolio&demo-title=Magic%20Portfolio&demo-description=Showcase%20your%20designers%20or%20developer%20portfolio&demo-url=https%3A%2F%2Fdemo.magic-portfolio.com&demo-image=%2F%2Fraw.githubusercontent.com%2Fonce-ui-system%2Fmagic-portfolio%2Fmain%2Fpublic%2Fimages%2Fog%2Fhome.jpg)
