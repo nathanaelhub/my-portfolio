@@ -14,7 +14,7 @@ const person: Person = {
 
 const newsletter: Newsletter = {
   display: false,
-  title: <>Subscribe to {person.firstName}'s Newsletter</>,
+  title: <>Subscribe to {person.firstName}&apos;s Newsletter</>,
   description: <>Updates on AI research and data science projects</>,
 };
 
@@ -33,7 +33,7 @@ const social: Social = [
   },
   {
     name: "Medium",
-    icon: "medium",
+    icon: "x",
     link: "https://medium.com/@nathanaeljdj",
   },
   {
@@ -54,7 +54,7 @@ const home: Home = {
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Building AI solutions for tomorrow's challenges</>,
+  headline: <>Building AI solutions for tomorrow&apos;s challenges</>,
   featured: {
     display: true,
     title: (
@@ -70,8 +70,8 @@ const home: Home = {
   },
   subline: (
     <>
-      I'm Nathanael, an Applied AI graduate student from Saba, Netherlands Antilles, currently studying at Lipscomb University.
-      <br /> I'm passionate about AI applications in healthcare, finance, and data science.
+      I&apos;m Nathanael, an Applied AI graduate student from Saba, Netherlands Antilles, currently studying at Lipscomb University.
+      <br /> I&apos;m passionate about AI applications in healthcare, finance, and data science.
     </>
   ),
 };
