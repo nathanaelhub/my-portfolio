@@ -13,6 +13,7 @@ const nextConfig = {
   trailingSlash: true,
   basePath: process.env.NODE_ENV === 'production' ? '/my-portfolio' : '',
   assetPrefix: process.env.NODE_ENV === 'production' ? '/my-portfolio' : '',
+  skipTrailingSlashRedirect: true,
   images: {
     unoptimized: true,
     remotePatterns: [
