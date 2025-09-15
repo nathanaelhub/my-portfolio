@@ -1,4 +1,5 @@
 export function getImagePath(imagePath: string): string {
-  const basePath = process.env.NODE_ENV === 'production' ? '/my-portfolio' : '';
-  return `${basePath}${imagePath}`;
+  // Next.js assetPrefix automatically handles the basePath for production
+  // No need to manually add basePath since it's configured in next.config.mjs
+  return imagePath;
 }
