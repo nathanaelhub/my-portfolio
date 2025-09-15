@@ -35,6 +35,28 @@ jobs:
         env:
           NODE_ENV: production
 
+      - name: Validate build output
+        run: |
+          echo "📁 Listing generated files:"
+          find out -name "*.html" -type f | head -20
+          echo ""
+          echo "📊 Build statistics:"
+          echo "Total files: $(find out -type f | wc -l)"
+          echo "HTML files: $(find out -name "*.html" -type f | wc -l)"
+          echo "Build size: $(du -sh out | cut -f1)"
+          
+      - name: Ensure critical files exist
+        run: |
+          # Check for critical HTML files
+          for file in "index.html" "about/index.html" "gallery/index.html" "blog/index.html" "work/index.html" "404.html"; do
+            if [ -f "out/$file" ]; then
+              echo "✅ Found: $file ($(du -h "out/$file" | cut -f1))"
+            else
+              echo "❌ Missing: $file"
+              exit 1
+            fi
+          done
+
       - name: Add .nojekyll file
         run: touch out/.nojekyll
 

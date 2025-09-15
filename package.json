@@ -4,8 +4,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "export": "next build",
+    "export": "next build && node scripts/validate-build.js",
     "deploy": "npm run export && touch out/.nojekyll",
+    "validate": "node scripts/validate-build.js",
     "biome-write": "npx @biomejs/biome format --write .",
     "start": "next start",
     "lint": "next lint"

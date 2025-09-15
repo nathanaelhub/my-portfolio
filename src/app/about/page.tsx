@@ -18,6 +18,8 @@ import styles from "@/components/about/about.module.scss";
 import { getImagePath } from "@/utils/image";
 import React from "react";
 
+export const dynamic = "force-static";
+
 export async function generateMetadata() {
   return Meta.generate({
     title: about.title,

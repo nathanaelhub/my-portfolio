@@ -1,16 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Redirecting...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Redirecting... | Nathanael Johnson's Portfolio</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background: #000;
+            color: #fff;
+        }
+        .spinner {
+            border: 2px solid #333;
+            border-top: 2px solid #00ffff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
     <script>
-        // GitHub Pages SPA redirect
-        // Store the current location before redirect
-        sessionStorage.redirect = location.href;
+        (function() {
+            try {
+                const currentPath = window.location.pathname;
+                const basePath = '/my-portfolio';
+                
+                console.log('404 redirect:', currentPath);
+                
+                // Store the intended destination for client-side routing
+                if (currentPath.startsWith(basePath + '/') && currentPath !== basePath + '/') {
+                    sessionStorage.setItem('redirect', currentPath);
+                    console.log('Storing redirect:', currentPath);
+                }
+                
+                // Redirect to main app
+                const redirectUrl = basePath + '/';
+                console.log('Redirecting to:', redirectUrl);
+                
+                // Use both immediate redirect and meta refresh as fallback
+                setTimeout(() => {
+                    window.location.replace(redirectUrl);
+                }, 100);
+                
+            } catch (error) {
+                console.error('404 redirect error:', error);
+                // Fallback to simple redirect
+                window.location.replace('/my-portfolio/');
+            }
+        })();
     </script>
-    <meta http-equiv="refresh" content="0;URL='/my-portfolio/'">
+    <meta http-equiv="refresh" content="2;URL='/my-portfolio/'">
 </head>
 <body>
-    <p>Redirecting...</p>
+    <h1>Redirecting...</h1>
+    <div class="spinner"></div>
+    <p>If you are not redirected automatically, <a href="/my-portfolio/" style="color: #00ffff;">click here</a>.</p>
 </body>
 </html>
