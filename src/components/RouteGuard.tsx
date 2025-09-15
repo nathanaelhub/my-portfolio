@@ -19,13 +19,22 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
     const checkRouteEnabled = () => {
       if (!pathname) return false;
 
-      if (pathname in routes) {
-        return routes[pathname as keyof typeof routes];
+      // Remove basePath from pathname for route matching
+      let routePath = pathname;
+      if (process.env.NODE_ENV === 'production') {
+        const basePath = '/my-portfolio';
+        if (pathname.startsWith(basePath)) {
+          routePath = pathname.slice(basePath.length) || '/';
+        }
+      }
+
+      if (routePath in routes) {
+        return routes[routePath as keyof typeof routes];
       }
 
       const dynamicRoutes = ["/blog", "/work"] as const;
       for (const route of dynamicRoutes) {
-        if (pathname?.startsWith(route) && routes[route]) {
+        if (routePath?.startsWith(route) && routes[route]) {
           return true;
         }
       }
