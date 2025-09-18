@@ -15,12 +15,17 @@ const REQUIRED_PAGES = [
 
 function validateBuild() {
   console.log('🔍 Validating Next.js static export...');
+  console.log(`📂 Build directory: ${path.resolve(BUILD_DIR)}`);
   
   // Check if build directory exists
   if (!fs.existsSync(BUILD_DIR)) {
     console.error(`❌ Build directory '${BUILD_DIR}' not found!`);
     process.exit(1);
   }
+  
+  // Log detailed directory structure
+  console.log('📁 Build directory structure:');
+  logDirectoryStructure(BUILD_DIR, '  ');
   
   // Check for required HTML files
   let missingFiles = [];
@@ -95,6 +100,16 @@ function validateBuild() {
   
   console.log('\n✅ Build validation completed successfully!');
   console.log(`📦 Total build size: ${getBuildSize()}MB`);
+  
+  // Log all generated routes for debugging
+  console.log('\n🔍 All generated HTML routes:');
+  const allHtmlFiles = getAllFiles(BUILD_DIR, '.html');
+  allHtmlFiles.forEach(file => {
+    const relativePath = path.relative(BUILD_DIR, file);
+    const stats = fs.statSync(file);
+    const route = relativePath === 'index.html' ? '/' : '/' + relativePath.replace('/index.html', '').replace('.html', '');
+    console.log(`   ${route} -> ${relativePath} (${Math.round(stats.size / 1024)}KB)`);
+  });
 }
 
 function getAllFiles(dir, extensions) {
@@ -148,6 +163,27 @@ function getBuildSize() {
   
   calculateSize(BUILD_DIR);
   return Math.round(totalSize / (1024 * 1024));
+}
+
+function logDirectoryStructure(dir, indent = '') {
+  if (!fs.existsSync(dir)) return;
+  
+  const items = fs.readdirSync(dir);
+  
+  for (const item of items) {
+    const fullPath = path.join(dir, item);
+    const stat = fs.statSync(fullPath);
+    
+    if (stat.isDirectory()) {
+      console.log(`${indent}📁 ${item}/`);
+      if (indent.length < 8) { // Limit depth to avoid too much output
+        logDirectoryStructure(fullPath, indent + '  ');
+      }
+    } else {
+      const size = Math.round(stat.size / 1024);
+      console.log(`${indent}📄 ${item} (${size}KB)`);
+    }
+  }
 }
 
 // Run validation

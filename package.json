@@ -4,9 +4,12 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "export": "next build && node scripts/validate-build.js",
+    "export": "next build && node scripts/validate-build.js && node scripts/inspect-build-output.js",
     "deploy": "npm run export && touch out/.nojekyll",
     "validate": "node scripts/validate-build.js",
+    "inspect": "node scripts/inspect-build-output.js",
+    "test-routes": "node scripts/test-deployed-routes.js",
+    "test-live": "node scripts/test-deployed-routes.js https://nathanaelhub.github.io/my-portfolio",
     "biome-write": "npx @biomejs/biome format --write .",
     "start": "next start",
     "lint": "next lint"
@@ -35,6 +38,7 @@
     "@types/react-dom": "^19.0.0",
     "eslint": "^9.25.0",
     "eslint-config-next": "^15.5.2",
+    "jsdom": "^27.0.0",
     "typescript": "^5.8.3",
     "tzdata": "^1.0.44"
   }
