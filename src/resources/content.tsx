@@ -7,7 +7,7 @@ const person: Person = {
   lastName: "Johnson",
   name: `Nathanael Johnson`,
   role: "Applied AI Graduate Student",
-  avatar: "/images/avatar.jpg",
+  avatar: getImagePath("/images/avatar.jpg"),
   email: "njjohnson1@mail.lipscomb.edu",
   location: "America/Chicago", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
   languages: ["English"], // optional: Leave the array empty if you don't want to display languages
@@ -51,7 +51,7 @@ const social: Social = [
 
 const home: Home = {
   path: "/",
-  image: "/images/projects/mental-health-llm/cover.png",
+  image: getImagePath("/images/projects/mental-health-llm/cover.png"),
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,

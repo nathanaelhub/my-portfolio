@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { routes } from "@/resources";
-import { Flex, Spinner } from "@once-ui-system/core";
-import NotFound from "@/app/not-found";
 
 interface RouteGuardProps {
   children: React.ReactNode;
@@ -12,53 +10,43 @@ interface RouteGuardProps {
 
 const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
   const pathname = usePathname();
-  const [isRouteEnabled, setIsRouteEnabled] = useState(false);
-  const [loading, setLoading] = useState(true);
-
+  const [isRouteEnabled, setIsRouteEnabled] = useState(true); // Default to true for static export
+  
   useEffect(() => {
-    const checkRouteEnabled = () => {
-      if (!pathname) return false;
+    // For static export, we want to allow all routes to render
+    // This prevents hydration issues on GitHub Pages
+    if (typeof window !== 'undefined') {
+      const checkRouteEnabled = () => {
+        if (!pathname) return true;
 
-      // Remove basePath from pathname for route matching
-      let routePath = pathname;
-      if (process.env.NODE_ENV === 'production') {
-        const basePath = '/my-portfolio';
-        if (pathname.startsWith(basePath)) {
-          routePath = pathname.slice(basePath.length) || '/';
+        // Normalize pathname by removing basePath
+        let routePath = pathname;
+        if (pathname.startsWith('/my-portfolio')) {
+          routePath = pathname.slice('/my-portfolio'.length) || '/';
         }
-      }
 
-      if (routePath in routes) {
-        return routes[routePath as keyof typeof routes];
-      }
-
-      const dynamicRoutes = ["/blog", "/work"] as const;
-      for (const route of dynamicRoutes) {
-        if (routePath?.startsWith(route) && routes[route]) {
-          return true;
+        // Check if route exists in routes config
+        if (routePath in routes) {
+          return routes[routePath as keyof typeof routes];
         }
-      }
 
-      return false;
-    };
+        // Allow dynamic routes for blog and work
+        const dynamicRoutes = ["/blog", "/work"] as const;
+        for (const route of dynamicRoutes) {
+          if (routePath?.startsWith(route) && routes[route]) {
+            return true;
+          }
+        }
 
-    const routeEnabled = checkRouteEnabled();
-    setIsRouteEnabled(routeEnabled);
-    setLoading(false);
+        return true; // Default to allowing routes for static export
+      };
+
+      const routeEnabled = checkRouteEnabled();
+      setIsRouteEnabled(routeEnabled);
+    }
   }, [pathname]);
 
-  if (loading) {
-    return (
-      <Flex fillWidth paddingY="128" horizontal="center">
-        <Spinner />
-      </Flex>
-    );
-  }
-
-  if (!isRouteEnabled) {
-    return <NotFound />;
-  }
-
+  // For static export, always render children to avoid blank pages
   return <>{children}</>;
 };
 
