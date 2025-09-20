@@ -30,28 +30,26 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build application
-        run: npm run export
+      - name: Build application for GitHub Pages
+        run: npm run build-github
         env:
           NODE_ENV: production
 
-      - name: Enhanced build validation
+      - name: List all files in /out directory
         run: |
-          echo "🔍 Running enhanced build validation..."
-          echo ""
-          echo "📁 Basic file listing:"
-          find out -name "*.html" -type f | head -20
+          echo "🔍 Complete file listing of /out directory:"
+          find out -type f | sort
           echo ""
           echo "📊 Build statistics:"
           echo "Total files: $(find out -type f | wc -l)"
           echo "HTML files: $(find out -name "*.html" -type f | wc -l)"
+          echo "Image files: $(find out -name "*.jpg" -o -name "*.png" -o -name "*.gif" | wc -l)"
           echo "Build size: $(du -sh out | cut -f1)"
-          echo ""
-          echo "🧐 Detailed build analysis will be included in export output above"
           
       - name: Ensure critical files exist
         run: |
           # Check for critical HTML files
+          echo "🔍 Checking critical HTML files:"
           for file in "index.html" "about/index.html" "gallery/index.html" "blog/index.html" "work/index.html" "404.html"; do
             if [ -f "out/$file" ]; then
               echo "✅ Found: $file ($(du -h "out/$file" | cut -f1))"
@@ -60,6 +58,35 @@ jobs:
               exit 1
             fi
           done
+          
+          echo ""
+          echo "🖼️ Checking critical image files:"
+          for file in "images/avatar.jpg" "images/gallery/horizontal-1.jpg"; do
+            if [ -f "out/$file" ]; then
+              echo "✅ Found: $file ($(du -h "out/$file" | cut -f1))"
+            else
+              echo "❌ Missing: $file"
+              exit 1
+            fi
+          done
+          
+          echo ""
+          echo "📄 Verifying about/index.html contains expected content:"
+          if grep -q "Nathanael" "out/about/index.html"; then
+            echo "✅ about/index.html contains 'Nathanael'"
+          else
+            echo "❌ about/index.html missing expected content"
+            exit 1
+          fi
+          
+          echo ""
+          echo "📄 Verifying gallery/index.html contains expected content:"
+          if grep -q "gallery" "out/gallery/index.html"; then
+            echo "✅ gallery/index.html contains 'gallery'"
+          else
+            echo "❌ gallery/index.html missing expected content"
+            exit 1
+          fi
 
       - name: Add .nojekyll file
         run: touch out/.nojekyll

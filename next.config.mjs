@@ -14,17 +14,14 @@ const nextConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   transpilePackages: ["next-mdx-remote"],
   
-  // Static export for GitHub Pages
+  // GitHub Pages specific configuration
   output: "export",
   
   // GitHub Pages configuration
   basePath: basePath,
-  assetPrefix: basePath,
+  assetPrefix: isProduction ? 'https://nathanaelhub.github.io/my-portfolio' : basePath,
   
-  // Ensure trailing slashes for GitHub Pages
-  trailingSlash: true,
-  
-  // Disable image optimization for static export
+  // Disable image optimization completely for GitHub Pages
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -42,7 +39,7 @@ const nextConfig = {
     silenceDeprecations: ["legacy-js-api"],
   },
 
-  // Webpack configuration for proper asset handling
+  // Webpack configuration for GitHub Pages
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Handle assets properly for GitHub Pages
     if (!dev && !isServer) {
