@@ -6,7 +6,8 @@
     "build": "next build",
     "export": "next build && node scripts/validate-build.js && node scripts/inspect-build-output.js",
     "build-github": "node scripts/build-github-pages.js",
-    "deploy": "npm run build-github && touch out/.nojekyll",
+    "build-brute-force": "node scripts/brute-force-build.js",
+    "deploy": "npm run build-brute-force",
     "validate": "node scripts/validate-build.js",
     "inspect": "node scripts/inspect-build-output.js",
     "test-routes": "node scripts/test-deployed-routes.js",
@@ -39,7 +40,9 @@
     "@types/react-dom": "^19.0.0",
     "eslint": "^9.25.0",
     "eslint-config-next": "^15.5.2",
+    "glob": "^11.0.3",
     "jsdom": "^27.0.0",
+    "puppeteer": "^24.22.0",
     "typescript": "^5.8.3",
     "tzdata": "^1.0.44"
   }
