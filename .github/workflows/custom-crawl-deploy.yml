@@ -76,7 +76,8 @@ jobs:
             '/gallery', 
             '/work',
             '/blog',
-            '/test-images'
+            '/test-images',
+            '/test'
           ];
           
           async function crawlSite() {
