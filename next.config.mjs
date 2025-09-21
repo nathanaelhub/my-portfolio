@@ -19,7 +19,7 @@ const nextConfig = {
   
   // GitHub Pages configuration
   basePath: basePath,
-  assetPrefix: isProduction ? 'https://nathanaelhub.github.io/my-portfolio' : basePath,
+  assetPrefix: basePath,
   
   // Disable image optimization completely for GitHub Pages
   images: {

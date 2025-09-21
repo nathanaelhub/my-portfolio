@@ -109,14 +109,14 @@ jobs:
                 // Get the HTML
                 let html = await page.content();
                 
-                // Fix all URLs for GitHub Pages
+                // Fix all URLs for GitHub Pages (but avoid double basePath)
                 html = html
-                  .replace(/src="\/(?!\/)/g, `src="${GITHUB_BASE_URL}/`)
-                  .replace(/href="\/(?!\/)/g, `href="${GITHUB_BASE_URL}/`)
-                  .replace(/url\(\/(?!\/)/g, `url(${GITHUB_BASE_URL}/`)
-                  .replace(/"\/(?!\/)/g, `"${GITHUB_BASE_URL}/`)
-                  .replace(/='\/(?!\/)/g, `='${GITHUB_BASE_URL}/`)
-                  .replace(/content="\/(?!\/)/g, `content="${GITHUB_BASE_URL}/`);
+                  .replace(/src="\/(?!\/|my-portfolio)/g, `src="${GITHUB_BASE_URL}/`)
+                  .replace(/href="\/(?!\/|my-portfolio)/g, `href="${GITHUB_BASE_URL}/`)
+                  .replace(/url\(\/(?!\/|my-portfolio)/g, `url(${GITHUB_BASE_URL}/`)
+                  .replace(/"\/(?!\/|my-portfolio)/g, `"${GITHUB_BASE_URL}/`)
+                  .replace(/='\/(?!\/|my-portfolio)/g, `='${GITHUB_BASE_URL}/`)
+                  .replace(/content="\/(?!\/|my-portfolio)/g, `content="${GITHUB_BASE_URL}/`);
                 
                 // Determine output path
                 let outputPath;
