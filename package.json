@@ -7,7 +7,9 @@
     "export": "next build && node scripts/validate-build.js && node scripts/inspect-build-output.js",
     "build-github": "node scripts/build-github-pages.js",
     "build-brute-force": "node scripts/brute-force-build.js",
+    "build-vercel": "cp next.config.vercel.mjs next.config.mjs && npm run build",
     "deploy": "npm run build-brute-force",
+    "deploy-vercel": "npm run build-vercel",
     "validate": "node scripts/validate-build.js",
     "inspect": "node scripts/inspect-build-output.js",
     "test-routes": "node scripts/test-deployed-routes.js",
@@ -42,6 +44,7 @@
     "eslint-config-next": "^15.5.2",
     "glob": "^11.0.3",
     "jsdom": "^27.0.0",
+    "playwright": "^1.55.0",
     "puppeteer": "^24.22.0",
     "typescript": "^5.8.3",
     "tzdata": "^1.0.44"

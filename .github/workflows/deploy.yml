@@ -1,9 +1,13 @@
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches: [main]
+  # DISABLED - using custom-crawl-deploy instead
   workflow_dispatch:
+    inputs:
+      force_old_deploy:
+        description: 'Force old deployment method'
+        required: false
+        default: 'false'
 
 permissions:
   contents: read

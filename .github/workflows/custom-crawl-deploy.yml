@@ -1,0 +1,290 @@
+name: Custom Crawl Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages-custom"
+  cancel-in-progress: false
+
+jobs:
+  build-and-crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright for reliable crawling
+        run: npx playwright install chromium
+
+      - name: Build Next.js application (no export)
+        run: npm run build
+        env:
+          NODE_ENV: production
+          GITHUB_PAGES: true
+
+      - name: Start Next.js server in background
+        run: |
+          npm run start &
+          echo $! > server.pid
+          echo "🚀 Next.js server starting..."
+          
+          # Wait for server to be ready
+          for i in {1..30}; do
+            if curl -f http://localhost:3000 >/dev/null 2>&1; then
+              echo "✅ Server is ready!"
+              break
+            fi
+            echo "⏳ Waiting for server... ($i/30)"
+            sleep 2
+          done
+          
+          if ! curl -f http://localhost:3000 >/dev/null 2>&1; then
+            echo "❌ Server failed to start"
+            exit 1
+          fi
+
+      - name: Create crawling script
+        run: |
+          cat > crawl-site.js << 'EOF'
+          const { chromium } = require('playwright');
+          const fs = require('fs');
+          const path = require('path');
+          
+          const BASE_URL = 'http://localhost:3000';
+          const GITHUB_BASE_URL = 'https://nathanaelhub.github.io/my-portfolio';
+          
+          const routes = [
+            '/',
+            '/about',
+            '/gallery', 
+            '/work',
+            '/blog',
+            '/test-images'
+          ];
+          
+          async function crawlSite() {
+            console.log('🕷️ Starting site crawl...');
+            
+            const browser = await chromium.launch();
+            const context = await browser.newContext({
+              viewport: { width: 1920, height: 1080 }
+            });
+            
+            // Ensure out directory exists
+            if (!fs.existsSync('out')) {
+              fs.mkdirSync('out', { recursive: true });
+            }
+            
+            for (const route of routes) {
+              console.log(`📄 Crawling ${route}...`);
+              
+              const page = await context.newPage();
+              
+              try {
+                await page.goto(`${BASE_URL}${route}`, { 
+                  waitUntil: 'networkidle',
+                  timeout: 30000 
+                });
+                
+                // Wait for any dynamic content
+                await page.waitForTimeout(3000);
+                
+                // Get the HTML
+                let html = await page.content();
+                
+                // Fix all URLs for GitHub Pages
+                html = html
+                  .replace(/src="\/(?!\/)/g, `src="${GITHUB_BASE_URL}/`)
+                  .replace(/href="\/(?!\/)/g, `href="${GITHUB_BASE_URL}/`)
+                  .replace(/url\(\/(?!\/)/g, `url(${GITHUB_BASE_URL}/`)
+                  .replace(/"\/(?!\/)/g, `"${GITHUB_BASE_URL}/`)
+                  .replace(/='\/(?!\/)/g, `='${GITHUB_BASE_URL}/`)
+                  .replace(/content="\/(?!\/)/g, `content="${GITHUB_BASE_URL}/`);
+                
+                // Determine output path
+                let outputPath;
+                if (route === '/') {
+                  outputPath = 'out/index.html';
+                } else {
+                  const dir = path.join('out', route.substring(1));
+                  fs.mkdirSync(dir, { recursive: true });
+                  outputPath = path.join(dir, 'index.html');
+                }
+                
+                // Write the file
+                fs.writeFileSync(outputPath, html);
+                
+                const size = (fs.statSync(outputPath).size / 1024).toFixed(1);
+                console.log(`   ✅ Saved ${outputPath} (${size}KB)`);
+                
+                // Verify content
+                if (route === '/about' && html.includes('Nathanael')) {
+                  console.log('   ✅ About page has expected content');
+                }
+                if (route === '/gallery' && html.includes('gallery')) {
+                  console.log('   ✅ Gallery page has expected content');
+                }
+                
+              } catch (error) {
+                console.error(`   ❌ Failed to crawl ${route}: ${error.message}`);
+                
+                // Create fallback
+                const fallbackHtml = createFallback(route);
+                let outputPath;
+                if (route === '/') {
+                  outputPath = 'out/index.html';
+                } else {
+                  const dir = path.join('out', route.substring(1));
+                  fs.mkdirSync(dir, { recursive: true });
+                  outputPath = path.join(dir, 'index.html');
+                }
+                fs.writeFileSync(outputPath, fallbackHtml);
+                console.log(`   🔄 Created fallback for ${route}`);
+              }
+              
+              await page.close();
+            }
+            
+            await browser.close();
+            console.log('🎉 Crawling complete!');
+          }
+          
+          function createFallback(route) {
+            const title = route === '/' ? 'Home' : route.substring(1);
+            return `<!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>${title.charAt(0).toUpperCase() + title.slice(1)} - Nathanael Johnson</title>
+              <meta http-equiv="refresh" content="0; url=${GITHUB_BASE_URL}/">
+          </head>
+          <body>
+              <h1>Redirecting to Portfolio...</h1>
+              <p><a href="${GITHUB_BASE_URL}/">Click here if not redirected</a></p>
+          </body>
+          </html>`;
+          }
+          
+          crawlSite().catch(console.error);
+          EOF
+
+      - name: Crawl all pages
+        run: node crawl-site.js
+
+      - name: Copy static assets
+        run: |
+          echo "📁 Copying static assets..."
+          
+          # Copy images
+          if [ -d "public/images" ]; then
+            cp -r public/images out/
+            echo "✅ Images copied"
+          fi
+          
+          # Copy other static files
+          if [ -f "public/favicon.png" ]; then
+            cp public/favicon.png out/
+          fi
+          if [ -f "public/icon.png" ]; then
+            cp public/icon.png out/
+          fi
+          
+          # Create .nojekyll
+          touch out/.nojekyll
+          
+          # Create robots.txt
+          echo "User-agent: *
+          Allow: /" > out/robots.txt
+          
+          # Create 404.html that redirects to main page
+          cat > out/404.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <meta charset="utf-8">
+              <title>Page Not Found</title>
+              <meta http-equiv="refresh" content="0; url=https://nathanaelhub.github.io/my-portfolio/">
+          </head>
+          <body>
+              <h1>Page Not Found</h1>
+              <p>Redirecting to <a href="https://nathanaelhub.github.io/my-portfolio/">portfolio</a>...</p>
+          </body>
+          </html>
+          EOF
+
+      - name: Stop Next.js server
+        run: |
+          if [ -f server.pid ]; then
+            kill $(cat server.pid) || true
+            rm server.pid
+          fi
+
+      - name: Verify crawled files
+        run: |
+          echo "🔍 Verifying crawled files..."
+          
+          critical_files=(
+            "out/index.html"
+            "out/about/index.html"
+            "out/gallery/index.html"
+            "out/work/index.html"
+            "out/blog/index.html"
+          )
+          
+          for file in "${critical_files[@]}"; do
+            if [ -f "$file" ]; then
+              size=$(du -h "$file" | cut -f1)
+              echo "✅ $file ($size)"
+            else
+              echo "❌ MISSING: $file"
+              exit 1
+            fi
+          done
+          
+          echo ""
+          echo "📊 Build summary:"
+          echo "Total files: $(find out -type f | wc -l)"
+          echo "HTML files: $(find out -name "*.html" | wc -l)" 
+          echo "Build size: $(du -sh out | cut -f1)"
+
+      - name: List all generated files
+        run: |
+          echo "📋 Complete file listing:"
+          find out -type f | sort
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build-and-crawl
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
