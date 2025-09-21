@@ -1,4 +1,3 @@
-import { Media } from '@/components';
 import { getImagePath } from '@/utils/image';
 
 export default function TestPage() {
@@ -25,8 +24,8 @@ export default function TestPage() {
       />
       <p>Status: <span id="test2">❓ Loading...</span></p>
       
-      <h2>Test 3: Media Component</h2>
-      <Media 
+      <h2>Test 3: Regular IMG Tag (Gallery Image)</h2>
+      <img 
         src="/images/gallery/horizontal-1.jpg"
         alt="Gallery Image"
         style={{ width: '200px', height: '150px', objectFit: 'cover', border: '2px solid green' }}
@@ -54,7 +53,7 @@ export default function TestPage() {
       <ul>
         <li>Test 1 (Red border): Should work on GitHub Pages due to assetPrefix</li>
         <li>Test 2 (Blue border): Should work - getImagePath should return same as Test 1</li>
-        <li>Test 3 (Green border): Should work - Media component using our utilities</li>
+        <li>Test 3 (Green border): Should work - regular img tag with gallery image</li>
         <li>Test 4 (Orange border): Should work - another gallery image</li>
       </ul>
       
