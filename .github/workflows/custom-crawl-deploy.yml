@@ -1,9 +1,13 @@
 name: Custom Crawl Deploy to GitHub Pages
 
 on:
-  push:
-    branches: [main]
+  # DISABLED - using simple-deploy instead
   workflow_dispatch:
+    inputs:
+      force_crawl_deploy:
+        description: 'Force complex crawl deployment'
+        required: false
+        default: 'false'
 
 permissions:
   contents: read

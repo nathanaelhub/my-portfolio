@@ -1,0 +1,113 @@
+name: Simple Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages-simple"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js application
+        run: npm run build
+        env:
+          NODE_ENV: production
+          GITHUB_PAGES: true
+
+      - name: Export static files
+        run: npm run export
+
+      - name: Run simple deployment fix
+        run: node scripts/simple-deploy-fix.js
+
+      - name: Create 404.html
+        run: |
+          cat > out/404.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <meta charset="utf-8">
+              <title>Page Not Found</title>
+              <meta http-equiv="refresh" content="0; url=/my-portfolio/">
+          </head>
+          <body>
+              <h1>Page Not Found</h1>
+              <p>Redirecting to <a href="/my-portfolio/">portfolio</a>...</p>
+          </body>
+          </html>
+          EOF
+
+      - name: Final validation
+        run: |
+          echo "🔍 Final deployment validation:"
+          echo "================================"
+          
+          echo "📊 File counts:"
+          echo "Total files: $(find out -type f | wc -l)"
+          echo "HTML files: $(find out -name '*.html' | wc -l)"
+          echo "Image files: $(find out \( -name '*.jpg' -o -name '*.png' \) | wc -l)"
+          
+          echo ""
+          echo "📄 Critical HTML files:"
+          for file in "index.html" "about/index.html" "gallery/index.html"; do
+            if [ -f "out/$file" ]; then
+              echo "✅ $file ($(du -h "out/$file" | cut -f1))"
+            else
+              echo "❌ MISSING: $file"
+              exit 1
+            fi
+          done
+          
+          echo ""
+          echo "🖼️ Critical image files:"
+          for file in "images/avatar.jpg" "images/gallery/horizontal-1.jpg"; do
+            if [ -f "out/$file" ]; then
+              echo "✅ $file ($(du -h "out/$file" | cut -f1))"
+            else
+              echo "❌ MISSING: $file"
+              exit 1
+            fi
+          done
+          
+          echo ""
+          echo "🎉 Deployment validation passed!"
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Deployment complete
+        run: |
+          echo "🚀 Deployment complete!"
+          echo "🌐 Site URL: https://nathanaelhub.github.io/my-portfolio/"
+          echo "📊 Deployment URL: ${{ steps.deployment.outputs.page_url }}"

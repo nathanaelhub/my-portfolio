@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "export": "next build && node scripts/validate-build.js && node scripts/inspect-build-output.js",
+    "export": "echo '📦 Export complete - using output from build step'",
+    "simple-deploy": "npm run build && node scripts/simple-deploy-fix.js",
     "build-github": "node scripts/build-github-pages.js",
     "build-brute-force": "node scripts/brute-force-build.js",
     "build-vercel": "cp next.config.vercel.mjs next.config.mjs && npm run build",
