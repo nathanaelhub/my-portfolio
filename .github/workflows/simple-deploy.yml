@@ -36,11 +36,8 @@ jobs:
           NODE_ENV: production
           GITHUB_PAGES: true
 
-      - name: Export static files
-        run: npm run export
-
-      - name: Run simple deployment fix
-        run: node scripts/simple-deploy-fix.js
+      - name: Run post-export URL fixer
+        run: node scripts/post-export.js
 
       - name: Create 404.html
         run: |
