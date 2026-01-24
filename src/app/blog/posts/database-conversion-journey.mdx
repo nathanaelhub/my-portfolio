@@ -1,0 +1,68 @@
+---
+title: "Transforming University Data: A Database Conversion Journey"
+summary: "How I designed and implemented a relational database system to replace Excel-based student registration data at Lipscomb University."
+image: "/images/gallery/japan-1.jpg"
+publishedAt: "2024-09-23"
+tag: "Data Engineering"
+---
+
+## Introduction
+
+In today's digital age, data accuracy and accessibility are key to the success of institutions, especially in education. Managing student records, faculty information, and course schedules is a complex task. Traditionally, tools like Microsoft Excel have been widely used to store and manage such data, but as the volume of data grows, so do the limitations of these tools.
+
+At Lipscomb University, the administrative staff faced challenges in maintaining and querying student registration data stored in Excel. They struggled with data inconsistencies and errors caused by manual entry and found it difficult to generate the queries they needed for routine academic tasks. Recognizing these issues, the university sought a solution to convert their spreadsheet-based system into a robust, well-structured relational database.
+
+This article details the project to design, implement, and test this new system.
+
+## Purpose
+
+The primary goal of this project was to streamline Lipscomb University's student registration process by migrating its Excel-based system to a relational database. The university's reliance on Excel resulted in several inefficiencies:
+
+- Inaccurate data entry
+- Limited querying capabilities
+- Data integrity concerns
+
+By moving to a relational database, the goal was to ensure data integrity, improve querying efficiency, and allow for better reporting and data analysis. Ultimately, this shift would enable the university to handle large volumes of data with greater accuracy and efficiency, reducing the burden on administrative staff and improving the overall student experience.
+
+## Scope
+
+This project focused on converting all relevant student, faculty, and course data into a relational database. The scope included datasets for:
+
+- Student information
+- Faculty information
+- Course information
+- Enrollment data
+- Building and room data
+- Term data
+
+The project involved translating this diverse set of data into a structured format that could be managed efficiently using SQL databases. Key deliverables included a relational database schema, SQL scripts to define the tables and enforce data integrity, transformation of raw data into database-friendly formats, and a set of standard queries to support administrative reporting and analysis.
+
+## Project Plan
+
+### 1. Database Schema Design
+
+Each key entity—students, faculty, courses, enrollment, etc.—was mapped into its own table, with relationships established using foreign keys to maintain referential integrity.
+
+### 2. Data Transformation and Import
+
+The original data, stored in various formats, was converted into SQL INSERT statements and loaded into the database. This phase also involved cleaning the data and ensuring there were no duplicate or incomplete entries.
+
+### 3. Consistency Checks and Data Integrity Testing
+
+Test updates and insertions were performed to ensure that integrity constraints worked as intended. Table definitions and constraints were adjusted based on test results.
+
+### 4. Query Development
+
+With the database fully populated and tested, queries were developed to enable staff to access and manipulate the data efficiently—for example, generating student lists by course, retrieving room capacities, and calculating tuition based on credit hours.
+
+### 5. Testing and Validation
+
+Further testing ensured that data could be retrieved accurately and that queries performed efficiently as the database grew.
+
+## Conclusion
+
+The project resulted in a highly efficient, accurate, and robust relational database system for Lipscomb University. By moving away from Excel and adopting SQL, the university improved its ability to manage student records, schedule courses, and generate reports while minimizing data errors and inconsistencies.
+
+The relational database provides a scalable foundation for future data management needs. Future considerations include developing a user-friendly interface for administrative staff and integrating the database with other university systems.
+
+The project underscores the importance of robust data management solutions and provided valuable experience in database design, SQL, and data transformation.

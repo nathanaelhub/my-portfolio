@@ -254,48 +254,47 @@ const gallery: Gallery = {
   label: "Gallery",
   title: `Photo gallery – ${person.name}`,
   description: `A photo collection by ${person.name}`,
-  // Images by https://lorant.one
-  // These are placeholder images, replace with your own
+  // Japan 2025 photos
   images: [
     {
-      src: getImagePath("/images/gallery/horizontal-1.jpg"),
-      alt: "image",
+      src: getImagePath("/images/gallery/japan-1.jpg"),
+      alt: "Japan 2025",
       orientation: "horizontal",
     },
     {
-      src: getImagePath("/images/gallery/vertical-4.jpg"),
-      alt: "image",
-      orientation: "vertical",
-    },
-    {
-      src: getImagePath("/images/gallery/horizontal-3.jpg"),
-      alt: "image",
+      src: getImagePath("/images/gallery/japan-2.jpg"),
+      alt: "Japan 2025",
       orientation: "horizontal",
     },
     {
-      src: getImagePath("/images/gallery/vertical-1.jpg"),
-      alt: "image",
-      orientation: "vertical",
-    },
-    {
-      src: getImagePath("/images/gallery/vertical-2.jpg"),
-      alt: "image",
-      orientation: "vertical",
-    },
-    {
-      src: getImagePath("/images/gallery/horizontal-2.jpg"),
-      alt: "image",
+      src: getImagePath("/images/gallery/japan-3.jpg"),
+      alt: "Japan 2025",
       orientation: "horizontal",
     },
     {
-      src: getImagePath("/images/gallery/horizontal-4.jpg"),
-      alt: "image",
+      src: getImagePath("/images/gallery/japan-4.jpg"),
+      alt: "Japan 2025",
       orientation: "horizontal",
     },
     {
-      src: getImagePath("/images/gallery/vertical-3.jpg"),
-      alt: "image",
-      orientation: "vertical",
+      src: getImagePath("/images/gallery/japan-5.jpg"),
+      alt: "Japan 2025",
+      orientation: "horizontal",
+    },
+    {
+      src: getImagePath("/images/gallery/japan-6.jpg"),
+      alt: "Japan 2025",
+      orientation: "horizontal",
+    },
+    {
+      src: getImagePath("/images/gallery/japan-7.jpg"),
+      alt: "Japan 2025",
+      orientation: "horizontal",
+    },
+    {
+      src: getImagePath("/images/gallery/japan-8.jpg"),
+      alt: "Japan 2025",
+      orientation: "horizontal",
     },
   ],
 };

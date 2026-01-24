@@ -1,0 +1,61 @@
+---
+title: "Analyzing Airbnb Listings in Nashville: Insights and Predictions from the Data Dive"
+summary: "A data analysis project using InsideAirbnb data to build predictive models for pricing and ratings in Nashville's short-term rental market."
+image: "/images/gallery/japan-3.jpg"
+publishedAt: "2024-09-23"
+tag: "Data Science"
+---
+
+## Introduction
+
+Short-term rentals have reshaped cities like Nashville. This analysis used data from InsideAirbnb.com to extract insights and develop predictive models to help hosts and platforms make informed decisions.
+
+The dataset included listings, reviews, calendar data, and derived features such as the top amenities. The goals were to visualize trends and build models to predict key variables.
+
+## Data Overview
+
+Key datasets comprised:
+
+- **Listings data** — detailed information about each property
+- **Reviews data** — reflecting guest feedback
+- **Calendar data** — availability and pricing
+
+These datasets were processed to extract features such as review scores, amenities, and pricing trends.
+
+## Visualizations and Exploratory Analysis
+
+Visualizations revealed that certain neighborhoods, especially downtown Nashville, had higher concentrations of Airbnb listings. Price trends showed that neighborhoods like The Gulch commanded higher average nightly rates than East Nashville.
+
+Review scores were generally high (above 4.5), although listings with fewer amenities had slightly lower ratings.
+
+## Regression Model for Price Prediction
+
+A linear regression model was built to predict nightly prices using features such as:
+
+- Number of bedrooms
+- Amenities
+- Location
+- Review scores
+
+After applying ridge and lasso regularization, the model achieved an **R² score of 0.78**. Important predictors included location, number of bedrooms, and premium amenities like swimming pools and rooftop access.
+
+## Classification Model for High vs. Low Ratings
+
+A random forest classifier predicted whether a listing would receive high ratings (above 4.5). The model achieved:
+
+- **85% accuracy**
+- **0.88 precision score**
+
+Significant features included cleanliness scores, communication scores, and number of reviews.
+
+## Insights and Recommendations
+
+The analysis produced recommendations for hosts and the platform:
+
+1. **Focus on premium amenities** to command higher prices and improve reviews
+2. **Prioritize cleanliness and communication** to maintain high ratings
+3. **Highlight neighborhood advantages** while differentiating listings in less premium areas
+
+## Conclusion
+
+The Nashville Airbnb data dive provided valuable insights into factors that influence prices and guest satisfaction. Hosts can apply these findings to enhance their listings, and platforms like InsideAirbnb.com can use predictive models to offer tailored recommendations.
