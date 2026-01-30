@@ -63,7 +63,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
       )}
 
       {/* Content on the right */}
-      <Column flex={1} gap="m" justifyContent="center">
+      <Column flex={1} gap="m">
         {title && (
           <SmartLink href={href}>
             <Heading as="h2" wrap="balance" variant="heading-strong-l">
