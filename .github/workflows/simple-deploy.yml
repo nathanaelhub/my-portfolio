@@ -79,7 +79,7 @@ jobs:
           
           echo ""
           echo "🖼️ Critical image files:"
-          for file in "images/avatar.jpg" "images/gallery/horizontal-1.jpg"; do
+          for file in "images/avatar.jpg" "images/gallery/japan-1.jpg"; do
             if [ -f "out/$file" ]; then
               echo "✅ $file ($(du -h "out/$file" | cut -f1))"
             else
