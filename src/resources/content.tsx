@@ -51,7 +51,7 @@ const social: Social = [
 
 const home: Home = {
   path: "/",
-  image: getImagePath("/images/projects/mental-health-llm/cover.png"),
+  image: getImagePath("/images/projects/mental-health-llm/cover.jpg"),
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
