@@ -57,15 +57,15 @@ jobs:
         run: |
           echo "🔍 Final deployment validation:"
           echo "================================"
-          
+
           echo "📊 File counts:"
           echo "Total files: $(find out -type f | wc -l)"
           echo "HTML files: $(find out -name '*.html' | wc -l)"
           echo "Image files: $(find out \( -name '*.jpg' -o -name '*.png' \) | wc -l)"
-          
+
           echo ""
           echo "📄 Critical HTML files:"
-          for file in "index.html" "about/index.html" "gallery/index.html"; do
+          for file in "index.html" "about.html" "gallery.html" "work.html"; do
             if [ -f "out/$file" ]; then
               echo "✅ $file ($(du -h "out/$file" | cut -f1))"
             else
@@ -73,7 +73,7 @@ jobs:
               exit 1
             fi
           done
-          
+
           echo ""
           echo "🖼️ Critical image files:"
           for file in "images/avatar.jpg" "images/gallery/japan-1.jpg"; do
@@ -84,7 +84,7 @@ jobs:
               exit 1
             fi
           done
-          
+
           echo ""
           echo "🎉 Deployment validation passed!"
 
