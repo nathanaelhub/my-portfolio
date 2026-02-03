@@ -36,9 +36,6 @@ jobs:
           NODE_ENV: production
           GITHUB_PAGES: true
 
-      - name: Run post-export URL fixer
-        run: node scripts/post-export.js
-
       - name: Create 404.html
         run: |
           cat > out/404.html << 'EOF'
