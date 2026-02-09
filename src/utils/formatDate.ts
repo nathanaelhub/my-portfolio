@@ -6,18 +6,21 @@ export function formatDate(date: string, includeRelative = false) {
   }
 
   const targetDate = new Date(date);
-  const yearsAgo = currentDate.getFullYear() - targetDate.getFullYear();
-  const monthsAgo = currentDate.getMonth() - targetDate.getMonth();
-  const daysAgo = currentDate.getDate() - targetDate.getDate();
+  const diffMs = currentDate.getTime() - targetDate.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const diffMonths =
+    (currentDate.getFullYear() - targetDate.getFullYear()) * 12 +
+    (currentDate.getMonth() - targetDate.getMonth());
+  const diffYears = Math.floor(diffMonths / 12);
 
   let formattedDate = "";
 
-  if (yearsAgo > 0) {
-    formattedDate = `${yearsAgo}y ago`;
-  } else if (monthsAgo > 0) {
-    formattedDate = `${monthsAgo}mo ago`;
-  } else if (daysAgo > 0) {
-    formattedDate = `${daysAgo}d ago`;
+  if (diffYears > 0) {
+    formattedDate = `${diffYears}y ago`;
+  } else if (diffMonths > 0) {
+    formattedDate = `${diffMonths}mo ago`;
+  } else if (diffDays > 0) {
+    formattedDate = `${diffDays}d ago`;
   } else {
     formattedDate = "Today";
   }

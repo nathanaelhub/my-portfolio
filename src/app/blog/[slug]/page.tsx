@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { CustomMDX, ScrollToHash } from "@/components";
+import { CustomMDX, ErrorBoundary, ScrollToHash } from "@/components";
 import {
   Meta,
   Schema,
@@ -47,11 +47,15 @@ export async function generateMetadata({
 
   if (!post) return {};
 
+  const ogImage = post.metadata.image
+    ? `${baseURL}${post.metadata.image}`
+    : `${baseURL}${person.avatar}`;
+
   return Meta.generate({
     title: post.metadata.title,
     description: post.metadata.summary,
     baseURL: baseURL,
-    image: post.metadata.image || `${baseURL}${person.avatar}`,
+    image: ogImage,
     path: `${blog.path}/${post.slug}`,
   });
 }
@@ -87,8 +91,9 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
             datePublished={post.metadata.publishedAt}
             dateModified={post.metadata.publishedAt}
             image={
-              post.metadata.image ||
-              `${baseURL}${person.avatar}`
+              post.metadata.image
+                ? `${baseURL}${post.metadata.image}`
+                : `${baseURL}${person.avatar}`
             }
             author={{
               name: person.name,
@@ -127,7 +132,9 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
             />
           )}
           <Column as="article" maxWidth="s">
-            <CustomMDX source={post.content} />
+            <ErrorBoundary>
+              <CustomMDX source={post.content} />
+            </ErrorBoundary>
           </Column>
           
           <ShareSection 

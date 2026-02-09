@@ -88,7 +88,7 @@ export const Header = () => {
           >
             <Row gap="4" vertical="center" textVariant="body-default-s" suppressHydrationWarning>
               {routes["/"] && (
-                <ToggleButton prefixIcon="home" href={getInternalPath("/")} selected={pathname === "/"} />
+                <ToggleButton prefixIcon="home" href={getInternalPath("/")} selected={pathname === "/"} aria-label="Home" />
               )}
               <Line background="neutral-alpha-medium" vert maxHeight="24" />
               {routes["/about"] && (
@@ -106,6 +106,7 @@ export const Header = () => {
                       prefixIcon="person"
                       href={getInternalPath("/about")}
                       selected={pathname === "/about"}
+                      aria-label="About"
                     />
                   </Row>
                 </>
@@ -125,6 +126,7 @@ export const Header = () => {
                       prefixIcon="grid"
                       href={getInternalPath("/work")}
                       selected={pathname.startsWith("/work")}
+                      aria-label="Work"
                     />
                   </Row>
                 </>
@@ -144,6 +146,7 @@ export const Header = () => {
                       prefixIcon="book"
                       href={getInternalPath("/blog")}
                       selected={pathname.startsWith("/blog")}
+                      aria-label="Blog"
                     />
                   </Row>
                 </>
@@ -163,6 +166,7 @@ export const Header = () => {
                       prefixIcon="gallery"
                       href={getInternalPath("/gallery")}
                       selected={pathname.startsWith("/gallery")}
+                      aria-label="Gallery"
                     />
                   </Row>
                 </>

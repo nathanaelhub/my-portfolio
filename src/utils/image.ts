@@ -1,6 +1,4 @@
-// Get basePath from environment - must match next.config.mjs
-const isProduction = process.env.NODE_ENV === 'production';
-const basePath = isProduction ? '/my-portfolio' : '';
+import { basePath } from './navigation';
 
 export function getImagePath(imagePath: string): string {
   // Skip if already prefixed, external URL, or empty

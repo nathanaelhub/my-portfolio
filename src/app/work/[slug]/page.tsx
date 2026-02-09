@@ -17,7 +17,7 @@ import {
 } from "@once-ui-system/core";
 import { baseURL, about, person, work } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
-import { ScrollToHash, CustomMDX } from "@/components";
+import { ScrollToHash, CustomMDX, ErrorBoundary } from "@/components";
 import { Metadata } from "next";
 import { Projects } from "@/components/work/Projects";
 
@@ -45,11 +45,17 @@ export async function generateMetadata({
 
   if (!post) return {};
 
+  const ogImage = post.metadata.image
+    ? `${baseURL}${post.metadata.image}`
+    : post.metadata.images?.[0]
+      ? `${baseURL}${post.metadata.images[0]}`
+      : `${baseURL}${person.avatar}`;
+
   return Meta.generate({
     title: post.metadata.title,
     description: post.metadata.summary,
     baseURL: baseURL,
-    image: post.metadata.image || `${baseURL}${person.avatar}`,
+    image: ogImage,
     path: `${work.path}/${post.slug}`,
   });
 }
@@ -86,7 +92,9 @@ export default async function Project({
         datePublished={post.metadata.publishedAt}
         dateModified={post.metadata.publishedAt}
         image={
-          post.metadata.image || `${baseURL}${person.avatar}`
+          post.metadata.images?.[0]
+            ? `${baseURL}${post.metadata.images[0]}`
+            : `${baseURL}${person.avatar}`
         }
         author={{
           name: person.name,
@@ -124,7 +132,9 @@ export default async function Project({
         <Media priority aspectRatio="16 / 9" radius="m" alt="image" src={post.metadata.images[0]} />
       )}
       <Column style={{ margin: "auto" }} as="article" maxWidth="xs">
-        <CustomMDX source={post.content} />
+        <ErrorBoundary>
+          <CustomMDX source={post.content} />
+        </ErrorBoundary>
       </Column>
       <Column fillWidth gap="40" horizontal="center" marginTop="40">
         <Line maxWidth="40" />

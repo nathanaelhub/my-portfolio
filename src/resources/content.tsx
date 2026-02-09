@@ -148,7 +148,7 @@ const about: About = {
     institutions: [
       {
         name: "Lipscomb University",
-        description: <>M.S. - Applied Artificial Intelligence (Currently enrolled, expected July 2025)</>,
+        description: <>M.S. - Applied Artificial Intelligence</>,
       },
       {
         name: "Middle Tennessee State University",
@@ -234,7 +234,7 @@ const about: About = {
 const blog: Blog = {
   path: "/blog",
   label: "Blog",
-  title: "Writing about design and tech...",
+  title: "Writing about AI and data science...",
   description: `Read what ${person.name} has been up to recently`,
   // Create new blog posts by adding a new .mdx file to app/blog/posts
   // All posts will be listed on the /blog route
@@ -244,7 +244,7 @@ const work: Work = {
   path: "/work",
   label: "Work",
   title: `Projects – ${person.name}`,
-  description: `Design and dev projects by ${person.name}`,
+  description: `AI, machine learning, and data science projects by ${person.name}`,
   // Create new project pages by adding a new .mdx file to app/blog/posts
   // All projects will be listed on the /home and /work routes
 };
@@ -258,42 +258,42 @@ const gallery: Gallery = {
   images: [
     {
       src: getImagePath("/images/gallery/japan-1.jpg"),
-      alt: "Japan 2025",
+      alt: "Japan travel photo 1",
       orientation: "horizontal",
     },
     {
       src: getImagePath("/images/gallery/japan-2.jpg"),
-      alt: "Japan 2025",
+      alt: "Japan travel photo 2",
       orientation: "horizontal",
     },
     {
       src: getImagePath("/images/gallery/japan-3.jpg"),
-      alt: "Japan 2025",
+      alt: "Japan travel photo 3",
       orientation: "horizontal",
     },
     {
       src: getImagePath("/images/gallery/japan-4.jpg"),
-      alt: "Japan 2025",
+      alt: "Japan travel photo 4",
       orientation: "horizontal",
     },
     {
       src: getImagePath("/images/gallery/japan-5.jpg"),
-      alt: "Japan 2025",
+      alt: "Japan travel photo 5",
       orientation: "horizontal",
     },
     {
       src: getImagePath("/images/gallery/japan-6.jpg"),
-      alt: "Japan 2025",
+      alt: "Japan travel photo 6",
       orientation: "horizontal",
     },
     {
       src: getImagePath("/images/gallery/japan-7.jpg"),
-      alt: "Japan 2025",
+      alt: "Japan travel photo 7",
       orientation: "horizontal",
     },
     {
       src: getImagePath("/images/gallery/japan-8.jpg"),
-      alt: "Japan 2025",
+      alt: "Japan travel photo 8",
       orientation: "horizontal",
     },
   ],

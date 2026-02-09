@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { routes } from "@/resources";
+import { basePath } from "@/utils/navigation";
 
 interface RouteGuardProps {
   children: React.ReactNode;
@@ -21,8 +22,8 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
 
         // Normalize pathname by removing basePath
         let routePath = pathname;
-        if (pathname.startsWith('/my-portfolio')) {
-          routePath = pathname.slice('/my-portfolio'.length) || '/';
+        if (basePath && pathname.startsWith(basePath)) {
+          routePath = pathname.slice(basePath.length) || '/';
         }
 
         // Check if route exists in routes config

@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { basePath } from '@/utils/navigation';
 
 export default function RedirectHandler() {
   const router = useRouter();
@@ -11,9 +12,8 @@ export default function RedirectHandler() {
     const redirect = sessionStorage.getItem('redirect');
     if (redirect) {
       sessionStorage.removeItem('redirect');
-      
+
       // Extract the path without the basePath
-      const basePath = '/my-portfolio';
       if (redirect.startsWith(basePath)) {
         const targetPath = redirect.slice(basePath.length) || '/';
         router.replace(targetPath);

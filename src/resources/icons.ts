@@ -27,7 +27,16 @@ import {
   SiNextdotjs,
   SiFigma,
   SiSupabase,
+  SiPython,
+  SiTensorflow,
+  SiScikitlearn,
+  SiTableau,
+  SiR,
+  SiReact,
+  SiHtml5,
 } from "react-icons/si";
+
+import { HiOutlineCircleStack } from "react-icons/hi2";
 
 import { FaDiscord, FaGithub, FaLinkedin, FaX, FaThreads, FaXTwitter, FaFacebook, FaPinterest, FaWhatsapp, FaReddit, FaTelegram, } from "react-icons/fa6";
 
@@ -58,6 +67,14 @@ export const iconLibrary: Record<string, IconType> = {
   nextjs: SiNextdotjs,
   supabase: SiSupabase,
   figma: SiFigma,
+  python: SiPython,
+  tensorflow: SiTensorflow,
+  scikitlearn: SiScikitlearn,
+  tableau: SiTableau,
+  sql: HiOutlineCircleStack,
+  r: SiR,
+  react: SiReact,
+  html: SiHtml5,
   facebook: FaFacebook,
   pinterest: FaPinterest,
   whatsapp: FaWhatsapp,
