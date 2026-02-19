@@ -54,7 +54,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
               priority={priority}
               sizes="280px"
               radius="m"
-              aspectRatio="16 / 10"
+              aspectRatio="1 / 1"
               src={getImagePath(images[0])}
               alt={title}
             />
