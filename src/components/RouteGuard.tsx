@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { routes } from "@/resources";
-import { basePath } from "@/utils/navigation";
 
 interface RouteGuardProps {
   children: React.ReactNode;
@@ -21,10 +20,7 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
         if (!pathname) return true;
 
         // Normalize pathname by removing basePath
-        let routePath = pathname;
-        if (basePath && pathname.startsWith(basePath)) {
-          routePath = pathname.slice(basePath.length) || '/';
-        }
+        const routePath = pathname;
 
         // Check if route exists in routes config
         if (routePath in routes) {
