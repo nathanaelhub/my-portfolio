@@ -5,21 +5,13 @@ const withMDX = mdx({
   options: {},
 });
 
-// GitHub Pages deployment configuration
-const isProduction = process.env.NODE_ENV === 'production';
-const basePath = isProduction ? '/my-portfolio' : '';
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   transpilePackages: ["next-mdx-remote"],
-  
-  // GitHub Pages specific configuration
+
+  // Static export for GitHub Pages with custom domain
   output: "export",
-  
-  // GitHub Pages configuration
-  basePath: basePath,
-  assetPrefix: basePath,
   
   // Disable image optimization completely for GitHub Pages
   images: {

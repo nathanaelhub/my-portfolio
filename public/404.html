@@ -29,38 +29,17 @@
     <script>
         (function() {
             try {
-                const currentPath = window.location.pathname;
-                const basePath = '/my-portfolio';
-                
-                console.log('404 redirect:', currentPath);
-                
-                // Store the intended destination for client-side routing
-                if (currentPath.startsWith(basePath + '/') && currentPath !== basePath + '/') {
-                    sessionStorage.setItem('redirect', currentPath);
-                    console.log('Storing redirect:', currentPath);
-                }
-                
-                // Redirect to main app
-                const redirectUrl = basePath + '/';
-                console.log('Redirecting to:', redirectUrl);
-                
-                // Use both immediate redirect and meta refresh as fallback
-                setTimeout(() => {
-                    window.location.replace(redirectUrl);
-                }, 100);
-                
+                window.location.replace('/');
             } catch (error) {
-                console.error('404 redirect error:', error);
-                // Fallback to simple redirect
-                window.location.replace('/my-portfolio/');
+                window.location.replace('/');
             }
         })();
     </script>
-    <meta http-equiv="refresh" content="2;URL='/my-portfolio/'">
+    <meta http-equiv="refresh" content="0;URL='/'">
 </head>
 <body>
     <h1>Redirecting...</h1>
     <div class="spinner"></div>
-    <p>If you are not redirected automatically, <a href="/my-portfolio/" style="color: #00ffff;">click here</a>.</p>
+    <p>If you are not redirected automatically, <a href="/" style="color: #00ffff;">click here</a>.</p>
 </body>
 </html>

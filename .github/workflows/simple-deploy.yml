@@ -36,22 +36,8 @@ jobs:
           NODE_ENV: production
           GITHUB_PAGES: true
 
-      - name: Create 404.html
-        run: |
-          cat > out/404.html << 'EOF'
-          <!DOCTYPE html>
-          <html>
-          <head>
-              <meta charset="utf-8">
-              <title>Page Not Found</title>
-              <meta http-equiv="refresh" content="0; url=/my-portfolio/">
-          </head>
-          <body>
-              <h1>Page Not Found</h1>
-              <p>Redirecting to <a href="/my-portfolio/">portfolio</a>...</p>
-          </body>
-          </html>
-          EOF
+      - name: Add .nojekyll
+        run: touch out/.nojekyll
 
       - name: Final validation
         run: |
@@ -103,5 +89,5 @@ jobs:
       - name: Deployment complete
         run: |
           echo "🚀 Deployment complete!"
-          echo "🌐 Site URL: https://nathanaelhub.github.io/my-portfolio/"
+          echo "🌐 Site URL: https://nathanaeljohnson.net/"
           echo "📊 Deployment URL: ${{ steps.deployment.outputs.page_url }}"

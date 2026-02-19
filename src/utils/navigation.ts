@@ -1,5 +1,5 @@
-const isProduction = process.env.NODE_ENV === 'production';
-export const basePath = isProduction ? '/my-portfolio' : '';
+// Custom domain (nathanaeljohnson.net) serves from root — no basePath needed
+export const basePath = '';
 
 export function getInternalPath(path: string): string {
   // Since Next.js basePath automatically adds the prefix in production,
