@@ -6,9 +6,9 @@ const person: Person = {
   firstName: "Nathanael",
   lastName: "Johnson",
   name: `Nathanael Johnson`,
-  role: "Applied AI Graduate Student",
+  role: "Applied AI & Data Science Professional",
   avatar: getImagePath("/images/avatar.jpg"),
-  email: "njjohnson1@mail.lipscomb.edu",
+  email: "nathanaeljdj@gmail.com",
   location: "America/Chicago", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
   languages: ["English"], // optional: Leave the array empty if you don't want to display languages
 };
@@ -71,8 +71,8 @@ const home: Home = {
   },
   subline: (
     <>
-      I&apos;m Nathanael, an Applied AI graduate student from Saba, Netherlands Antilles, currently studying at Lipscomb University.
-      <br /> I&apos;m passionate about AI applications in healthcare, finance, and data science.
+      I&apos;m Nathanael, an Applied AI and Data Science professional from Saba, Netherlands Antilles, based in Nashville, TN.
+      <br /> I&apos;m passionate about building AI solutions across healthcare, finance, and data science.
     </>
   ),
 };
@@ -98,44 +98,62 @@ const about: About = {
     title: "Introduction",
     description: (
       <>
-        Nathanael is a passionate Applied AI graduate student from Saba, Netherlands Antilles, currently pursuing his M.S. in Applied Artificial Intelligence at Lipscomb University. 
-        With a strong background in Data Science and a keen interest in AI applications across healthcare, finance, and data analytics, 
-        he enjoys working out, hiking, cinematography, drawing, video games, and board games in his free time.
+        Nathanael is an Applied AI and Data Science professional from Saba, Netherlands Antilles, based in Nashville, TN.
+        He holds an M.S. in Applied Artificial Intelligence and a B.S. in Data Science from Lipscomb University.
+        With a background spanning business intelligence, machine learning, and healthcare AI research,
+        he is passionate about building data-driven solutions that create real-world impact.
+        Outside of work, he enjoys working out, hiking, cinematography, drawing, video games, and board games.
       </>
     ),
   },
   work: {
     display: true, // set to false to hide this section
-    title: "Academic & Research Experience",
+    title: "Work Experience",
     experiences: [
       {
         company: "Lipscomb University",
-        timeframe: "2023 - Present",
-        role: "M.S. Applied AI Student",
+        timeframe: "December 2025 – Present",
+        role: "College of Computing Assistant",
         achievements: [
           <>
-            Conducting research on bias and fairness in Large Language Models for mental health applications,
-            contributing to advancing responsible AI deployment in healthcare.
-          </>,
-          <>
-            Developing predictive models and machine learning systems across various domains including
-            healthcare, finance, and transportation optimization.
+            Built AI demonstration projects including a physical therapy pose estimation system and a
+            message routing interface to teach AI concepts to diverse audiences.
           </>,
         ],
         images: [],
       },
       {
-        company: "Middle Tennessee State University",
-        timeframe: "2022 - 2023",
-        role: "M.S. Data Science Student",
+        company: "ROX Analytics",
+        timeframe: "Jan 2025 – October 2025",
+        role: "Business Intelligence Developer Intern",
         achievements: [
           <>
-            Completed advanced coursework in statistical methods, predictive modeling, and large-scale
-            data analysis, building expertise in applied analytics.
+            Built and maintained operational Power BI dashboards (Power Query, M-code, DAX) with advanced
+            visualization techniques to track financial and service-line KPIs.
           </>,
           <>
-            Developed multiple data science projects including market analysis, customer segmentation,
-            and business intelligence dashboards.
+            Executed data integrity routines and SQL-based model testing on large healthcare datasets,
+            troubleshooting sources and triaging BI support requests.
+          </>,
+          <>
+            Presented data-driven insights in client-facing reports and meetings, driving informed
+            decision-making and adoption of analytics outputs.
+          </>,
+        ],
+        images: [],
+      },
+      {
+        company: "Amplion, Clinical Communications, Inc.",
+        timeframe: "October 2022 – March 2023",
+        role: "Business Intelligence Intern",
+        achievements: [
+          <>
+            Developed four comprehensive reports using Power BI and Tableau, streamlining nursing data
+            from multiple locations and reducing analysis time by 75%.
+          </>,
+          <>
+            Created interactive data visualization dashboards using JavaScript, HTML, and Plotly,
+            improving stakeholder engagement and decision-making processes.
           </>,
         ],
         images: [],
@@ -148,15 +166,11 @@ const about: About = {
     institutions: [
       {
         name: "Lipscomb University",
-        description: <>M.S. - Applied Artificial Intelligence</>,
-      },
-      {
-        name: "Middle Tennessee State University",
-        description: <>M.S. - Data Science</>,
+        description: <>M.S. - Applied Artificial Intelligence — Graduated August 2025 | GPA: 3.7</>,
       },
       {
         name: "Lipscomb University",
-        description: <>B.S. - Data Science (Graduated December 2022)</>,
+        description: <>B.S. - Data Science — Graduated December 2022</>,
       },
     ],
   },
