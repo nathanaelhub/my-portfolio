@@ -10,6 +10,7 @@ import {
   Text,
 } from "@once-ui-system/core";
 import { getImagePath } from "@/utils/image";
+import styles from "./ProjectCard.module.scss";
 
 interface ProjectCardProps {
   href: string;
@@ -42,6 +43,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
       radius="l"
       border="neutral-alpha-weak"
       background="surface"
+      className={styles.card}
     >
       {/* Image on the left - smaller size */}
       {images.length > 0 && (

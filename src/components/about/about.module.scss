@@ -12,6 +12,10 @@
     position: sticky;
     height: fit-content;
     top: var(--static-space-64);
+
+    :global(img) {
+        object-position: top center;
+    }
 }
 
 @media (max-width: breakpoints.$s) {

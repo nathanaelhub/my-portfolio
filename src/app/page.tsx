@@ -60,7 +60,7 @@ export default function Home() {
                 paddingX="12"
                 paddingY="4"
                 onBackground="neutral-strong"
-                textVariant="label-default-s"
+                textVariant="label-default-m"
                 arrow={false}
                 href={home.featured.href}
               >
