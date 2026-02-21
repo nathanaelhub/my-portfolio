@@ -128,14 +128,28 @@ export default async function Project({
           </Text>
         </Row>
       </Row>
-      {post.metadata.images.length > 0 && (
-        <Media priority aspectRatio="16 / 9" radius="m" alt="image" src={post.metadata.images[0]} />
-      )}
-      <Column style={{ margin: "auto" }} as="article" maxWidth="xs">
-        <ErrorBoundary>
-          <CustomMDX source={post.content} />
-        </ErrorBoundary>
-      </Column>
+      <Row fillWidth gap="xl" s={{ direction: "column" }} marginBottom="8">
+        {post.metadata.images.length > 0 && (
+          <Column
+            position="sticky"
+            top="80"
+            style={{ flex: "0 0 42%", maxWidth: "420px", alignSelf: "flex-start" }}
+          >
+            <Media
+              priority
+              aspectRatio="4 / 3"
+              radius="m"
+              alt="image"
+              src={post.metadata.images[0]}
+            />
+          </Column>
+        )}
+        <Column flex={1} as="article">
+          <ErrorBoundary>
+            <CustomMDX source={post.content} />
+          </ErrorBoundary>
+        </Column>
+      </Row>
       <Column fillWidth gap="40" horizontal="center" marginTop="40">
         <Line maxWidth="40" />
         <Heading as="h2" variant="heading-strong-xl" marginBottom="24">
