@@ -10,3 +10,4 @@ export { ThemeToggle } from "@/components/ThemeToggle";
 export { CustomMDX } from "@/components/mdx";
 export { ErrorBoundary } from "@/components/ErrorBoundary";
 export { default as RedirectHandler } from "@/components/RedirectHandler";
+export { AuthorCard } from "@/components/AuthorCard";

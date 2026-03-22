@@ -17,7 +17,7 @@ import {
 } from "@once-ui-system/core";
 import { baseURL, about, person, work } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
-import { ScrollToHash, CustomMDX, ErrorBoundary } from "@/components";
+import { AuthorCard, ScrollToHash, CustomMDX, ErrorBoundary } from "@/components";
 import { Metadata } from "next";
 import { Projects } from "@/components/work/Projects";
 
@@ -154,6 +154,9 @@ export default async function Project({
           </ErrorBoundary>
         </Column>
       </Row>
+      <Column fillWidth marginTop="40">
+        <AuthorCard />
+      </Column>
       <Column fillWidth gap="40" horizontal="center" marginTop="40">
         <Line maxWidth="40" />
         <Heading as="h2" variant="heading-strong-xl" marginBottom="24">

@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { CustomMDX, ErrorBoundary, ScrollToHash } from "@/components";
+import { AuthorCard, CustomMDX, ErrorBoundary, ScrollToHash } from "@/components";
 import {
   Meta,
   Schema,
@@ -141,10 +141,14 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
             </ErrorBoundary>
           </Column>
           
-          <ShareSection 
-            title={post.metadata.title} 
-            url={`${baseURL}${blog.path}/${post.slug}`} 
+          <ShareSection
+            title={post.metadata.title}
+            url={`${baseURL}${blog.path}/${post.slug}`}
           />
+
+          <Column fillWidth marginTop="40">
+            <AuthorCard />
+          </Column>
 
           <Column fillWidth gap="40" horizontal="center" marginTop="40">
             <Line maxWidth="40" />
