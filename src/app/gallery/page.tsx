@@ -27,7 +27,7 @@ export default function Gallery() {
         title={gallery.title}
         description={gallery.description}
         path={gallery.path}
-        image={`${baseURL}${person.avatar}`}
+        image={person.avatar}
         author={{
           name: person.name,
           url: `${baseURL}${gallery.path}`,

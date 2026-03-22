@@ -13,6 +13,7 @@ import {
   Row,
 } from "@once-ui-system/core";
 import { baseURL, about, person, social } from "@/resources";
+import { PersonSchema } from "@/components";
 import TableOfContents from "@/components/about/TableOfContents";
 import styles from "@/components/about/about.module.scss";
 import { getImagePath } from "@/utils/image";
@@ -65,13 +66,15 @@ export default function About() {
         title={about.title}
         description={about.description}
         path={about.path}
-        image={`${baseURL}${person.avatar}`}
+        image={person.avatar}
+        sameAs={social.filter((s) => s.link && !s.link.startsWith("mailto:")).map((s) => s.link)}
         author={{
           name: person.name,
           url: `${baseURL}${about.path}`,
           image: `${baseURL}${person.avatar}`,
         }}
       />
+      <PersonSchema />
       {about.tableOfContent.display && (
         <Column
           left="0"

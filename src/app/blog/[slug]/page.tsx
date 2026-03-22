@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { AuthorCard, CustomMDX, ErrorBoundary, ScrollToHash } from "@/components";
+import { AuthorCard, BreadcrumbSchema, CustomMDX, ErrorBoundary, ScrollToHash } from "@/components";
 import {
   Meta,
   Schema,
@@ -94,16 +94,19 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
             description={post.metadata.summary}
             datePublished={post.metadata.publishedAt}
             dateModified={post.metadata.publishedAt}
-            image={
-              post.metadata.image
-                ? `${baseURL}${post.metadata.image}`
-                : `${baseURL}${person.avatar}`
-            }
+            image={post.metadata.image || person.avatar}
             author={{
               name: person.name,
               url: `${baseURL}${about.path}`,
               image: `${baseURL}${person.avatar}`,
             }}
+          />
+          <BreadcrumbSchema
+            items={[
+              { name: "Home", href: "/" },
+              { name: "Blog", href: blog.path },
+              { name: post.metadata.title, href: `${blog.path}/${post.slug}` },
+            ]}
           />
           <Column maxWidth="s" gap="16" horizontal="center" align="center">
             <SmartLink href="/blog">

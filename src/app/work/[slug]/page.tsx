@@ -17,7 +17,7 @@ import {
 } from "@once-ui-system/core";
 import { baseURL, about, person, work } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
-import { AuthorCard, ScrollToHash, CustomMDX, ErrorBoundary } from "@/components";
+import { AuthorCard, BreadcrumbSchema, ScrollToHash, CustomMDX, ErrorBoundary } from "@/components";
 import { Metadata } from "next";
 import { Projects } from "@/components/work/Projects";
 
@@ -95,16 +95,19 @@ export default async function Project({
         description={post.metadata.summary}
         datePublished={post.metadata.publishedAt}
         dateModified={post.metadata.publishedAt}
-        image={
-          post.metadata.images?.[0]
-            ? `${baseURL}${post.metadata.images[0]}`
-            : `${baseURL}${person.avatar}`
-        }
+        image={post.metadata.images?.[0] || person.avatar}
         author={{
           name: person.name,
           url: `${baseURL}${about.path}`,
           image: `${baseURL}${person.avatar}`,
         }}
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", href: "/" },
+          { name: "Work", href: work.path },
+          { name: post.metadata.title, href: `${work.path}/${post.slug}` },
+        ]}
       />
       <Column maxWidth="s" gap="16" horizontal="center" align="center">
         <SmartLink href="/work">

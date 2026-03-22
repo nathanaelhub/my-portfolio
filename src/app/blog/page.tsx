@@ -28,7 +28,7 @@ export default function Blog() {
         title={blog.title}
         description={blog.description}
         path={blog.path}
-        image={`${baseURL}${person.avatar}`}
+        image={person.avatar}
         author={{
           name: person.name,
           url: `${baseURL}/blog`,

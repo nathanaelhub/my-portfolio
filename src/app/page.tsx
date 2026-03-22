@@ -11,9 +11,9 @@ import {
   Meta,
   Line,
 } from "@once-ui-system/core";
-import { home, about, person, baseURL, routes } from "@/resources";
+import { home, about, person, social, baseURL, routes } from "@/resources";
 import { getImagePath } from "@/utils/image";
-import { Mailchimp } from "@/components";
+import { Mailchimp, PersonSchema } from "@/components";
 import { Projects } from "@/components/work/Projects";
 import { Posts } from "@/components/blog/Posts";
 
@@ -42,13 +42,15 @@ export default function Home() {
         path={home.path}
         title={home.title}
         description={home.description}
-        image={`${baseURL}${person.avatar}`}
+        image={person.avatar}
+        sameAs={social.filter((s) => s.link && !s.link.startsWith("mailto:")).map((s) => s.link)}
         author={{
           name: person.name,
           url: `${baseURL}${about.path}`,
           image: `${baseURL}${person.avatar}`,
         }}
       />
+      <PersonSchema />
       <Column fillWidth horizontal="center" gap="m">
         <Column maxWidth="s" horizontal="center" align="center">
           {home.featured.display && (
