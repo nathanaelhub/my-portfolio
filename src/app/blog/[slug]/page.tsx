@@ -51,13 +51,17 @@ export async function generateMetadata({
     ? `${baseURL}${post.metadata.image}`
     : `${baseURL}${person.avatar}`;
 
-  return Meta.generate({
+  const metadata = Meta.generate({
     title: post.metadata.title,
     description: post.metadata.summary,
     baseURL: baseURL,
     image: ogImage,
     path: `${blog.path}/${post.slug}`,
   });
+  return {
+    ...metadata,
+    alternates: { canonical: `${baseURL}${blog.path}/${post.slug}` },
+  };
 }
 
 export default async function Blog({ params }: { params: Promise<{ slug: string | string[] }> }) {

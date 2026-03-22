@@ -5,13 +5,17 @@ import { baseURL, gallery, person } from "@/resources";
 export const dynamic = "force-static";
 
 export async function generateMetadata() {
-  return Meta.generate({
+  const metadata = Meta.generate({
     title: gallery.title,
     description: gallery.description,
     baseURL: baseURL,
     image: `${baseURL}${person.avatar}`,
     path: gallery.path,
   });
+  return {
+    ...metadata,
+    alternates: { canonical: `${baseURL}${gallery.path}` },
+  };
 }
 
 export default function Gallery() {

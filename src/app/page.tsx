@@ -20,13 +20,17 @@ import { Posts } from "@/components/blog/Posts";
 export const dynamic = "force-static";
 
 export async function generateMetadata() {
-  return Meta.generate({
+  const metadata = Meta.generate({
     title: home.title,
     description: home.description,
     baseURL: baseURL,
     path: home.path,
     image: home.image,
   });
+  return {
+    ...metadata,
+    alternates: { canonical: `${baseURL}${home.path === "/" ? "" : home.path}` },
+  };
 }
 
 export default function Home() {

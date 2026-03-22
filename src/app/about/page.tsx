@@ -21,13 +21,17 @@ import React from "react";
 export const dynamic = "force-static";
 
 export async function generateMetadata() {
-  return Meta.generate({
+  const metadata = Meta.generate({
     title: about.title,
     description: about.description,
     baseURL: baseURL,
     image: person.avatar,
     path: about.path,
   });
+  return {
+    ...metadata,
+    alternates: { canonical: `${baseURL}${about.path}` },
+  };
 }
 
 export default function About() {

@@ -6,13 +6,17 @@ import { baseURL, blog, person, newsletter } from "@/resources";
 export const dynamic = "force-static";
 
 export async function generateMetadata() {
-  return Meta.generate({
+  const metadata = Meta.generate({
     title: blog.title,
     description: blog.description,
     baseURL: baseURL,
     image: `${baseURL}${person.avatar}`,
     path: blog.path,
   });
+  return {
+    ...metadata,
+    alternates: { canonical: `${baseURL}${blog.path}` },
+  };
 }
 
 export default function Blog() {

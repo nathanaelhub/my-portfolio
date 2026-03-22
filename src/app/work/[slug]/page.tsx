@@ -51,13 +51,17 @@ export async function generateMetadata({
       ? `${baseURL}${post.metadata.images[0]}`
       : `${baseURL}${person.avatar}`;
 
-  return Meta.generate({
+  const metadata = Meta.generate({
     title: post.metadata.title,
     description: post.metadata.summary,
     baseURL: baseURL,
     image: ogImage,
     path: `${work.path}/${post.slug}`,
   });
+  return {
+    ...metadata,
+    alternates: { canonical: `${baseURL}${work.path}/${post.slug}` },
+  };
 }
 
 export default async function Project({
