@@ -14,7 +14,7 @@ import {
 import { home } from "./index";
 
 // IMPORTANT: Replace with your own domain address - it's used for SEO in meta tags and schema
-const baseURL: string = "https://nathanaelhub.github.io/my-portfolio";
+const baseURL: string = "https://nathanaeljohnson.net";
 
 const routes: RoutesConfig = {
   "/": true,
@@ -188,7 +188,7 @@ const schema: SchemaConfig = {
   type: "Person",
   name: "Nathanael Johnson",
   description: home.description,
-  email: "njjohnson1@mail.lipscomb.edu",
+  email: "nathanaeljdj@gmail.com",
 };
 
 // social links

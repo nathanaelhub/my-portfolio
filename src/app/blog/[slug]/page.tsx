@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { CustomMDX, ErrorBoundary, ScrollToHash } from "@/components";
+import { AuthorCard, BreadcrumbSchema, CustomMDX, ErrorBoundary, ScrollToHash } from "@/components";
 import {
   Meta,
   Schema,
@@ -51,13 +51,17 @@ export async function generateMetadata({
     ? `${baseURL}${post.metadata.image}`
     : `${baseURL}${person.avatar}`;
 
-  return Meta.generate({
+  const metadata = Meta.generate({
     title: post.metadata.title,
     description: post.metadata.summary,
     baseURL: baseURL,
     image: ogImage,
     path: `${blog.path}/${post.slug}`,
   });
+  return {
+    ...metadata,
+    alternates: { canonical: `${baseURL}${blog.path}/${post.slug}` },
+  };
 }
 
 export default async function Blog({ params }: { params: Promise<{ slug: string | string[] }> }) {
@@ -90,16 +94,19 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
             description={post.metadata.summary}
             datePublished={post.metadata.publishedAt}
             dateModified={post.metadata.publishedAt}
-            image={
-              post.metadata.image
-                ? `${baseURL}${post.metadata.image}`
-                : `${baseURL}${person.avatar}`
-            }
+            image={post.metadata.image || person.avatar}
             author={{
               name: person.name,
               url: `${baseURL}${about.path}`,
               image: `${baseURL}${person.avatar}`,
             }}
+          />
+          <BreadcrumbSchema
+            items={[
+              { name: "Home", href: "/" },
+              { name: "Blog", href: blog.path },
+              { name: post.metadata.title, href: `${blog.path}/${post.slug}` },
+            ]}
           />
           <Column maxWidth="s" gap="16" horizontal="center" align="center">
             <SmartLink href="/blog">
@@ -137,10 +144,14 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
             </ErrorBoundary>
           </Column>
           
-          <ShareSection 
-            title={post.metadata.title} 
-            url={`${baseURL}${blog.path}/${post.slug}`} 
+          <ShareSection
+            title={post.metadata.title}
+            url={`${baseURL}${blog.path}/${post.slug}`}
           />
+
+          <Column fillWidth marginTop="40">
+            <AuthorCard />
+          </Column>
 
           <Column fillWidth gap="40" horizontal="center" marginTop="40">
             <Line maxWidth="40" />

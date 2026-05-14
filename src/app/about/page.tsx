@@ -13,6 +13,7 @@ import {
   Row,
 } from "@once-ui-system/core";
 import { baseURL, about, person, social } from "@/resources";
+import { PersonSchema } from "@/components";
 import TableOfContents from "@/components/about/TableOfContents";
 import styles from "@/components/about/about.module.scss";
 import { getImagePath } from "@/utils/image";
@@ -21,13 +22,17 @@ import React from "react";
 export const dynamic = "force-static";
 
 export async function generateMetadata() {
-  return Meta.generate({
+  const metadata = Meta.generate({
     title: about.title,
     description: about.description,
     baseURL: baseURL,
     image: person.avatar,
     path: about.path,
   });
+  return {
+    ...metadata,
+    alternates: { canonical: `${baseURL}${about.path}` },
+  };
 }
 
 export default function About() {
@@ -61,13 +66,15 @@ export default function About() {
         title={about.title}
         description={about.description}
         path={about.path}
-        image={`${baseURL}${person.avatar}`}
+        image={person.avatar}
+        sameAs={social.filter((s) => s.link && !s.link.startsWith("mailto:")).map((s) => s.link)}
         author={{
           name: person.name,
           url: `${baseURL}${about.path}`,
           image: `${baseURL}${person.avatar}`,
         }}
       />
+      <PersonSchema />
       {about.tableOfContent.display && (
         <Column
           left="0"

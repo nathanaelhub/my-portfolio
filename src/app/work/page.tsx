@@ -5,13 +5,17 @@ import { Projects } from "@/components/work/Projects";
 export const dynamic = "force-static";
 
 export async function generateMetadata() {
-  return Meta.generate({
+  const metadata = Meta.generate({
     title: work.title,
     description: work.description,
     baseURL: baseURL,
     image: `${baseURL}${person.avatar}`,
     path: work.path,
   });
+  return {
+    ...metadata,
+    alternates: { canonical: `${baseURL}${work.path}` },
+  };
 }
 
 export default function Work() {
@@ -23,7 +27,7 @@ export default function Work() {
         path={work.path}
         title={work.title}
         description={work.description}
-        image={`${baseURL}${person.avatar}`}
+        image={person.avatar}
         author={{
           name: person.name,
           url: `${baseURL}${about.path}`,
