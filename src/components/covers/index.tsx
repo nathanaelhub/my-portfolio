@@ -37,11 +37,11 @@ export const coverMeta: Record<string, CoverMeta> = {
   "car-sales-analysis": { Component: Cars, tint: "#ececec", accent: "#1c1b18" },
   "employee-attrition": { Component: Attrition, tint: "#f1ecf6", accent: "#6e4ba8" },
   "lyft-market-analysis": { Component: Lyft, tint: "#faecef", accent: "#e0457b" },
-  "physics-museum": { Component: PhysicsMuseum, tint: "#1c1b18", accent: "#7ba4ff", dark: true },
-  "apex-finance": { Component: ApexFinance, tint: "#eaf2ec", accent: "#1f7a4b" },
+  "physics-museum": { Component: PhysicsMuseum, tint: "#eef4ff", accent: "#7ba4ff" },
+  "apex-finance": { Component: ApexFinance, tint: "#eaf3ee", accent: "#1f7a4b" },
   "lineup": { Component: LineUp, tint: "#f3eefb", accent: "#7853c4" },
-  "air-canvas": { Component: AirCanvas, tint: "#eaf3fb", accent: "#2a6fc4" },
-  "audio-visualizer": { Component: AudioVisualizer, tint: "#1c1b18", accent: "#5ec8c2", dark: true },
+  "air-canvas": { Component: AirCanvas, tint: "#eef4f9", accent: "#2a6fc4" },
+  "audio-visualizer": { Component: AudioVisualizer, tint: "#0f1d1d", accent: "#5ec8c2", dark: true },
 };
 
 const FALLBACK_ACCENT = "#d97757";

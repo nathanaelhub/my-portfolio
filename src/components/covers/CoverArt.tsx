@@ -778,347 +778,497 @@ export function BisonChat() {
   );
 }
 
-// 20 — Physics Museum: parabolic kinematic arc on a faint grid + equation label.
+// 20 — Physics Museum: parabolic trajectory on a faint physics grid + equation
+// label, with a tiny ramp + ball corner motif.
 export function PhysicsMuseum() {
   const accent = "#7ba4ff";
-  const ink = "#f1eee6";
-  // Sample parabola: y = -0.012(x-200)^2 + 90 (in svg space, inverted)
-  const samples = Array.from({ length: 21 }, (_, i) => {
-    const x = 40 + i * 16;
-    const dx = x - 200;
-    const y = 230 - (90 - 0.012 * dx * dx);
-    return [x, y] as const;
-  });
+  const pts: Array<[number, number]> = [];
+  for (let i = 0; i <= 60; i++) {
+    const x = 40 + i * 5.5;
+    const t = i;
+    const yPhys = -0.0035 * t * t + 0.21 * t;
+    const y = 230 - yPhys * 110;
+    pts.push([x, y]);
+  }
+  const path = "M " + pts.map((p) => p.join(",")).join(" L ");
   return (
     <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
-      {/* grid */}
+      {Array.from({ length: 11 }).map((_, i) => (
+        <line
+          key={`v${i}`}
+          x1={40 + i * 32}
+          x2={40 + i * 32}
+          y1="20"
+          y2="240"
+          stroke={accent}
+          strokeOpacity="0.08"
+        />
+      ))}
       {Array.from({ length: 7 }).map((_, i) => (
         <line
-          key={`gv${i}`}
-          x1={40 + i * 53}
-          y1="40"
-          x2={40 + i * 53}
-          y2="240"
-          stroke={ink}
-          strokeOpacity="0.08"
-        />
-      ))}
-      {Array.from({ length: 5 }).map((_, i) => (
-        <line
-          key={`gh${i}`}
+          key={`h${i}`}
           x1="40"
-          y1={40 + i * 50}
-          x2="358"
-          y2={40 + i * 50}
-          stroke={ink}
+          x2="360"
+          y1={20 + i * 36}
+          y2={20 + i * 36}
+          stroke={accent}
           strokeOpacity="0.08"
         />
       ))}
-      {/* axes */}
-      <line x1="40" y1="240" x2="358" y2="240" stroke={ink} strokeOpacity="0.4" />
-      <line x1="40" y1="40" x2="40" y2="240" stroke={ink} strokeOpacity="0.4" />
-      {/* parabolic dots */}
-      {samples.map(([x, y], i) => (
-        <circle
-          key={i}
-          cx={x}
-          cy={y}
-          r={i === 0 || i === samples.length - 1 ? 4 : 2.2}
-          fill={accent}
-          opacity={i === 0 || i === samples.length - 1 ? 1 : 0.75}
+      <line x1="40" y1="230" x2="360" y2="230" stroke={accent} strokeOpacity="0.45" />
+      <line x1="40" y1="20" x2="40" y2="230" stroke={accent} strokeOpacity="0.45" />
+      {pts
+        .filter((_, i) => i % 3 === 0)
+        .map(([x, y], i) => (
+          <circle key={i} cx={x} cy={y} r="1.6" fill={accent} opacity="0.5" />
+        ))}
+      <path d={path} fill="none" stroke={accent} strokeWidth="2.5" />
+      <circle cx="40" cy="230" r="4" fill={accent} />
+      <g>
+        <circle cx={pts[30][0]} cy={pts[30][1]} r="5" fill={accent} />
+        <circle cx={pts[30][0]} cy={pts[30][1]} r="11" fill={accent} opacity="0.2" />
+        <line
+          x1={pts[30][0]}
+          y1={pts[30][1] - 14}
+          x2={pts[30][0]}
+          y2={pts[30][1] - 28}
+          stroke={accent}
+          strokeWidth="1"
+          strokeDasharray="2 2"
         />
-      ))}
-      {/* projectile body */}
-      <circle cx={samples[10][0]} cy={samples[10][1]} r="6" fill={accent} />
-      <circle cx={samples[10][0]} cy={samples[10][1]} r="10" fill="none" stroke={accent} strokeOpacity="0.4" />
-      {/* velocity vector */}
-      <line x1={samples[10][0]} y1={samples[10][1]} x2={samples[12][0] + 6} y2={samples[12][1] - 6} stroke={accent} strokeWidth="1.5" />
-      <polygon
-        points={`${samples[12][0] + 6},${samples[12][1] - 6} ${samples[12][0] - 2},${samples[12][1] - 4} ${samples[12][0] + 2},${samples[12][1] - 14}`}
+        <text
+          x={pts[30][0]}
+          y={pts[30][1] - 32}
+          textAnchor="middle"
+          fontFamily="Geist Mono, monospace"
+          fontSize="9"
+          fill={accent}
+        >
+          apex
+        </text>
+      </g>
+      <g transform="translate(310, 220)">
+        <path d="M 0 18 L 36 0 L 36 18 Z" fill={accent} opacity="0.25" />
+        <line x1="0" y1="18" x2="36" y2="18" stroke={accent} strokeOpacity="0.5" />
+        <circle cx="32" cy="3" r="3" fill={accent} />
+      </g>
+      <g transform="translate(50, 38)">
+        <rect width="172" height="22" rx="3" fill={accent} opacity="0.12" />
+        <text x="10" y="15" fontFamily="Geist Mono, monospace" fontSize="11" fill={accent}>
+          x = ½at² + v₀t + x₀
+        </text>
+      </g>
+      <text
+        x="40"
+        y="270"
+        fontFamily="Geist Mono, monospace"
+        fontSize="9"
         fill={accent}
-      />
-      {/* equation */}
-      <text x="56" y="62" fontFamily="Geist Mono, monospace" fontSize="11" fill={accent} letterSpacing="0.04em">
-        x = ½at² + v₀t + x₀
+        letterSpacing="0.18em"
+      >
+        EXHIBIT 01 · PROJECTILE
       </text>
-      <text x="200" y="282" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="9" fill={ink} opacity="0.55" letterSpacing="0.18em">
-        EXHIBIT 01 · KINEMATIC CATAPULT
+      <text
+        x="360"
+        y="270"
+        textAnchor="end"
+        fontFamily="Geist Mono, monospace"
+        fontSize="9"
+        fill={accent}
+        opacity="0.55"
+        letterSpacing="0.18em"
+      >
+        UNITY 6 · WEBGL
       </text>
     </svg>
   );
 }
 
-// 21 — Apex Finance: balance card + ascending bars + ledger lines.
+// 21 — Apex Finance: balance card, 6-month spend bars, transaction rows.
 export function ApexFinance() {
   const accent = "#1f7a4b";
+  const months = ["J", "F", "M", "A", "M", "J"];
+  const heights = [42, 56, 38, 64, 50, 72];
+  const rows: Array<{ merchant: string; amt: string; pos: boolean; faint?: boolean }> = [
+    { merchant: "ACH · Robinhood Transfer", amt: "+$1,200.00", pos: true },
+    { merchant: "Brick House Coffee · Nash", amt: "−$6.40", pos: false },
+    { merchant: "Plaid · Bank Link", amt: "+$0.01", pos: true, faint: true },
+    { merchant: "Whole Foods · Nashville", amt: "−$84.22", pos: false },
+    { merchant: "Lipscomb Bookstore", amt: "−$140.00", pos: false },
+  ];
   return (
     <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
-      {/* ledger background lines */}
-      {Array.from({ length: 8 }).map((_, i) => (
-        <line
-          key={i}
-          x1="36"
-          x2="364"
-          y1={64 + i * 24}
-          y2={64 + i * 24}
-          stroke="#1c1b18"
-          strokeOpacity="0.04"
-        />
-      ))}
-      {/* balance card */}
-      <g transform="translate(40, 40)">
-        <rect width="180" height="84" rx="10" fill="#fff" stroke={accent} strokeOpacity="0.3" />
-        <text x="14" y="22" fontFamily="Geist Mono, monospace" fontSize="9" fill="#605b50" letterSpacing="0.14em">
-          TOTAL BALANCE
+      <g transform="translate(30, 28)">
+        <rect width="200" height="78" rx="6" fill={accent} />
+        <text
+          x="14"
+          y="22"
+          fontFamily="Geist Mono, monospace"
+          fontSize="9"
+          fill="#fff"
+          opacity="0.7"
+          letterSpacing="0.12em"
+        >
+          ▎AVAILABLE BALANCE
         </text>
-        <text x="14" y="56" fontFamily="Geist, sans-serif" fontSize="26" fontWeight="500" fill="#1c1b18">
-          $12,486
+        <text x="14" y="52" fontFamily="Geist Mono, monospace" fontSize="22" fill="#fff">
+          $12,487.30
         </text>
-        <text x="14" y="74" fontFamily="Geist Mono, monospace" fontSize="9" fill={accent}>
-          ↗ +4.2% mo
+        <text
+          x="14"
+          y="68"
+          fontFamily="Geist Mono, monospace"
+          fontSize="9"
+          fill="#fff"
+          opacity="0.7"
+        >
+          ▴ +$842 this month
         </text>
-        <circle cx="158" cy="22" r="6" fill={accent} opacity="0.18" />
-        <circle cx="158" cy="22" r="3" fill={accent} />
+        <rect x="166" y="18" width="20" height="14" rx="2" fill="#fff" opacity="0.5" />
       </g>
-      {/* ascending bars */}
-      <g transform="translate(240, 90)">
-        {[24, 32, 28, 44, 38, 56, 52].map((h, i) => (
-          <rect
-            key={i}
-            x={i * 16}
-            y={66 - h}
-            width="10"
-            height={h}
-            rx="2"
-            fill={accent}
-            opacity={0.35 + i * 0.08}
-          />
-        ))}
-        <line x1="-4" y1="66" x2="116" y2="66" stroke="#1c1b18" strokeOpacity="0.25" />
-        <text x="56" y="86" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="9" fill="#605b50" letterSpacing="0.1em">
-          6 MO · SPEND
+      <g transform="translate(240, 28)">
+        <text
+          x="0"
+          y="10"
+          fontFamily="Geist Mono, monospace"
+          fontSize="9"
+          fill={accent}
+          letterSpacing="0.1em"
+        >
+          ▎6-MO SPEND
         </text>
-      </g>
-      {/* mini transaction rows */}
-      <g transform="translate(40, 158)">
-        {["Coffee Hub", "Lyft", "Plaid Demo Bank → Apex", "Lipscomb · Tuition"].map((label, i) => (
-          <g key={i} transform={`translate(0, ${i * 22})`}>
-            <circle cx="6" cy="6" r="3" fill={accent} opacity={0.6} />
-            <line x1="16" y1="6" x2="280" y2="6" stroke="#1c1b18" strokeOpacity="0.08" />
-            <text x="20" y="9" fontFamily="Geist, sans-serif" fontSize="10" fill="#1c1b18">
-              {label}
-            </text>
+        {heights.map((h, i) => (
+          <g key={i}>
+            <rect
+              x={i * 22}
+              y={78 - h}
+              width="14"
+              height={h}
+              rx="1.5"
+              fill={accent}
+              opacity={0.35 + i * 0.1}
+            />
             <text
-              x="316"
-              y="9"
+              x={i * 22 + 7}
+              y="94"
+              textAnchor="middle"
               fontFamily="Geist Mono, monospace"
               fontSize="9"
-              fill={i % 2 === 0 ? "#c43838" : accent}
-              textAnchor="end"
+              fill={accent}
+              opacity="0.5"
             >
-              {i % 2 === 0 ? "-$4.20" : "+$1,250"}
+              {months[i]}
             </text>
           </g>
         ))}
       </g>
+      <g transform="translate(30, 132)">
+        <text
+          x="0"
+          y="10"
+          fontFamily="Geist Mono, monospace"
+          fontSize="9"
+          fill={accent}
+          letterSpacing="0.1em"
+        >
+          ▎RECENT
+        </text>
+        {rows.map((t, i) => (
+          <g key={i} transform={`translate(0, ${22 + i * 24})`}>
+            <line x1="0" x2="340" y1="0" y2="0" stroke={accent} strokeOpacity="0.15" />
+            <circle
+              cx="8"
+              cy="14"
+              r="3"
+              fill={t.pos ? accent : "#a4622a"}
+              opacity={t.faint ? 0.4 : 1}
+            />
+            <text
+              x="20"
+              y="17"
+              fontFamily="Inter, sans-serif"
+              fontSize="11"
+              fill="#1c1b18"
+              opacity={t.faint ? 0.45 : 0.85}
+            >
+              {t.merchant}
+            </text>
+            <text
+              x="340"
+              y="17"
+              textAnchor="end"
+              fontFamily="Geist Mono, monospace"
+              fontSize="11"
+              fill={t.pos ? accent : "#a4622a"}
+              opacity={t.faint ? 0.45 : 0.95}
+            >
+              {t.amt}
+            </text>
+          </g>
+        ))}
+      </g>
+      <text
+        x="200"
+        y="290"
+        textAnchor="middle"
+        fontFamily="Geist Mono, monospace"
+        fontSize="9"
+        fill={accent}
+        letterSpacing="0.18em"
+      >
+        PLAID · DWOLLA · NEXT.JS 14
+      </text>
     </svg>
   );
 }
 
-// 22 — LineUp: stage script page with a spotlight cone overhead.
+// 22 — LineUp: script page with one character's lines accented, spotlight cone,
+// tiny play glyph at the bottom.
 export function LineUp() {
   const accent = "#7853c4";
+  const lines: Array<{ who: string; accent: boolean; width: number }> = [
+    { who: "JULIET", accent: true, width: 160 },
+    { who: "ROMEO", accent: false, width: 130 },
+    { who: "ROMEO", accent: false, width: 174 },
+    { who: "JULIET", accent: true, width: 142 },
+    { who: "JULIET", accent: true, width: 196 },
+    { who: "NURSE", accent: false, width: 120 },
+    { who: "JULIET", accent: true, width: 156 },
+    { who: "ROMEO", accent: false, width: 184 },
+  ];
   return (
     <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
       <defs>
-        <linearGradient id="ln-spot" x1="50%" y1="0%" x2="50%" y2="100%">
-          <stop offset="0%" stopColor={accent} stopOpacity="0.4" />
+        <linearGradient id="lu-spot" x1="0.5" y1="0" x2="0.5" y2="1">
+          <stop offset="0%" stopColor={accent} stopOpacity="0.32" />
           <stop offset="100%" stopColor={accent} stopOpacity="0" />
         </linearGradient>
       </defs>
-      {/* spotlight cone */}
-      <polygon points="200,0 130,220 270,220" fill="url(#ln-spot)" />
-      {/* script page */}
-      <g transform="translate(110, 80)">
-        <rect width="180" height="190" rx="3" fill="#fff" stroke="#1c1b18" strokeOpacity="0.18" />
-        <text x="90" y="22" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="8" fill={accent} letterSpacing="0.2em">
-          ACT II · SCENE 4
-        </text>
-        <line x1="14" y1="32" x2="166" y2="32" stroke="#1c1b18" strokeOpacity="0.12" />
-        {/* speech blocks */}
-        <g transform="translate(14, 44)">
-          {[
-            { role: "ROSA", lines: 2, mine: false },
-            { role: "YOU (HUGH)", lines: 3, mine: true },
-            { role: "ROSA", lines: 1, mine: false },
-            { role: "YOU (HUGH)", lines: 2, mine: true },
-          ].map((block, i) => {
-            const yOffset = i === 0 ? 0 : null;
-            const prev = [
-              { role: "ROSA", lines: 2, mine: false },
-              { role: "YOU (HUGH)", lines: 3, mine: true },
-              { role: "ROSA", lines: 1, mine: false },
-            ].slice(0, i);
-            const y = (yOffset ?? prev.reduce((acc, b) => acc + 18 + b.lines * 8, 0));
-            return (
-              <g key={i} transform={`translate(0, ${y})`}>
-                <text
-                  x="0"
-                  y="0"
-                  fontFamily="Geist Mono, monospace"
-                  fontSize="7"
-                  fill={block.mine ? accent : "#605b50"}
-                  letterSpacing="0.16em"
-                >
-                  {block.role}
-                </text>
-                {Array.from({ length: block.lines }).map((_, li) => (
-                  <line
-                    key={li}
-                    x1="0"
-                    y1={8 + li * 8}
-                    x2={130 - (li === block.lines - 1 ? 30 : 0)}
-                    y2={8 + li * 8}
-                    stroke={block.mine ? accent : "#1c1b18"}
-                    strokeOpacity={block.mine ? 0.7 : 0.22}
-                    strokeWidth={block.mine ? 1.4 : 1}
-                  />
-                ))}
-              </g>
-            );
-          })}
-        </g>
+      <path d="M 200 0 L 80 280 L 320 280 Z" fill="url(#lu-spot)" />
+      <line x1="180" y1="0" x2="180" y2="6" stroke={accent} strokeWidth="3" />
+      <line x1="220" y1="0" x2="220" y2="6" stroke={accent} strokeWidth="3" />
+      <g transform="translate(74, 28)">
+        <rect width="252" height="244" rx="3" fill="#fff" stroke={accent} strokeOpacity="0.2" />
+        <path d="M 240 0 L 252 0 L 252 12 Z" fill={accent} opacity="0.12" />
+        {lines.map((line, i) => {
+          const y = 32 + i * 24;
+          const c = line.accent ? accent : "#1c1b18";
+          const op = line.accent ? 1 : 0.18;
+          return (
+            <g key={i} transform={`translate(20, ${y})`}>
+              <text
+                x="0"
+                y="0"
+                fontFamily="Geist Mono, monospace"
+                fontSize="9.5"
+                fill={c}
+                opacity={op * 0.9}
+                letterSpacing="0.12em"
+              >
+                {line.who}
+              </text>
+              <rect x="0" y="6" width={line.width} height="3" rx="1.5" fill={c} opacity={op * 0.85} />
+              <rect
+                x="0"
+                y="12"
+                width={line.width - 30}
+                height="3"
+                rx="1.5"
+                fill={c}
+                opacity={op * 0.6}
+              />
+            </g>
+          );
+        })}
       </g>
-      {/* play / pause glyph */}
-      <g transform="translate(180, 250)">
-        <circle cx="20" cy="20" r="14" fill={accent} />
-        <polygon points="16,12 16,28 28,20" fill="#fff" />
+      <g transform="translate(200, 270)">
+        <circle r="14" fill="none" stroke={accent} strokeWidth="1.3" opacity="0.6" />
+        <polygon points="-4,-6 6,0 -4,6" fill={accent} />
       </g>
     </svg>
   );
 }
 
-// 23 — Air Canvas: hand + dotted 3D stroke trail on a perspective grid.
+// 23 — Air Canvas: hand silhouette + dotted 3D stroke trail on a perspective grid.
 export function AirCanvas() {
   const accent = "#2a6fc4";
+  const horizLines = Array.from({ length: 9 }, (_, i) => {
+    const t = i / 8;
+    const y = 200 + t * 80;
+    const stretchX = 200 - t * 160;
+    return (
+      <line
+        key={`gh${i}`}
+        x1={200 - stretchX}
+        y1={y}
+        x2={200 + stretchX}
+        y2={y}
+        stroke={accent}
+        strokeOpacity={0.16 + t * 0.15}
+      />
+    );
+  });
+  const vertLines = Array.from({ length: 13 }, (_, idx) => {
+    const i = idx - 6;
+    const x = 200 + i * 26;
+    return (
+      <line
+        key={`gv${i}`}
+        x1={x}
+        y1="200"
+        x2={200 + i * 6}
+        y2="280"
+        stroke={accent}
+        strokeOpacity="0.18"
+      />
+    );
+  });
+  const trail: Array<{ x: number; y: number; r: number; opacity: number }> = [];
+  for (let i = 0; i <= 26; i++) {
+    const t = i / 26;
+    const x = 110 + t * 220;
+    const y = 170 - Math.sin(t * Math.PI) * 70 + Math.cos(t * Math.PI * 2) * 8;
+    const depth = 0.4 + (1 - t) * 0.85;
+    const r = 1.5 + depth * 4;
+    trail.push({ x, y, r, opacity: depth });
+  }
+  const last = trail[trail.length - 1];
   return (
     <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
-      {/* perspective grid */}
-      <g stroke="#1c1b18" strokeOpacity="0.08">
-        {Array.from({ length: 7 }).map((_, i) => {
-          const y = 220 - i * (180 / 6) * 0.6;
-          const inset = (i * 70) / 6;
-          return (
-            <line key={`h${i}`} x1={40 + inset} y1={y} x2={360 - inset} y2={y} />
-          );
-        })}
-        {Array.from({ length: 9 }).map((_, i) => {
-          const x = 40 + i * (320 / 8);
-          const top = 40 + Math.abs(i - 4) * 8;
-          return (
-            <line key={`v${i}`} x1={x} y1={top} x2={x} y2={220} />
-          );
-        })}
+      {horizLines}
+      {vertLines}
+      <g transform="translate(48, 120)">
+        <path
+          d="M 0 20 L 0 64 Q 0 76 12 76 L 50 76 Q 62 76 62 64 L 62 30 Z"
+          fill="#1c1b18"
+          opacity="0.85"
+        />
+        <path d="M 0 30 Q -10 26, -14 14 L -10 8 Q -2 12, 2 22 Z" fill="#1c1b18" opacity="0.85" />
+        <path d="M 14 30 L 14 -8 Q 22 -10, 26 -8 L 26 30 Z" fill="#1c1b18" opacity="0.85" />
+        <circle cx="20" cy="-6" r="6" fill={accent} opacity="0.35" />
+        <circle cx="20" cy="-6" r="2.5" fill={accent} />
+        <path d="M 30 30 L 30 4 Q 38 2, 42 4 L 42 30 Z" fill="#1c1b18" opacity="0.5" />
+        <path d="M 46 30 L 46 8 Q 53 6, 56 8 L 56 30 Z" fill="#1c1b18" opacity="0.45" />
+        <path d="M 58 30 L 58 14 Q 64 12, 66 14 L 66 30 Z" fill="#1c1b18" opacity="0.4" />
       </g>
-      {/* dotted trail (3D path) */}
-      {(() => {
-        const path: Array<[number, number, number]> = [];
-        for (let i = 0; i <= 40; i++) {
-          const t = i / 40;
-          const x = 80 + 240 * t;
-          const y = 180 - 90 * Math.sin(t * Math.PI * 1.6);
-          const z = 0.5 + 0.5 * t; // depth-modulated radius
-          path.push([x, y, z]);
-        }
-        return path.map(([x, y, z], i) => (
-          <circle key={i} cx={x} cy={y} r={1.6 + z * 2} fill={accent} opacity={0.4 + z * 0.55} />
-        ));
-      })()}
-      {/* hand silhouette (simplified) */}
-      <g transform="translate(48, 150)" fill="none" stroke={accent} strokeWidth="2" strokeLinecap="round">
-        {/* palm */}
-        <path d="M16 56 L16 30 Q16 22 24 22 L40 22 Q48 22 48 30 L48 56" />
-        {/* fingers */}
-        <line x1="20" y1="22" x2="20" y2="8" />
-        <line x1="28" y1="22" x2="28" y2="2" />
-        <line x1="36" y1="22" x2="36" y2="6" />
-        <line x1="44" y1="22" x2="44" y2="14" />
-        {/* thumb */}
-        <path d="M16 36 L4 30" />
+      {trail.map((d, i) => (
+        <circle key={i} cx={d.x} cy={d.y} r={d.r} fill={accent} opacity={d.opacity} />
+      ))}
+      <g>
+        <circle cx={last.x} cy={last.y} r={11} fill={accent} opacity="0.2" />
+        <circle cx={last.x} cy={last.y} r={3.5} fill={accent} />
       </g>
-      {/* fingertip glow at first point of trail */}
-      <circle cx="80" cy="180" r="5" fill={accent} />
-      <circle cx="80" cy="180" r="11" fill={accent} opacity="0.25" />
-      <text x="200" y="282" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="9" fill={accent} letterSpacing="0.18em">
+      <g transform="translate(40, 36)">
+        <circle r="4" fill={accent} />
+        <circle r="9" fill={accent} opacity="0.2" />
+        <text x="14" y="4" fontFamily="Geist Mono, monospace" fontSize="9.5" fill={accent}>
+          LIVE · 3 peers
+        </text>
+      </g>
+      <text
+        x="200"
+        y="290"
+        textAnchor="middle"
+        fontFamily="Geist Mono, monospace"
+        fontSize="9"
+        fill={accent}
+        letterSpacing="0.18em"
+      >
         MEDIAPIPE · THREE.JS · SOCKET.IO
       </text>
     </svg>
   );
 }
 
-// 24 — Audio Visualizer: frequency bars + sine waveform overlay.
+// 24 — Audio Visualizer (dark): frequency bars across the bottom, sine waveform
+// mid-frame, mic glyph + 44.1 kHz · LOCAL label.
 export function AudioVisualizer() {
   const accent = "#5ec8c2";
-  const ink = "#f1eee6";
-  const bars = [18, 32, 46, 38, 54, 70, 64, 88, 72, 60, 74, 92, 78, 56, 42, 36, 50, 64, 48, 34, 24, 18, 14];
+  const bars: number[] = [];
+  for (let i = 0; i < 36; i++) {
+    const seed = Math.sin(i * 1.7 + 3.1) * 0.5 + Math.sin(i * 0.4) * 0.5;
+    const env = Math.sin((i / 35) * Math.PI) * 0.6 + 0.3;
+    const h = Math.max(6, (seed * 0.5 + env) * 110);
+    bars.push(h);
+  }
+  const wavePts: Array<[number, number]> = [];
+  for (let i = 0; i <= 80; i++) {
+    const x = 30 + i * 4.4;
+    const y = 110 + Math.sin(i * 0.32) * 28 + Math.sin(i * 0.11) * 8;
+    wavePts.push([x, y]);
+  }
+  const wavePath = "M " + wavePts.map((p) => p.join(",")).join(" L ");
   return (
     <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
-      {/* axis baseline */}
-      <line x1="20" y1="220" x2="380" y2="220" stroke={ink} strokeOpacity="0.25" />
-      {/* frequency bars */}
-      {bars.map((h, i) => (
-        <rect
-          key={i}
-          x={20 + i * 16}
-          y={220 - h}
-          width="11"
-          height={h}
-          rx="2"
-          fill={accent}
-          opacity={0.45 + (i / bars.length) * 0.35}
-        />
-      ))}
-      {/* mirror underside (subtle reflection) */}
-      {bars.map((h, i) => (
-        <rect
-          key={`r${i}`}
-          x={20 + i * 16}
-          y="222"
-          width="11"
-          height={h * 0.4}
-          rx="2"
-          fill={accent}
-          opacity="0.15"
-        />
-      ))}
-      {/* sine waveform overlay */}
-      <path
-        d={(() => {
-          const pts: string[] = [];
-          for (let i = 0; i <= 80; i++) {
-            const x = 20 + i * 4.5;
-            const t = i / 80;
-            const y = 110 + Math.sin(t * Math.PI * 4) * 18 * (0.6 + 0.4 * Math.sin(t * Math.PI * 2));
-            pts.push(`${i === 0 ? "M" : "L"} ${x} ${y}`);
-          }
-          return pts.join(" ");
-        })()}
-        fill="none"
+      <defs>
+        <linearGradient id="av-bar" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={accent} stopOpacity="1" />
+          <stop offset="100%" stopColor={accent} stopOpacity="0.4" />
+        </linearGradient>
+      </defs>
+      <line
+        x1="20"
+        y1="110"
+        x2="380"
+        y2="110"
         stroke={accent}
-        strokeWidth="1.6"
-        opacity="0.85"
+        strokeOpacity="0.18"
+        strokeDasharray="2 3"
       />
-      {/* mic glyph */}
-      <g transform="translate(20, 36)" stroke={accent} strokeWidth="1.5" fill="none">
-        <rect x="6" y="0" width="10" height="18" rx="5" />
-        <path d="M2 12 Q2 22 11 22 Q20 22 20 12" />
-        <line x1="11" y1="22" x2="11" y2="28" />
-        <line x1="6" y1="28" x2="16" y2="28" />
+      <path d={wavePath} fill="none" stroke={accent} strokeWidth="2" opacity="0.85" />
+      <path d={wavePath} fill="none" stroke={accent} strokeWidth="6" opacity="0.18" />
+      {bars.map((h, i) => {
+        const x = 30 + i * 10;
+        const y = 240 - h;
+        return <rect key={i} x={x} y={y} width="6" height={h} rx="1.5" fill="url(#av-bar)" />;
+      })}
+      <line x1="20" y1="240" x2="380" y2="240" stroke={accent} strokeOpacity="0.4" />
+      <g transform="translate(32, 32)">
+        <rect x="0" y="0" width="14" height="20" rx="7" fill="none" stroke={accent} strokeWidth="1.5" />
+        <path
+          d="M -3 16 Q -3 26, 7 26 Q 17 26, 17 16"
+          fill="none"
+          stroke={accent}
+          strokeWidth="1.2"
+        />
+        <line x1="7" y1="26" x2="7" y2="32" stroke={accent} strokeWidth="1.2" />
+        <line x1="2" y1="32" x2="12" y2="32" stroke={accent} strokeWidth="1.2" />
+        <text
+          x="26"
+          y="14"
+          fontFamily="Geist Mono, monospace"
+          fontSize="9.5"
+          fill={accent}
+          letterSpacing="0.08em"
+        >
+          44.1 kHz
+        </text>
+        <text
+          x="26"
+          y="26"
+          fontFamily="Geist Mono, monospace"
+          fontSize="9.5"
+          fill={accent}
+          opacity="0.55"
+          letterSpacing="0.08em"
+        >
+          LOCAL
+        </text>
       </g>
-      <text x="44" y="50" fontFamily="Geist Mono, monospace" fontSize="9" fill={ink} opacity="0.6" letterSpacing="0.14em">
-        MIC · 44.1 kHz · LOCAL
-      </text>
-      <text x="200" y="282" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="9" fill={accent} letterSpacing="0.18em">
+      <g transform="translate(348, 38)" opacity="0.8">
+        <circle r="6" fill="none" stroke={accent} />
+        <circle r="10" fill="none" stroke={accent} opacity="0.5" />
+        <circle r="14" fill="none" stroke={accent} opacity="0.25" />
+      </g>
+      <text
+        x="200"
+        y="276"
+        textAnchor="middle"
+        fontFamily="Geist Mono, monospace"
+        fontSize="9"
+        fill={accent}
+        letterSpacing="0.18em"
+      >
         SVELTEKIT · WEB AUDIO API
       </text>
     </svg>
