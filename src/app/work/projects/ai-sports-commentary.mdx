@@ -1,0 +1,41 @@
+---
+title: "AI Sports Commentary"
+publishedAt: "2025-06-20"
+summary: "LLM-driven play-by-play with Hume TTS and a RAG layer over historical plays — generates broadcast-quality audio in real time."
+team:
+  - name: "Nathanael Johnson"
+    role: "ML Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/Commentary"
+tag: "LLM / Voice"
+tier: "featured"
+domains: ["Production ML", "Sports", "Voice"]
+year: 2025
+metric: "RAG · 1.2s TTS latency"
+isNew: true
+---
+
+## Overview
+
+An end-to-end pipeline that turns raw play data into broadcast-style commentary. A language model generates the script; Hume TTS speaks it; a retrieval layer grounds each call in historical context so the commentary references the right players, stats, and situations.
+
+## Pipeline
+
+1. **Event ingest** — structured play data arrives as a stream
+2. **RAG retrieval** — relevant historical plays, player records, and team context pulled from a vector store of ~18K indexed plays
+3. **LLM generation** — context + current play → spoken-style commentary script
+4. **Hume TTS** — script rendered to natural-sounding audio with ~1.2s end-to-end latency
+5. **Output** — audio streamed to the listener in near real time
+
+## Stack
+
+- **Python** orchestration
+- **OpenAI / Anthropic** for generation
+- **Hume TTS** for voice synthesis
+- **Vector store (FAISS / Chroma)** for RAG
+- **WebSocket streaming** for live delivery
+
+## Why it matters
+
+Live commentary has historically required a person at a microphone. This project shows the full path from raw play data to broadcast-ready audio is now a deployable pipeline — a useful template for any domain that needs grounded, real-time spoken output.

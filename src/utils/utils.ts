@@ -9,6 +9,8 @@ type Team = {
   linkedIn: string;
 };
 
+type ProjectTier = "featured" | "production" | "tools" | "analysis";
+
 type Metadata = {
   title: string;
   publishedAt: string;
@@ -18,6 +20,21 @@ type Metadata = {
   tag?: string;
   team: Team[];
   link?: string;
+  tier?: ProjectTier;
+  domains?: string[];
+  year?: number;
+  metric?: string;
+  isNew?: boolean;
+  // Blog-only
+  topic?: string;
+  excerpt?: string;
+  readMins?: number;
+  // Project case-study meta strip
+  role?: string;
+  collaborator?: string;
+  timeline?: string;
+  stack?: string;
+  status?: string;
 };
 
 import { notFound } from "next/navigation";
@@ -47,6 +64,19 @@ function readMDXFile(filePath: string) {
     tag: data.tag || [],
     team: data.team || [],
     link: data.link || "",
+    tier: data.tier || undefined,
+    domains: data.domains || [],
+    year: data.year || undefined,
+    metric: data.metric || "",
+    isNew: data.isNew || false,
+    topic: data.topic || undefined,
+    excerpt: data.excerpt || "",
+    readMins: data.readMins || undefined,
+    role: data.role || undefined,
+    collaborator: data.collaborator || undefined,
+    timeline: data.timeline || undefined,
+    stack: data.stack || undefined,
+    status: data.status || undefined,
   };
 
   return { metadata, content };

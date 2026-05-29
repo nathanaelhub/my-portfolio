@@ -5,17 +5,17 @@ import {
   Column,
   Flex,
   Heading,
-  Media,
   SmartLink,
   Text,
 } from "@once-ui-system/core";
 import { getImagePath } from "@/utils/image";
+import { ProjectCover } from "@/components/covers";
 import styles from "./ProjectCard.module.scss";
 
 interface ProjectCardProps {
+  slug: string;
   href: string;
   priority?: boolean;
-  images: string[];
   title: string;
   content: string;
   description: string;
@@ -24,9 +24,8 @@ interface ProjectCardProps {
 }
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
+  slug,
   href,
-  priority,
-  images = [],
   title,
   content,
   description,
@@ -45,24 +44,15 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
       background="surface"
       className={styles.card}
     >
-      {/* Image on the left - smaller size */}
-      {images.length > 0 && (
-        <Flex
-          style={{ width: "280px", minWidth: "280px", flexShrink: 0 }}
-          s={{ style: { width: "100%", minWidth: "100%" } }}
-        >
-          <SmartLink href={href} style={{ width: "100%" }}>
-            <Media
-              priority={priority}
-              sizes="280px"
-              radius="m"
-              aspectRatio="1 / 1"
-              src={getImagePath(images[0])}
-              alt={title}
-            />
-          </SmartLink>
-        </Flex>
-      )}
+      {/* SVG cover on the left */}
+      <Flex
+        style={{ width: "280px", minWidth: "280px", flexShrink: 0 }}
+        s={{ style: { width: "100%", minWidth: "100%" } }}
+      >
+        <SmartLink href={href} style={{ width: "100%" }}>
+          <ProjectCover slug={slug} />
+        </SmartLink>
+      </Flex>
 
       {/* Content on the right */}
       <Column flex={1} gap="m">
@@ -84,11 +74,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           />
         )}
         {description?.trim() && (
-          <Text
-            wrap="balance"
-            variant="body-default-s"
-            onBackground="neutral-weak"
-          >
+          <Text wrap="balance" variant="body-default-s" onBackground="neutral-weak">
             {description}
           </Text>
         )}

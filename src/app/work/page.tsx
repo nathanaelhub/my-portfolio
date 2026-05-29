@@ -1,6 +1,7 @@
-import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
+import { Column, Meta, Schema } from "@once-ui-system/core";
 import { baseURL, about, person, work } from "@/resources";
-import { Projects } from "@/components/work/Projects";
+import { getPosts } from "@/utils/utils";
+import { WorkExplorer, type WorkProject } from "@/components/work/WorkExplorer";
 
 export const dynamic = "force-static";
 
@@ -18,9 +19,25 @@ export async function generateMetadata() {
   };
 }
 
+function getWorkProjects(): WorkProject[] {
+  return getPosts(["src", "app", "work", "projects"]).map((post) => ({
+    slug: post.slug,
+    title: post.metadata.title,
+    summary: post.metadata.summary,
+    link: post.metadata.link || "",
+    tier: post.metadata.tier ?? "analysis",
+    domains: post.metadata.domains ?? [],
+    year: post.metadata.year ?? new Date(post.metadata.publishedAt).getFullYear(),
+    metric: post.metadata.metric ?? "",
+    isNew: post.metadata.isNew ?? false,
+  }));
+}
+
 export default function Work() {
+  const projects = getWorkProjects();
+
   return (
-    <Column maxWidth="m" paddingTop="24">
+    <Column maxWidth="l" fillWidth paddingTop="24">
       <Schema
         as="webPage"
         baseURL={baseURL}
@@ -34,10 +51,7 @@ export default function Work() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
-      <Heading marginBottom="l" variant="heading-strong-xl" align="center">
-        {work.title}
-      </Heading>
-      <Projects filterable />
+      <WorkExplorer projects={projects} />
     </Column>
   );
 }

@@ -1,0 +1,466 @@
+/* ------------------------------------------------------------------ */
+/* Home — warm minimal (Direction C). Hero leads with name; bento     */
+/* work grid pulls cover SVGs into card corners; recent writing row.   */
+/* Theme-aware via the global [data-theme] attr on <html>. Blue accent */
+/* is scoped to .page so only home gets the cool accent.              */
+/* ------------------------------------------------------------------ */
+
+.page {
+  --home-accent: #2455ff;
+  --home-accent-soft: #6b8cff;
+  --home-line: var(--rd-line);
+  --home-chip-bg: var(--rd-bone);
+  --home-hint: var(--rd-faint);
+
+  width: 100%;
+  color: var(--rd-ink);
+  padding: 8px 12px 36px;
+  font-family: var(--font-body), "Geist", system-ui, sans-serif;
+}
+
+:global([data-theme="dark"]) .page {
+  --home-accent: #6b8cff;
+  --home-accent-soft: #8aa6ff;
+}
+
+/* ---------- HERO ---------- */
+.hero {
+  margin-top: 56px;
+  max-width: 980px;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 10px;
+  background: var(--rd-bone);
+  border: 1px solid var(--rd-line);
+  border-radius: 999px;
+  font-size: 12.5px;
+  color: var(--rd-mute);
+}
+
+.pillDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #22b573;
+  box-shadow: 0 0 0 3px rgba(34, 181, 115, 0.18);
+}
+
+.pillDotAccent {
+  background: var(--home-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--home-accent) 18%, transparent);
+}
+
+.greeting {
+  font-family: var(--font-serif-italic), "Instrument Serif", serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 28px;
+  color: var(--rd-mute);
+  margin: 0 0 10px;
+  letter-spacing: -0.005em;
+}
+
+.displayName {
+  font-family: var(--font-body), "Geist", sans-serif;
+  font-weight: 500;
+  font-size: 88px;
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+  margin: 0;
+  color: var(--rd-ink);
+  text-wrap: balance;
+}
+
+.accent {
+  color: var(--home-accent);
+}
+
+.role {
+  margin-top: 26px;
+  font-size: 19px;
+  color: var(--rd-mute);
+  max-width: 640px;
+  line-height: 1.55;
+  font-weight: 400;
+}
+
+.role strong {
+  color: var(--rd-ink);
+  font-weight: 500;
+}
+
+.heroCta {
+  margin-top: 36px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn {
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  background: var(--rd-paper);
+  color: var(--rd-ink);
+  border: 1px solid var(--rd-line);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  text-decoration: none;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    transform 0.15s;
+
+  &:hover {
+    background: var(--rd-bone);
+  }
+}
+
+.btnPrimary {
+  background: var(--rd-ink);
+  color: var(--rd-bg);
+  border-color: var(--rd-ink);
+
+  &:hover {
+    background: var(--rd-ink);
+    opacity: 0.88;
+  }
+}
+
+:global([data-theme="dark"]) .btnPrimary {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* ---------- SECTION ---------- */
+.sectionHead {
+  margin-top: 96px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.sectionLabel {
+  font-family: var(--font-code), monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--rd-faint);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  padding: 6px 13px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  background: var(--rd-bone);
+  color: var(--rd-mute);
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition:
+    background 0.15s,
+    color 0.15s;
+
+  &:hover {
+    color: var(--rd-ink);
+  }
+}
+
+.chipActive {
+  background: var(--rd-ink);
+  color: var(--rd-bg);
+
+  &:hover {
+    color: var(--rd-bg);
+  }
+}
+
+/* ---------- WORK GRID (bento) ---------- */
+.workGrid {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 14px;
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 200px;
+  text-decoration: none;
+  color: inherit;
+  background: var(--card-tint-light, var(--rd-bone));
+  border: 1px solid color-mix(in srgb, var(--card-tint-light, var(--rd-bone)) 80%, var(--rd-line));
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px -16px rgba(28, 27, 24, 0.18);
+  }
+}
+
+:global([data-theme="dark"]) .card {
+  background: var(--card-tint-dark, var(--rd-bone));
+  border-color: color-mix(in srgb, var(--card-tint-dark, var(--rd-bone)) 70%, var(--rd-line));
+}
+
+.cardFeat {
+  grid-column: span 1;
+  grid-row: span 2;
+  min-height: 420px;
+  padding: 28px 30px;
+}
+
+.cardHead {
+  position: relative;
+  z-index: 2;
+}
+
+.cardTag {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--card-accent, var(--home-accent));
+  margin-bottom: 12px;
+}
+
+.cardTagMute {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--rd-mute);
+  margin-bottom: 12px;
+}
+
+.cardTitle {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.018em;
+  color: var(--rd-ink);
+  max-width: 28ch;
+}
+
+.cardFeat .cardTitle {
+  font-size: 32px;
+  line-height: 1.08;
+  letter-spacing: -0.022em;
+  max-width: 18ch;
+}
+
+.cardBody {
+  font-size: 14.5px;
+  color: var(--rd-mute);
+  line-height: 1.5;
+  margin-top: 14px;
+  max-width: 42ch;
+}
+
+.cardFoot {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 18px;
+  position: relative;
+  z-index: 2;
+}
+
+.cardFeat .cardFoot {
+  margin-top: 22px;
+}
+
+.cardMetric {
+  font-size: 12.5px;
+  color: var(--rd-mute);
+}
+
+.cardArrow {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--rd-ink);
+  color: var(--rd-bg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: transform 0.2s;
+}
+
+.card:hover .cardArrow {
+  transform: translate(2px, -2px);
+}
+
+/* Cover slot inside card — bleeds out the bottom-right corner */
+.cardCover {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.92;
+}
+
+.cardCover :global(svg) {
+  position: absolute !important;
+  right: -10%;
+  bottom: -8%;
+  width: 70%;
+  height: auto;
+  opacity: 0.85;
+  inset: auto !important;
+}
+
+.cardFeat .cardCover :global(svg) {
+  right: -2%;
+  bottom: 18%;
+  width: 60%;
+}
+
+:global([data-theme="dark"]) .cardCover {
+  opacity: 0.55;
+}
+
+:global([data-theme="dark"]) .cardCover :global(svg) {
+  opacity: 0.7;
+}
+
+/* ---------- "SEE MORE" CARD ---------- */
+.cardMore {
+  background: var(--rd-bone);
+  border: 1px dashed var(--rd-line);
+}
+
+:global([data-theme="dark"]) .cardMore {
+  background: var(--rd-bone);
+}
+
+.moreGlyph {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56px;
+  color: var(--rd-faint);
+  font-weight: 200;
+  pointer-events: none;
+}
+
+/* ---------- WRITING ROW ---------- */
+.postRow {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.post {
+  padding: 22px 0 0;
+  border-top: 1px solid var(--rd-line);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.15s;
+  min-height: 140px;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.postMeta {
+  display: flex;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--rd-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: var(--font-code), monospace;
+}
+
+.postTitle {
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.012em;
+  color: var(--rd-ink);
+}
+
+.postArr {
+  margin-top: auto;
+  color: var(--home-accent);
+  font-size: 12.5px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 1000px) {
+  .workGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .cardFeat {
+    grid-column: span 2;
+    grid-row: span 1;
+    min-height: 320px;
+  }
+  .cardFeat .cardCover :global(svg) {
+    right: -4%;
+    bottom: -10%;
+    width: 50%;
+  }
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding: 8px 4px 28px;
+  }
+  .displayName {
+    font-size: 56px;
+  }
+  .greeting {
+    font-size: 22px;
+  }
+  .role {
+    font-size: 17px;
+  }
+  .hero {
+    margin-top: 32px;
+  }
+  .sectionHead {
+    margin-top: 64px;
+  }
+  .workGrid {
+    grid-template-columns: 1fr;
+  }
+  .cardFeat {
+    grid-column: span 1;
+    min-height: 280px;
+  }
+  .postRow {
+    grid-template-columns: 1fr;
+  }
+}

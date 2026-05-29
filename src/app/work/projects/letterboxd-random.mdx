@@ -1,0 +1,39 @@
+---
+title: "Letterboxd Random"
+publishedAt: "2024-09-12"
+summary: "A Cloudflare Worker that picks a random film from your Letterboxd watchlist. Deployed live, no server."
+team:
+  - name: "Nathanael Johnson"
+    role: "Maker"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/letterboxd-random"
+tag: "Tool / Edge"
+tier: "tools"
+domains: ["Tools", "Live"]
+year: 2024
+metric: "Cloudflare Worker · live"
+isNew: true
+---
+
+## Overview
+
+A small live tool that solves a personal problem: too many films in the Letterboxd watchlist, decision paralysis on a Tuesday night. Paste your username, get a random pick.
+
+**Live at:** [letterboxd-random.njdj.workers.dev](https://letterboxd-random.njdj.workers.dev/)
+
+## How it works
+
+- Cloudflare Worker scrapes the public Letterboxd watchlist HTML
+- Picks a random entry
+- Renders a clean card with title, year, and the Letterboxd link
+
+## Why it's here
+
+It's not the most technically interesting thing I've built, but it is the one I use the most. It's deployed, it stays up, and it taught me Cloudflare Workers — which turn out to be the right answer for a lot of small tools.
+
+## Stack
+
+- **Cloudflare Workers** (free tier)
+- **HTML / vanilla JS** for the UI
+- **Wrangler** for deploys

@@ -1,0 +1,38 @@
+---
+title: "PT-Assist"
+publishedAt: "2025-08-15"
+summary: "Real-time AI physical therapy assistant using YOLO11 pose estimation for live form analysis and rep counting."
+team:
+  - name: "Nathanael Johnson"
+    role: "AI / Computer Vision Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/pt-assist"
+tag: "Computer Vision"
+tier: "featured"
+domains: ["Research", "Healthcare", "Vision"]
+year: 2025
+metric: "YOLO11 · live form check"
+isNew: true
+---
+
+## Overview
+
+PT-Assist is a real-time physical therapy assistant that uses YOLO11 pose estimation to monitor exercise form, count repetitions, and provide live feedback. Built to help patients perform PT exercises correctly without a therapist physically present.
+
+## What it does
+
+- **Live pose tracking** — extracts joint keypoints from webcam video in real time
+- **Joint-angle analysis** — computes knee, hip, and elbow angles per frame against target ranges
+- **Rep counting with form gating** — only counts reps performed within the correct angle envelope
+- **HUD feedback** — overlays current rep count and an in-range / out-of-range form indicator
+
+## Stack
+
+- **Python · YOLO11** for pose estimation
+- **OpenCV** for real-time video capture and overlay rendering
+- **NumPy** for joint-angle vector math
+
+## Why it matters
+
+Physical therapy adherence drops sharply when patients exercise at home unsupervised. PT-Assist demonstrates that a single laptop camera plus a modern pose model is enough to give patients the corrective feedback loop they lose between sessions — without specialized hardware.

@@ -1,0 +1,39 @@
+---
+title: "Hume Voice Demo"
+publishedAt: "2025-07-05"
+summary: "Streamlit voice agent with live model swapping between Claude and GPT-4 and a circular-spectrum waveform visualizer."
+team:
+  - name: "Nathanael Johnson"
+    role: "ML Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/hume-voice-demo"
+tag: "Voice / LLM"
+tier: "production"
+domains: ["Production ML", "Voice"]
+year: 2025
+metric: "Streamlit · model swap"
+isNew: true
+---
+
+## Overview
+
+A Streamlit-based voice agent that lets you hot-swap the underlying language model — Claude or GPT-4 — without restarting the session. Built as a teaching demo to make the differences between models *audible*, not just measurable.
+
+## What you can do
+
+- Speak into the mic; Hume transcribes
+- The active model generates a response
+- Hume TTS speaks it back
+- A circular-spectrum waveform visualizes the audio output in real time
+- A single click swaps between Claude and GPT-4 mid-conversation
+
+## Why a swap matters
+
+Most voice demos pin you to one model. The point of this one is comparison — same prompt, same TTS, only the brain changes. Useful for showing students or non-technical stakeholders that "the LLM" is not one fixed thing.
+
+## Stack
+
+- **Python · Streamlit** for the UI
+- **Hume API** for transcription + TTS
+- **OpenAI · Anthropic SDKs** with a thin abstraction so swap is a single state change

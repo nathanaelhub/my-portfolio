@@ -8,8 +8,6 @@ import {
   Text,
   InlineCode,
   CodeBlock,
-  TextProps,
-  MediaProps,
   Accordion,
   AccordionGroup,
   Table,
@@ -22,17 +20,21 @@ import {
   Icon,
   Media,
   SmartLink,
-  List,
-  ListItem,
-  Line,
 } from "@once-ui-system/core";
 
-type CustomLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+/**
+ * MDX renderer for long-form pages (blog posts + project case studies).
+ * Maps standard markdown tags to plain semantic HTML so the .prose
+ * stylesheet (see `Prose.module.scss`) can drive typography.
+ * Headings keep slug ids so the in-page TOC can anchor to them.
+ */
+
+type AnchorProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string;
   children: ReactNode;
 };
 
-function CustomLink({ href, children, ...props }: CustomLinkProps) {
+function CustomLink({ href, children, ...props }: AnchorProps) {
   if (href.startsWith("/")) {
     return (
       <SmartLink href={href} {...props}>
@@ -56,12 +58,50 @@ function CustomLink({ href, children, ...props }: CustomLinkProps) {
   );
 }
 
-function createImage({ alt, src, ...props }: MediaProps & { src: string }) {
-  if (!src) {
-    console.error("Media requires a valid 'src' property.");
-    return null;
+function flattenText(node: ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(flattenText).join("");
+  if (React.isValidElement(node)) {
+    const props = node.props as { children?: ReactNode };
+    return flattenText(props.children ?? "");
   }
+  return "";
+}
 
+function slugify(value: ReactNode): string {
+  const text = flattenText(value).replace(/&/g, " and ");
+  return transliterate(text, { lowercase: true, separator: "-" }).replace(/-{2,}/g, "-");
+}
+
+function createHeading(tag: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
+  const Heading = ({ children, ...rest }: { children?: ReactNode }) => {
+    const id = slugify(children);
+    return React.createElement(tag, { id, ...rest }, children);
+  };
+  Heading.displayName = `Prose${tag.toUpperCase()}`;
+  return Heading;
+}
+
+function createCodeBlock(props: { children?: React.ReactElement<{ className?: string; children?: string }> }) {
+  const child = props.children;
+  if (child && child.props && child.props.className) {
+    const { className, children } = child.props;
+    const language = className.replace("language-", "");
+    const label = language.charAt(0).toUpperCase() + language.slice(1);
+    return (
+      <CodeBlock
+        marginTop="8"
+        marginBottom="16"
+        codes={[{ code: children ?? "", language, label }] as never}
+        copyButton={true}
+      />
+    );
+  }
+  return <pre {...props} />;
+}
+
+function createImage({ alt, src, ...rest }: { alt?: string; src: string } & Record<string, unknown>) {
+  if (!src) return null;
   return (
     <Media
       marginTop="8"
@@ -72,121 +112,27 @@ function createImage({ alt, src, ...props }: MediaProps & { src: string }) {
       sizes="(max-width: 960px) 100vw, 960px"
       alt={alt}
       src={src}
-      {...props}
+      {...rest}
     />
   );
 }
 
-function slugify(str: string): string {
-  const strWithAnd = str.replace(/&/g, " and "); // Replace & with 'and'
-  return transliterate(strWithAnd, {
-    lowercase: true,
-    separator: "-", // Replace spaces with -
-  }).replace(/\-\-+/g, "-"); // Replace multiple - with single -
-}
-
-function createHeading(as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
-  const CustomHeading = ({
-    children,
-    ...props
-  }: Omit<React.ComponentProps<typeof HeadingLink>, "as" | "id">) => {
-    const slug = slugify(children as string);
-    return (
-      <HeadingLink marginTop="24" marginBottom="12" as={as} id={slug} {...props}>
-        {children}
-      </HeadingLink>
-    );
-  };
-
-  CustomHeading.displayName = `${as}`;
-
-  return CustomHeading;
-}
-
-function createParagraph({ children }: TextProps) {
-  return (
-    <Text
-      style={{ lineHeight: "175%" }}
-      variant="body-default-m"
-      onBackground="neutral-medium"
-      marginTop="8"
-      marginBottom="12"
-    >
-      {children}
-    </Text>
-  );
-}
-
-function createInlineCode({ children }: { children: ReactNode }) {
-  return <InlineCode>{children}</InlineCode>;
-}
-
-function createCodeBlock(props: any) {
-  // For pre tags that contain code blocks
-  if (props.children && props.children.props && props.children.props.className) {
-    const { className, children } = props.children.props;
-
-    // Extract language from className (format: language-xxx)
-    const language = className.replace("language-", "");
-    const label = language.charAt(0).toUpperCase() + language.slice(1);
-
-    return (
-      <CodeBlock
-        marginTop="8"
-        marginBottom="16"
-        codes={[
-          {
-            code: children,
-            language,
-            label,
-          },
-        ]}
-        copyButton={true}
-      />
-    );
-  }
-
-  // Fallback for other pre tags or empty code blocks
-  return <pre {...props} />;
-}
-
-function createList({ children }: { children: ReactNode }) {
-  return <List>{children}</List>;
-}
-
-function createListItem({ children }: { children: ReactNode }) {
-  return (
-    <ListItem marginTop="4" marginBottom="8" style={{ lineHeight: "175%" }}>
-      {children}
-    </ListItem>
-  );
-}
-
-function createHR() {
-  return (
-    <Row fillWidth horizontal="center">
-      <Line maxWidth="40" />
-    </Row>
-  );
-}
-
 const components = {
-  p: createParagraph as any,
-  h1: createHeading("h1") as any,
-  h2: createHeading("h2") as any,
-  h3: createHeading("h3") as any,
-  h4: createHeading("h4") as any,
-  h5: createHeading("h5") as any,
-  h6: createHeading("h6") as any,
-  img: createImage as any,
-  a: CustomLink as any,
-  code: createInlineCode as any,
-  pre: createCodeBlock as any,
-  ol: createList as any,
-  ul: createList as any,
-  li: createListItem as any,
-  hr: createHR as any,
+  // Headings — plain semantic tags with slug ids so TOC/anchor links work.
+  h1: createHeading("h1") as never,
+  h2: createHeading("h2") as never,
+  h3: createHeading("h3") as never,
+  h4: createHeading("h4") as never,
+  h5: createHeading("h5") as never,
+  h6: createHeading("h6") as never,
+  // Inline + block elements stay plain so .prose styles win.
+  a: CustomLink as never,
+  code: InlineCode as never,
+  pre: createCodeBlock as never,
+  img: createImage as never,
+  // Once UI primitives still callable from MDX as named components.
   Heading,
+  HeadingLink,
   Text,
   CodeBlock,
   InlineCode,

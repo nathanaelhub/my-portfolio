@@ -1,0 +1,48 @@
+---
+title: "Audio Visualizer"
+publishedAt: "2026-01-22"
+summary: "A SvelteKit app that turns your microphone into four kinds of real-time visualisation — waveform, frequency bars, circular rings, and a particle system — all in the browser, all local."
+team:
+  - name: "Nathanael Johnson"
+    role: "Maker"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/audio-visualizer-app"
+tag: "Creative / Web Audio"
+tier: "tools"
+domains: ["Tools", "Creative"]
+year: 2025
+metric: "SvelteKit · Web Audio API"
+isNew: true
+---
+
+## Overview
+
+Audio Visualizer is a SvelteKit single-page app that listens to your microphone and draws what it hears. Four visualisations, all running off the same `AnalyserNode`: a classic oscilloscope waveform, frequency-domain bars, a circular ring that pulses with the loudness envelope, and a particle system that emits on transient detection.
+
+All processing is local — audio never leaves the browser. No server, no API keys, works offline once cached.
+
+## Visualisations
+
+- **Waveform** — time-domain `Uint8Array` from `getByteTimeDomainData`, drawn as a polyline.
+- **Frequency bars** — `getByteFrequencyData` bucketed into logarithmic bins so the bass end isn't crushed into 3 pixels.
+- **Circular waves** — same frequency data mapped to radial offsets around a polar centre, with smoothing across frames.
+- **Particles** — onset detection on the high-frequency envelope spawns particles with velocity proportional to peak amplitude.
+
+## Controls
+
+- Microphone toggle (gated on Permissions API).
+- Colour palette + accent colour.
+- Sensitivity slider (linear scale on the analyser's smoothingTimeConstant + a post-gain).
+- Line-width slider for the waveform / circular modes.
+
+## Stack
+
+- **SvelteKit** + TypeScript
+- **Tailwind CSS** for the control panel
+- **Web Audio API** (`AudioContext`, `MediaStreamAudioSourceNode`, `AnalyserNode`)
+- **Vite** build, **pnpm** package manager
+
+## Why it's here
+
+This is the project that taught me Svelte properly — coming from React, the lack of a virtual DOM and the granular reactivity made the per-frame draw loop noticeably less fiddly. It's also a good demo of how much the Web Audio API can do without a single server call.

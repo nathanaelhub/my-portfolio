@@ -1,7 +1,7 @@
-import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
-import { Mailchimp } from "@/components";
-import { Posts } from "@/components/blog/Posts";
-import { baseURL, blog, person, newsletter } from "@/resources";
+import { Column, Meta, Schema } from "@once-ui-system/core";
+import { baseURL, blog, person } from "@/resources";
+import { getPosts } from "@/utils/utils";
+import { BlogIndexClient, type BlogPost } from "@/components/blog/BlogIndexClient";
 
 export const dynamic = "force-static";
 
@@ -19,9 +19,23 @@ export async function generateMetadata() {
   };
 }
 
+function getBlogPosts(): BlogPost[] {
+  return getPosts(["src", "app", "blog", "posts"])
+    .map((post) => ({
+      slug: post.slug,
+      title: post.metadata.title,
+      excerpt: post.metadata.excerpt || post.metadata.summary,
+      date: post.metadata.publishedAt,
+      readMins: post.metadata.readMins ?? 5,
+      topic: post.metadata.topic || post.metadata.tag || "Notes",
+    }))
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
 export default function Blog() {
+  const posts = getBlogPosts();
   return (
-    <Column maxWidth="m" paddingTop="24">
+    <Column maxWidth="l" fillWidth paddingTop="24">
       <Schema
         as="blogPosting"
         baseURL={baseURL}
@@ -35,18 +49,7 @@ export default function Blog() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
-      <Heading marginBottom="l" variant="heading-strong-xl" marginLeft="24">
-        {blog.title}
-      </Heading>
-      <Column fillWidth flex={1} gap="40">
-        <Posts range={[1, 1]} thumbnail />
-        <Posts range={[2, 3]} columns="2" thumbnail direction="column" />
-        <Mailchimp marginBottom="l" />
-        <Heading as="h2" variant="heading-strong-xl" marginLeft="l">
-          Earlier posts
-        </Heading>
-        <Posts range={[4]} columns="2" />
-      </Column>
+      <BlogIndexClient posts={posts} />
     </Column>
   );
 }

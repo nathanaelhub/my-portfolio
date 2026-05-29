@@ -1,0 +1,38 @@
+---
+title: "FraudGuard-AI"
+publishedAt: "2025-05-10"
+summary: "ML fraud detection dashboard — XGBoost classifier behind FastAPI, real-time transaction scoring, Chart.js visualizations."
+team:
+  - name: "Nathanael Johnson"
+    role: "ML Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/fraudguard-ai"
+tag: "Production ML"
+tier: "production"
+domains: ["Production ML", "Finance"]
+year: 2025
+metric: "XGBoost · FastAPI"
+isNew: true
+---
+
+## Overview
+
+A production-style fraud detection dashboard. Transactions stream into a FastAPI endpoint, an XGBoost classifier scores each one for fraud likelihood, and a live dashboard surfaces flagged transactions with the model's confidence and feature attributions.
+
+## Architecture
+
+- **FastAPI** serves the inference endpoint with sub-100ms per-request latency
+- **XGBoost** classifier trained on a labeled transaction dataset with class imbalance handled via SMOTE
+- **Chart.js** dashboard renders a live risk-score histogram and a transaction stream with flag markers
+- **Feature attribution** per flagged transaction so analysts can see *why* the model flagged it
+
+## What it shows
+
+This project shifts from notebook-style analysis to a deployable system — the parts that matter when ML actually goes into production: API design, latency budgets, threshold tuning for the imbalanced positive class, and a UI a non-ML user can actually act on.
+
+## Stack
+
+- **Python · XGBoost · FastAPI** for the backend
+- **CSS · Chart.js** for the dashboard
+- **Docker** for deployment
