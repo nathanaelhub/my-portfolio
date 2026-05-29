@@ -51,11 +51,11 @@ const social: Social = [
 
 const home: Home = {
   path: "/",
-  image: getImagePath("/images/projects/mental-health-llm/cover.jpg"),
+  image: getImagePath("/images/portfolio-homepage.jpg"),
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Building AI solutions for tomorrow&apos;s challenges</>,
+  headline: <>Applied AI, built with the patience of research and the discipline of a shipped product</>,
   featured: {
     display: true,
     title: (
@@ -71,8 +71,8 @@ const home: Home = {
   },
   subline: (
     <>
-      I&apos;m Nathanael, an Applied AI and Data Science professional from Saba, Netherlands Antilles, based in Nashville, TN.
-      <br /> I&apos;m passionate about building AI solutions across healthcare, finance, and data science.
+      I&apos;m Nathanael — born on Saba, a 5-square-mile Caribbean island, working out of Nashville.
+      <br /> I evaluate large language models for mental-health applications, and I build end-to-end ML systems for healthcare, finance, and sports.
     </>
   ),
 };

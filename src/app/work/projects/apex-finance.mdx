@@ -1,0 +1,53 @@
+---
+title: "Apex Finance"
+publishedAt: "2026-02-10"
+summary: "A full-stack fintech banking app — Plaid bank-account links, Dwolla ACH transfers, transaction search, and spending analytics — built end-to-end in Next.js 14."
+team:
+  - name: "Nathanael Johnson"
+    role: "Full-stack Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/banking"
+tag: "Full-stack / Fintech"
+tier: "production"
+domains: ["Tools", "Finance"]
+year: 2025
+metric: "Plaid + Dwolla · Next.js 14"
+isNew: true
+---
+
+## Overview
+
+Apex Finance is a working consumer-banking app: log in, link your real bank via Plaid, see all your accounts and transactions in one place, search and filter them, transfer money to other Apex users over ACH. It's not a UI clone — it's the whole stack, with the integrations that make a fintech actually a fintech.
+
+## Features
+
+- **Authentication** — server-side auth with Appwrite, protected routes, full session lifecycle.
+- **Connect banks (Plaid)** — link real accounts; pull balances and transactions live.
+- **Dashboard** — aggregate balance across accounts, 6-month spending chart, recent activity.
+- **Transaction search** — live filter by name, category, paginated, one-click CSV export.
+- **Fund transfers (Dwolla)** — send ACH transfers between Apex users with idempotency keys and toast feedback.
+- **Mobile-first** — responsive layout with a collapsible mobile nav.
+
+## Stack
+
+| Layer | Tech |
+|---|---|
+| Framework | Next.js 14 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS + shadcn/ui |
+| Auth + DB | Appwrite (server-side sessions) |
+| Banking | Plaid (account linking + transactions) |
+| Transfers | Dwolla (ACH) |
+| Forms | React Hook Form + Zod |
+| Monitoring | Sentry |
+
+## What made this interesting
+
+- **Two financial APIs at once.** Plaid pulls *read* data (accounts, transactions). Dwolla handles *write* operations (ACH transfers). Wiring both into the same user — with KYC, customer IDs, and funding sources — is the actual hard part of fintech; the UI is the easy half.
+- **Idempotency end-to-end.** Every transfer request carries an idempotency key generated client-side; the server uses it as the primary key for the transfer record before it ever hits Dwolla. Retrying a failed network request can never double-charge.
+- **Server-side auth, not client-side.** Sessions live in cookies set by the server; the client never touches a session token. Appwrite's server SDK runs in a Next.js Server Action; protected routes are gated in middleware.
+
+## Why it's here
+
+Most of my portfolio is analytical — models, dashboards, evaluations. This is a counterweight: a full production application with real third-party integrations, authentication, and the failure-mode discipline that money requires.

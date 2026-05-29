@@ -1,0 +1,37 @@
+---
+title: "Marvel Rivals Assistant"
+publishedAt: "2024-12-04"
+summary: "AI assistant for team-composition suggestions in Marvel Rivals — synergy scoring across hero pools."
+team:
+  - name: "Nathanael Johnson"
+    role: "Maker"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/marvel-rivals-assistant"
+tag: "Tool / Play"
+tier: "tools"
+domains: ["Tools", "Play"]
+year: 2024
+metric: "92% synergy score"
+isNew: true
+---
+
+## Overview
+
+An LLM-backed assistant that suggests team compositions for Marvel Rivals based on synergy scoring across the hero pool. You give it your two locked-in picks; it surfaces the best third pick.
+
+## How it works
+
+- Hero pool encoded with role tags (Vanguard / Duelist / Strategist) and synergy edges
+- Current team state fed to an LLM with a system prompt that asks for a counter-pick that balances composition
+- Output: a ranked list of suggested heroes with a one-line rationale for each
+
+## Why it's here
+
+It's a small thing, but it's the kind of thing I'll build for myself anyway — and the synergy-graph + LLM-reasoning hybrid pattern generalizes to any "what fits with what" problem (recommender systems, ingredient pairings, scheduling).
+
+## Stack
+
+- **JavaScript** front end
+- **LLM API** for the reasoning step
+- **JSON-encoded hero graph** as the knowledge base

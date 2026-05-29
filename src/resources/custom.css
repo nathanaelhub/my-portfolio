@@ -1,2 +1,46 @@
 /* Custom color overrides */
-/* Generate at: https://once-ui.com/customize */
+
+/* ------------------------------------------------------------------ */
+/* Portfolio redesign — warm-paper editorial palette, theme-aware.      */
+/* The --rd-* tokens drive the Work / Home redesign components, and the */
+/* --page-background / --surface-background overrides retint Once UI so */
+/* the whole site (Header, Footer, About, Blog, Gallery) shares the     */
+/* same warm-paper surface in both light and dark mode.                 */
+/* ------------------------------------------------------------------ */
+
+:root {
+  /* Long-form reading serif, with safe fallbacks. */
+  --serif-body: var(--font-serif-body), "Newsreader", "Fraunces", Georgia, serif;
+}
+
+[data-theme="light"] {
+  --rd-bg: #f6f4ef;
+  --rd-ink: #1c1b18;
+  --rd-ink-soft: #3d3a33;
+  --rd-mute: #605b50;
+  --rd-faint: #8a8478;
+  --rd-line: #d9d4c7;
+  --rd-line-soft: #e5e1d6;
+  --rd-bone: #f0ede4;
+  --rd-accent: #d97757;
+  --rd-paper: #ffffff;
+
+  --page-background: #f6f4ef;
+  --surface-background: #ffffff;
+}
+
+[data-theme="dark"] {
+  --rd-bg: #1c1b18;
+  --rd-ink: #f1eee6;
+  --rd-ink-soft: #cdc8bc;
+  --rd-mute: #9a9486;
+  --rd-faint: #6f6a5e;
+  --rd-line: #38352d;
+  --rd-line-soft: #2a2822;
+  --rd-bone: #232119;
+  --rd-accent: #e2916f;
+  --rd-paper: #26241f;
+
+  --page-background: #1c1b18;
+  --surface-background: #26241f;
+}

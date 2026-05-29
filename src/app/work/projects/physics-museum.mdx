@@ -1,0 +1,50 @@
+---
+title: "Physics Museum"
+publishedAt: "2026-04-12"
+summary: "An interactive Unity 6 sandbox that turns introductory mechanics into walk-up exhibits — projectiles, friction ramps, a skydiver with parachute, and a first-person impulse shooter at Rigidbody stacks."
+team:
+  - name: "Nathanael Johnson"
+    role: "Designer + Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/physics-museum"
+tag: "Game / Education"
+tier: "featured"
+domains: ["Tools", "Creative"]
+year: 2025
+metric: "Unity 6 · WebGL · live"
+isNew: true
+---
+
+## Overview
+
+Physics Museum is a Unity 6 WebGL sandbox built like a science-centre — every exhibit is a single physics principle, walked up to and triggered with one button. The pitch: introductory mechanics taught by *playing with the equation*, not just reading it.
+
+**Live demo:** [nathanaelhub.github.io/physics-museum](https://nathanaelhub.github.io/physics-museum/)
+
+## Exhibits
+
+- **Kinematic Catapult** — pure transform-driven projectile motion, no Rigidbody, so the equation `x_f = ½at² + v_it + x_i` is what you see.
+- **Drag Race** — same thrust, two masses, watch `F = ma` separate them.
+- **Friction Ramps** — ice vs. rubber Physic Materials.
+- **Skydiver** — terminal velocity with a deployable parachute that bumps linear damping.
+- **Impulse Shooter** — first-person ray-cast that uses `AddForceAtPosition`, so hitting a Jenga block at the corner produces real off-axis torque.
+- **Spin Cabinet** — one-shot angular impulse demo (`ΔΩ = I⁻¹τ`).
+- **Reset Plinth** — snapshots launch-state poses + velocities; restores on demand so visitors can replay.
+
+## Design choices that matter
+
+- **`KinematicProjectile` is intentionally not a Rigidbody.** The exhibit is about the equation, not collision response — adding drag and substep noise would obscure the formula.
+- **`ImpulseShooter` uses `AddForceAtPosition`, not `AddForce`.** Off-axis hits have to feel different from centred ones; `AddForceAtPosition` produces the torque automatically.
+- **`ExhibitResetManager.ResetExhibit()` calls `Rigidbody.Sleep()`** after zeroing velocities. Otherwise a body still in contact with the floor picks up a micro-velocity on the next FixedUpdate from the solver re-resolving the contact — leaving the exhibit subtly drifting.
+
+## Stack
+
+- Unity 6 (6000.x), built-in render pipeline
+- C# (.NET Standard 2.1)
+- Built-in PhysX (Rigidbody, Physic Materials, raycast)
+- WebGL build served from `docs/` via GitHub Pages
+
+## Why it's here
+
+This is the most *teacherly* project I've shipped — it forced me to think about pedagogy and interaction design alongside the physics. Every exhibit had to answer "what's the one thing a visitor should walk away understanding?" before any code was written.

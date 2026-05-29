@@ -1,0 +1,38 @@
+---
+title: "Bison Chat"
+publishedAt: "2025-09-18"
+summary: "LLM routing demo built for Lipscomb — a proxy that dynamically picks between Haiku, Sonnet, and Opus per prompt."
+team:
+  - name: "Nathanael Johnson"
+    role: "ML / Teaching Assistant"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/bison-chat"
+tag: "Education / LLM"
+tier: "tools"
+domains: ["Tools", "Education"]
+year: 2025
+metric: "Haiku · Sonnet · Opus"
+isNew: true
+---
+
+## Overview
+
+Bison Chat is a teaching demo built for Lipscomb's College of Computing — a proxy that routes prompts between Anthropic's Haiku, Sonnet, and Opus based on the prompt's complexity. The goal is to make model selection *visible* to students learning about LLM economics.
+
+## What students see
+
+- They type a prompt
+- The router classifies it (lightweight question, code task, deep reasoning task, etc.)
+- They watch the proxy pick a model, justify the pick, and call it
+- The response and the model choice are both visible side by side
+
+## Why it works as a teaching tool
+
+When students start using LLMs, they default to "the smartest one" and run up bills. Watching the proxy correctly send a fact lookup to Haiku and a multi-step reasoning task to Opus makes the cost/capability tradeoff land in a way no slide ever does.
+
+## Stack
+
+- **Python** proxy server
+- **Anthropic SDK** with all three models
+- **A simple chat UI** showing prompt, router decision, and response together

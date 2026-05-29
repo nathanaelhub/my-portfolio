@@ -1,0 +1,44 @@
+---
+title: "Air Canvas"
+publishedAt: "2026-03-08"
+summary: "Multiplayer 3D drawing in the browser — paint in mid-air with your hand using MediaPipe tracking, with strokes synced live across viewers via socket.io and rendered in Three.js."
+team:
+  - name: "Nathanael Johnson"
+    role: "Maker"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/air-canvas"
+tag: "Creative / CV"
+tier: "tools"
+domains: ["Tools", "Creative"]
+year: 2025
+metric: "MediaPipe + Three.js + socket.io"
+isNew: true
+---
+
+## Overview
+
+Air Canvas is a browser app that turns your webcam into a paintbrush. MediaPipe tracks your hand at ~30 fps, a pinch-gesture starts a stroke, and the position of your fingertip in 3D is rendered as a tube in a Three.js scene. Multiple users connect to the same room via socket.io, so strokes drawn on one machine appear on everyone else's canvas in real time.
+
+## How it works
+
+- **Client** — Vite + vanilla JS + Three.js. MediaPipe Hand Landmarker (the `@mediapipe/tasks-vision` WASM build) runs in a web worker so the main thread stays free for rendering. Pinch detection is a simple distance check between thumb-tip and index-tip landmarks; a debounced state machine starts/ends strokes.
+- **Server** — Node + socket.io. Holds room state in memory (no DB), broadcasts each new stroke segment to all peers, replays the room history when someone joins late.
+- **3D scene** — strokes are built incrementally as `TubeGeometry` segments along a `CatmullRomCurve3` of the fingertip path. The user's hand is mirrored back as a glowing point so they can see where the brush is.
+
+## What made it interesting
+
+- **30 fps gesture loop + 60 fps render loop on the same tab.** Decoupling MediaPipe inference into a web worker was the unlock — keeping it on the main thread tanked render to ~22 fps.
+- **Stroke replay vs. live broadcast.** A late joiner shouldn't see strokes "draw themselves" over 10 seconds; they should appear instant. So the server splits its event types: live segment broadcasts (small, frequent) vs. "snapshot" payloads sent only on join.
+- **Coordinate-space conversions** between MediaPipe's normalized 2D landmarks, the webcam's screen-space, and the Three.js world coordinates. Getting the depth axis to feel right took longer than the network code.
+
+## Stack
+
+- MediaPipe Tasks Vision (`@mediapipe/tasks-vision`)
+- Three.js
+- socket.io + socket.io-client
+- Vite
+
+## Why it's here
+
+Of everything in the portfolio, this is the one that makes people *want to try it*. It's also the project where the architectural choices — workers, separate event channels, snapshot-vs-live state — mattered more than any single piece of code.

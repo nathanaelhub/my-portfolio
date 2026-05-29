@@ -1,0 +1,40 @@
+---
+title: "LineUp"
+publishedAt: "2025-11-04"
+summary: "A personal acting-rehearsal app — load a script, pick your role, and run lines with the app voicing the other parts."
+team:
+  - name: "Nathanael Johnson"
+    role: "Maker"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/lineup"
+tag: "Tool / Live"
+tier: "tools"
+domains: ["Tools", "Creative"]
+year: 2025
+metric: "Live · GitHub Pages"
+isNew: true
+---
+
+## Overview
+
+LineUp is the tool I wanted while rehearsing for a community-theatre show: paste a script, pick which character is yours, and the app reads the other lines aloud so you can practise your cues alone. Built as a single-page app, deployed on GitHub Pages, no backend.
+
+**Live app:** [nathanaelhub.github.io/lineup](https://nathanaelhub.github.io/lineup/)
+
+## How it works
+
+- Paste or upload a script (plain text with `CHARACTER: line` formatting).
+- The parser extracts a list of speaking parts; pick one as "yours".
+- The app uses the Web Speech API to voice the other characters, pausing on your lines so you can deliver them.
+- Skip back, advance, change pace, switch the character voice.
+
+## Stack
+
+- **Vanilla TypeScript + Vite** — small enough that a framework would be more code than the app.
+- **Web Speech API** for TTS — no server, no API keys, runs offline once the page is cached.
+- **GitHub Pages** for hosting — `vite build` → `gh-pages` branch → done.
+
+## Why it's here
+
+The most-used thing I've shipped this year, despite being technically the simplest. It's a reminder that "tool that does the one thing you actually needed" beats "tool that does ten things you might".

@@ -3,6 +3,7 @@ import "@once-ui-system/core/css/tokens.css";
 import "@/resources/custom.css";
 
 import classNames from "classnames";
+import { Fraunces, Instrument_Serif, Newsreader } from "next/font/google";
 
 import {
   Background,
@@ -15,6 +16,29 @@ import {
 } from "@once-ui-system/core";
 import { Footer, Header, RouteGuard, Providers, RedirectHandler } from "@/components";
 import { baseURL, effects, fonts, style, dataStyle, home } from "@/resources";
+
+// Redesign display fonts — Fraunces for headlines, Instrument Serif for italic accents.
+const displayFont = Fraunces({
+  variable: "--font-display",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const serifItalicFont = Instrument_Serif({
+  variable: "--font-serif-italic",
+  weight: "400",
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  display: "swap",
+});
+
+// Long-form reading serif (blog + project case studies)
+const serifBodyFont = Newsreader({
+  variable: "--font-serif-body",
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -42,6 +66,9 @@ export default async function RootLayout({
         fonts.body.variable,
         fonts.label.variable,
         fonts.code.variable,
+        displayFont.variable,
+        serifItalicFont.variable,
+        serifBodyFont.variable,
       )}
     >
       <head>
