@@ -1,7 +1,8 @@
-import { Column, Meta, Schema } from "@once-ui-system/core";
+import { Column, Meta } from "@once-ui-system/core";
 import { baseURL, blog, person } from "@/resources";
 import { getPosts } from "@/utils/utils";
 import { BlogIndexClient, type BlogPost } from "@/components/blog/BlogIndexClient";
+import { BlogPostingSchema } from "@/components";
 
 export const dynamic = "force-static";
 
@@ -36,12 +37,10 @@ export default function Blog() {
   const posts = getBlogPosts();
   return (
     <Column maxWidth="l" fillWidth paddingTop="24">
-      <Schema
-        as="blogPosting"
-        baseURL={baseURL}
+      <BlogPostingSchema
+        path={blog.path}
         title={blog.title}
         description={blog.description}
-        path={blog.path}
         image={person.avatar}
         author={{
           name: person.name,
