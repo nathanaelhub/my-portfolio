@@ -1,10 +1,16 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Column, Meta, Schema } from "@once-ui-system/core";
+import { Column, Meta } from "@once-ui-system/core";
 import { Metadata } from "next";
 import { baseURL, about, blog, person } from "@/resources";
 import { getPosts } from "@/utils/utils";
-import { BreadcrumbSchema, CustomMDX, ErrorBoundary, ScrollToHash } from "@/components";
+import {
+  BlogPostingSchema,
+  BreadcrumbSchema,
+  CustomMDX,
+  ErrorBoundary,
+  ScrollToHash,
+} from "@/components";
 import { BlogCover, blogAccentFor } from "@/components/blog-covers";
 import { BlogCard, type BlogCardData } from "@/components/blog/BlogCard";
 import { Prose } from "@/components/reading/Prose";
@@ -83,9 +89,7 @@ export default async function BlogPostPage({
 
   return (
     <Column maxWidth="l" fillWidth paddingTop="24">
-      <Schema
-        as="blogPosting"
-        baseURL={baseURL}
+      <BlogPostingSchema
         path={`${blog.path}/${post.slug}`}
         title={post.metadata.title}
         description={post.metadata.summary}

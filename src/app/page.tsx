@@ -1,6 +1,6 @@
-import { Column, Meta, Schema } from "@once-ui-system/core";
+import { Column, Meta } from "@once-ui-system/core";
 import { home, about, person, social, baseURL } from "@/resources";
-import { Mailchimp, PersonSchema } from "@/components";
+import { Mailchimp, PersonSchema, WebPageSchema } from "@/components";
 import { HomeIntro, type HomeProject, type HomePost } from "@/components/home/HomeIntro";
 import { getPosts } from "@/utils/utils";
 
@@ -81,9 +81,7 @@ export default function Home() {
 
   return (
     <Column maxWidth="l" paddingY="12" horizontal="center" fillWidth>
-      <Schema
-        as="webPage"
-        baseURL={baseURL}
+      <WebPageSchema
         path={home.path}
         title={home.title}
         description={home.description}

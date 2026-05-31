@@ -1,7 +1,8 @@
-import { Column, Meta, Schema } from "@once-ui-system/core";
+import { Column, Meta } from "@once-ui-system/core";
 import { baseURL, about, person, work } from "@/resources";
 import { getPosts } from "@/utils/utils";
 import { WorkExplorer, type WorkProject } from "@/components/work/WorkExplorer";
+import { WebPageSchema } from "@/components";
 
 export const dynamic = "force-static";
 
@@ -38,9 +39,7 @@ export default function Work() {
 
   return (
     <Column maxWidth="l" fillWidth paddingTop="24">
-      <Schema
-        as="webPage"
-        baseURL={baseURL}
+      <WebPageSchema
         path={work.path}
         title={work.title}
         description={work.description}

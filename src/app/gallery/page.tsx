@@ -1,6 +1,7 @@
-import { Flex, Meta, Schema } from "@once-ui-system/core";
+import { Flex, Meta } from "@once-ui-system/core";
 import GalleryView from "@/components/gallery/GalleryView";
 import { baseURL, gallery, person } from "@/resources";
+import { WebPageSchema } from "@/components";
 
 export const dynamic = "force-static";
 
@@ -21,12 +22,10 @@ export async function generateMetadata() {
 export default function Gallery() {
   return (
     <Flex maxWidth="l">
-      <Schema
-        as="webPage"
-        baseURL={baseURL}
+      <WebPageSchema
+        path={gallery.path}
         title={gallery.title}
         description={gallery.description}
-        path={gallery.path}
         image={person.avatar}
         author={{
           name: person.name,
