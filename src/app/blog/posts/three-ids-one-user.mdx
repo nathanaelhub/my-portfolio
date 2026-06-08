@@ -1,0 +1,159 @@
+---
+title: "Three IDs, one user: what shipping a real banking app actually involves"
+summary: "Building a fintech app where Plaid, Dwolla, and Appwrite each have their own idea of who the user is — and what to do when one of them disagrees."
+publishedAt: "2026-06-08"
+tag: "Engineering"
+topic: "Engineering"
+readMins: 7
+excerpt: "The hard part of building a bank wasn't the dashboard. It was the moment three vendors all had a slightly different opinion about who the user was — and a transfer was already in flight."
+---
+
+## Introduction
+
+I shipped a working consumer-banking app this spring. You can sign in, link your real bank via Plaid, see all your accounts in one place, and send money to another user over ACH. It's called **Apex Finance**. The whole thing is on GitHub.
+
+People who look at the screenshots usually ask about the dashboard — the spend chart, the search-with-filters, the toast notifications. Those weren't hard. The actual hard part of building a fintech is that the user doesn't exist anywhere as a single entity. They exist as **three different IDs in three different systems**, and you have to keep those IDs in sync without ever letting them disagree about money in flight.
+
+This post is about that.
+
+## The cast
+
+When someone signs up for Apex Finance, the server quietly creates three things:
+
+| Vendor | What it stores | The ID I get back |
+|---|---|---|
+| **Appwrite** | Account, password, session cookies, profile row | `userId` |
+| **Plaid** | Linked bank accounts, balances, transactions | `accessToken` per institution |
+| **Dwolla** | Verified customer, funding sources, transfers | `customerUrl` |
+
+None of them know about each other. Appwrite has the email and the password. Plaid has the bank balance. Dwolla is the only one that can actually move money. The "user" only exists if my own database row stitches all three IDs together.
+
+The simplest version of the failure is this: if Appwrite says "yes, this is Nathanael, here's a session" but Dwolla has no record of him, the UI is happy to show a "Send money" button that 500s when clicked. If Dwolla has Nathanael but Plaid has no linked accounts, the "Send money" form will render a funding-source dropdown that's empty.
+
+So step one is **never let the user reach a state where one of the three is missing**.
+
+## Why I do all three in the same Server Action
+
+When the user submits the sign-up form, a Next.js Server Action runs this, on the server, in one round trip:
+
+```ts
+"use server";
+
+export async function signUp(values: SignUpValues) {
+  // 1. Create the Appwrite account + session cookie
+  const account = await appwriteServer.account.create({
+    userId: ID.unique(),
+    email: values.email,
+    password: values.password,
+    name: values.name,
+  });
+
+  // 2. Create the Dwolla customer (KYC fields included)
+  const customerUrl = await createDwollaCustomer({
+    firstName: values.firstName,
+    lastName: values.lastName,
+    email: values.email,
+    type: "personal",
+    address1: values.address1,
+    city: values.city,
+    state: values.state,
+    postalCode: values.postalCode,
+    dateOfBirth: values.dateOfBirth,
+    ssn: values.ssn,
+  });
+
+  // 3. Write the row that stitches them together
+  await appwriteServer.databases.createDocument({
+    databaseId: APPWRITE_DATABASE_ID,
+    collectionId: APPWRITE_USER_COLLECTION_ID,
+    documentId: account.$id,                   // Appwrite ID = primary key
+    data: { ...values, dwollaCustomerId: customerUrl },
+  });
+
+  // 4. Set the session cookie
+  setSessionCookie(account.session);
+}
+```
+
+Three calls, no client-side coordination, one atomic-ish unit. Plaid isn't here yet because **bank-linking happens after sign-up**, in the dashboard, when the user clicks "Connect a bank." That separation matters — KYC at sign-up is mandatory and synchronous, but Plaid is opt-in and might never happen.
+
+The "ish" in atomic-ish is doing real work, though. If the Dwolla call fails after Appwrite already created the account, I'm stuck with an Appwrite user who has no Dwolla customer — exactly the broken state I'm trying to avoid. The fix is the boring one: I delete the Appwrite account in the catch block, surface the Dwolla error to the form, and let the user retry.
+
+> **Idempotency note.** Dwolla's customer-create endpoint returns 409 on duplicate email. That's the easy case. The unkind case is that the network drops the response *after* Dwolla created the customer, so my code thinks the call failed and the rollback deletes the Appwrite account — leaving a stranded Dwolla customer with no way to reach Apex. The right fix is an idempotency key on the Dwolla call too. I haven't implemented that yet. It's the next thing on my list.
+
+## The transfer is where it gets interesting
+
+Reads from Plaid are forgiving — if a call to `getAccount` fails, I retry, the user sees a spinner, no real harm done. Writes to Dwolla are different. **Every transfer has to be exactly-once.**
+
+The wrong shape:
+
+```ts
+async function transfer(from, to, amount) {
+  const txnId = await dwolla.transfer({ from, to, amount });   // network call
+  await db.recordTransaction({ from, to, amount, txnId });
+}
+```
+
+If the network drops between the Dwolla call and the DB write, money has moved and there is no record of it. The user clicks "Send" again on the spinner that never goes away, and now I've sent it twice.
+
+The shape I actually use:
+
+```ts
+async function transfer(values: TransferFormValues) {
+  const idempotencyKey = crypto.randomUUID();   // generated server-side
+
+  // 1. Write the *intent* first, with a 'pending' status.
+  await db.recordTransaction({
+    ...values,
+    idempotencyKey,
+    status: "pending",
+  });
+
+  try {
+    // 2. Then call Dwolla with that same key.
+    const txnId = await dwolla.transfer({
+      ...values,
+      idempotencyKey,
+    });
+
+    // 3. Update on success.
+    await db.updateTransaction(idempotencyKey, { status: "processing", txnId });
+  } catch (err) {
+    await db.updateTransaction(idempotencyKey, { status: "failed", error: err.message });
+    throw err;
+  }
+}
+```
+
+The DB write happens first, with the same idempotency key the Dwolla call will use. If the network drops at any point, the DB has a row that says "we tried to send this; we don't know what happened." A reconciliation job (or a manual support touch) can then ask Dwolla: *did you ever see this idempotency key?* The answer is yes or no, and either way the DB row gets cleaned up.
+
+Dwolla treats two `POST /transfers` calls with the same idempotency key as the same transfer — same response both times. So the retry-on-drop case is also safe: the user can mash the button, and Dwolla only sees one transfer.
+
+## Server-side sessions, not client-side tokens
+
+This isn't financial-app-specific advice, but it's particularly load-bearing here: **sessions live in HTTP-only cookies set by the server**. The client never sees a session token, never sees a JWT, never has access to anything that could be exfiltrated by a malicious browser extension or a stray third-party script.
+
+Concretely:
+
+- Appwrite's server SDK runs inside Next.js Server Actions.
+- Session cookies are created with `httpOnly`, `secure`, `sameSite: "lax"`.
+- Every Server Action that touches money first calls `getLoggedInUser()`, which reads the session cookie and rejects if missing or expired.
+- The browser never even has the choice to leak a credential. There's no `localStorage.setItem('token', ...)` anywhere in the codebase.
+
+This is the part where the React framework choice paid off. With the older "fetch from a Next API route" pattern, you have to decide where the session validation happens for every endpoint — and if you forget, the endpoint is unauthenticated and Plaid's `transactions` data flows out to whoever asks. With Server Actions, the auth check is the first line of the function, *in the same file as the action*. There's no "API route I forgot to gate."
+
+## What I'd do differently
+
+Three things I'd change if I were starting over:
+
+1. **Idempotency on the Dwolla customer-create call from day one.** I have it on transfers; I should have it on every write to Dwolla. Cheap to add upfront, painful to retrofit.
+2. **A dedicated `apex_users` table separate from Appwrite's profile documents.** Right now my user document IS the Appwrite document, with the Dwolla customer URL hung off it. That made the sign-up flow simple but couples my data model to Appwrite's schema. If I ever migrate auth providers, I have to migrate the user table at the same time.
+3. **Webhook handlers for Dwolla transfer status.** Right now I poll Dwolla for transfer status. That works for a portfolio demo. In a real product I'd subscribe to the `transfer_completed` and `transfer_failed` webhooks so the UI updates the moment Dwolla updates, not on the next poll.
+
+## The thing that actually matters
+
+When I tell people I built a banking app, they assume the work was in the UI. The UI was the easy part — Tailwind + shadcn/ui got me 80% of the way there in a weekend. The real work was the **failure-mode discipline that money requires**: every write has to be exactly-once, every multi-step flow has to be reversible (or never have made the destructive step in the first place), and every state the user can land in has to be one I planned for.
+
+Most of my portfolio is analytical — models, dashboards, evaluations. Apex Finance is the counterweight: a full production application where shipping means thinking about what happens when the network drops at exactly the wrong moment.
+
+That's the post. If you want to look at the code, the repo is at [github.com/nathanaelhub/banking](https://github.com/nathanaelhub/banking).

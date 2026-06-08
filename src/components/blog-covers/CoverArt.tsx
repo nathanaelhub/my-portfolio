@@ -244,3 +244,143 @@ export function NashvilleBlogCover() {
     </svg>
   );
 }
+
+// 06 — Three IDs, One User: three labeled circles overlapping at a single
+// user dot, with an idempotency-key transaction line crossing the cluster.
+export function ThreeIdsCover() {
+  const accent = "#2a6fc4";
+  const ink = "#1c1b18";
+  const cx = 200;
+  const cy = 158;
+  const r = 64;
+  const c1 = { x: cx - 40, y: cy - 22, label: "APPWRITE" };
+  const c2 = { x: cx + 40, y: cy - 22, label: "PLAID" };
+  const c3 = { x: cx, y: cy + 42, label: "DWOLLA" };
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      <text
+        x="32"
+        y="44"
+        fontFamily="Geist Mono, monospace"
+        fontSize="9"
+        fill={accent}
+        letterSpacing="0.18em"
+      >
+        IDEMPOTENCY · KEYS · STATE
+      </text>
+      {[c1, c2, c3].map((c, i) => (
+        <circle
+          key={i}
+          cx={c.x}
+          cy={c.y}
+          r={r}
+          fill={accent}
+          fillOpacity="0.08"
+          stroke={accent}
+          strokeWidth="1.2"
+          strokeOpacity="0.65"
+        />
+      ))}
+      <text
+        x={c1.x - r - 4}
+        y={c1.y + 4}
+        textAnchor="end"
+        fontFamily="Geist Mono, monospace"
+        fontSize="9"
+        fill={ink}
+        opacity="0.7"
+        letterSpacing="0.14em"
+      >
+        {c1.label}
+      </text>
+      <text
+        x={c2.x + r + 4}
+        y={c2.y + 4}
+        fontFamily="Geist Mono, monospace"
+        fontSize="9"
+        fill={ink}
+        opacity="0.7"
+        letterSpacing="0.14em"
+      >
+        {c2.label}
+      </text>
+      <text
+        x={c3.x}
+        y={c3.y + r + 16}
+        textAnchor="middle"
+        fontFamily="Geist Mono, monospace"
+        fontSize="9"
+        fill={ink}
+        opacity="0.7"
+        letterSpacing="0.14em"
+      >
+        {c3.label}
+      </text>
+      <circle cx={cx} cy={cy} r="11" fill={accent} opacity="0.22" />
+      <circle cx={cx} cy={cy} r="4.5" fill={accent} />
+      <text
+        x={cx}
+        y={cy - 18}
+        textAnchor="middle"
+        fontFamily="Geist Mono, monospace"
+        fontSize="8"
+        fill={accent}
+        letterSpacing="0.16em"
+      >
+        ONE USER
+      </text>
+      <line
+        x1="60"
+        y1="240"
+        x2="340"
+        y2="240"
+        stroke={accent}
+        strokeOpacity="0.35"
+        strokeDasharray="2 4"
+      />
+      <g transform="translate(60, 240)">
+        <circle r="3.5" fill={accent} />
+        <text
+          x="0"
+          y="14"
+          fontFamily="Geist Mono, monospace"
+          fontSize="8"
+          fill={ink}
+          opacity="0.55"
+          letterSpacing="0.1em"
+        >
+          PENDING
+        </text>
+      </g>
+      <g transform="translate(340, 240)">
+        <circle r="3.5" fill={accent} />
+        <text
+          x="0"
+          y="14"
+          textAnchor="end"
+          fontFamily="Geist Mono, monospace"
+          fontSize="8"
+          fill={ink}
+          opacity="0.55"
+          letterSpacing="0.1em"
+        >
+          PROCESSING
+        </text>
+      </g>
+      <g transform="translate(160, 222)">
+        <rect width="80" height="14" rx="3" fill={accent} opacity="0.14" />
+        <text
+          x="40"
+          y="10"
+          textAnchor="middle"
+          fontFamily="Geist Mono, monospace"
+          fontSize="8"
+          fill={accent}
+          letterSpacing="0.04em"
+        >
+          key=8f3a-ad21
+        </text>
+      </g>
+    </svg>
+  );
+}

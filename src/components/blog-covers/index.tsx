@@ -8,6 +8,7 @@ import {
   DatabaseConvCover,
   EthicalDecisionCover,
   NashvilleBlogCover,
+  ThreeIdsCover,
 } from "./CoverArt";
 
 export interface BlogCoverMeta {
@@ -22,6 +23,7 @@ export const blogCoverMeta: Record<string, BlogCoverMeta> = {
   "database-conversion-journey": { Component: DatabaseConvCover, tint: "#eef0f7", accent: "#2a4dbd" },
   "ethical-decision-making-data": { Component: EthicalDecisionCover, tint: "#f3f7f3", accent: "#3a8a4a" },
   "nashville-airbnb-analysis": { Component: NashvilleBlogCover, tint: "#eef4ee", accent: "#3a8a4a" },
+  "three-ids-one-user": { Component: ThreeIdsCover, tint: "#eef4fb", accent: "#2a6fc4" },
 };
 
 const FALLBACK_ACCENT = "#d97757";
