@@ -22,6 +22,15 @@ import {
   SmartLink,
 } from "@once-ui-system/core";
 
+// Project-specific custom MDX components.
+import {
+  OlistArchitecture,
+  OlistStarSchema,
+  OlistRevenueByRegion,
+  OlistSellerRetention,
+  OlistLateDeliveryByCategory,
+} from "@/components/charts/OlistCharts";
+
 /**
  * MDX renderer for long-form pages (blog posts + project case studies).
  * Maps standard markdown tags to plain semantic HTML so the .prose
@@ -148,6 +157,12 @@ const components = {
   Icon,
   Media,
   SmartLink,
+  // Olist Warehouse project charts.
+  OlistArchitecture,
+  OlistStarSchema,
+  OlistRevenueByRegion,
+  OlistSellerRetention,
+  OlistLateDeliveryByCategory,
 };
 
 type CustomMDXProps = MDXRemoteProps & {

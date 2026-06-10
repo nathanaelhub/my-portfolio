@@ -1,0 +1,99 @@
+---
+title: "Olist Warehouse"
+publishedAt: "2026-06-15"
+summary: "Modeling 100,000 Brazilian e-commerce orders in Snowflake. Star-schema design, dbt transformations, and three analyst questions answered straight from the marts — with the charts to back them."
+team:
+  - name: "Nathanael Johnson"
+    role: "Analytics Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/olist-warehouse"
+tag: "Analytics / Data Engineering"
+tier: "featured"
+domains: ["Analysis", "Tools"]
+year: 2026
+metric: "Snowflake · dbt · star schema · 100k orders"
+isNew: true
+---
+
+## The brief
+
+Olist is the largest department-store marketplace in Brazil. In 2018 they released a public anonymized dataset of ~100,000 orders across two years — 8 normalized tables covering customers, orders, line items, sellers, products, payments, reviews, and geolocation.
+
+The dataset is a near-perfect proxy for a real e-commerce analytics workload. Multi-table, partially denormalized, with timestamps that need standardising and free-text columns that need parsing. Exactly the shape that needs a warehouse and a star schema before the business team can ask questions of it.
+
+So I built that warehouse, and then I asked it three questions.
+
+## The pipeline
+
+<OlistArchitecture />
+
+The whole thing runs on a Snowflake trial account, costs roughly $4 in credits to build from cold, and refreshes incrementally if you want it to. The transformation logic lives in dbt — staging views that rename and cast, intermediate views that join, marts tables that the analyst layer queries directly. Tests run on every build; sources have freshness checks.
+
+## The schema
+
+<OlistStarSchema />
+
+The grain of `fact_orders` is one row per order × line item. This was the most decision-heavy part of the project. Two grains that *seemed* reasonable but were wrong:
+
+- **Order grain** would have averaged multi-seller orders into a single row, destroying the per-seller margin story.
+- **Payment grain** would have inflated revenue when joined to product/seller, because a single order line can have multiple payment methods stretched across installments.
+
+Line-item grain keeps revenue additive across every join, and it preserves the seller-attribution thread that runs through every interesting question in the dataset. The full grain-and-SCD justification (including why customer is SCD2 but seller is SCD1) is in [`docs/star_schema.md`](https://github.com/nathanaelhub/olist-warehouse/blob/main/docs/star_schema.md) in the repo.
+
+## Three questions, three queries, three charts
+
+The point of building a warehouse is to be able to answer questions that the raw tables can't. Three I picked from this dataset:
+
+### Q1 · Where is the revenue actually coming from?
+
+<OlistRevenueByRegion />
+
+This is the question that almost everything else hinges on. Any growth investment has to start by accepting that **71% of revenue comes from one of Brazil's five regions**. The Norte (north) — geographically huge, sparsely populated — contributes 2%. A national growth strategy that allocates equal effort by region is allocating four-fifths of effort against one-fifth of opportunity.
+
+### Q2 · Are sellers churning faster than the platform is replacing them?
+
+<OlistSellerRetention />
+
+This is the chart that surprised me. The retention curve is brutal — under half of each cohort is still active in month 2, a third by month 3. The platform's revenue stability isn't from sellers staying; it's from new sellers arriving faster than old ones leave. That's a sustainable equilibrium only as long as acquisition holds up. The data says nothing about whether it will, but it identifies the metric that matters most.
+
+The query behind this one ([`sql_highlights/01_seller_retention_cohort.sql`](https://github.com/nathanaelhub/olist-warehouse/blob/main/sql_highlights/01_seller_retention_cohort.sql)) uses a `LAG()` window function over per-seller first-order timestamps to define cohorts, then cross-joins cohort × period to materialize the retention matrix in one GROUP BY. No triangular subquery, no per-period self-join. The shape Snowflake makes easy.
+
+### Q3 · Is late delivery a logistics problem or a category problem?
+
+<OlistLateDeliveryByCategory />
+
+A naive read says "industrial categories have a 22% late rate, fix the industrial supply chain." The chart says otherwise. **Every category is roughly 3× later outside the Sudeste than inside it.** The disparity isn't about product type — it's about freight infrastructure. A category-by-category fix would chase the wrong root cause; a region-by-region one wouldn't.
+
+This is the value of conformed dimensions. The same `dim_geography` table that powers the regional revenue split also powers the regional delivery split — the cross-cut "wait, the late rate is geographic, not categorical" is a single join away, not a separate analysis project.
+
+## What this project actually shows
+
+It's small data — 100k orders fits in a laptop's memory — so the *engineering* on display isn't performance at scale. What it shows is the **shape of warehouse work**:
+
+- **Source modeling.** Each of the 9 raw tables becomes a staging view that renames, casts, and applies dedup logic where the source has it (reviews are 1-many per order in the raw; staging collapses to the latest).
+- **Conformance.** `dim_geography` is shared by customer and seller; `dim_date` is role-played 3× on `fact_orders`. These choices keep the schema readable and the join story honest.
+- **SCD2 done correctly.** `dim_customer` keys on a surrogate built from `(customer_unique_id, valid_from)`. Fact rows join through the version that was current at `order_purchase_timestamp`. Customers who moved between orders produce multiple dim rows; orders correctly attribute to the city they were in *at the time*.
+- **dbt discipline.** schema.yml with column tests (`unique`, `not_null`, `accepted_values`, `relationships`), source freshness checks, a `packages.yml` with versioned `dbt_utils`. The tests run on every build; a regression in the upstream CSV would fail the build before it landed in the marts.
+- **Snowflake patterns that matter.** Cluster key on `fact_orders.purchase_date_key` (the dimension every dashboard filters by first), [`QUALIFY` for top-N-per-group](https://github.com/nathanaelhub/olist-warehouse/blob/main/sql_highlights/02_top_n_per_category_qualify.sql) (clean), `mode()` for a categorical aggregation in `dim_geography`, role-based access with a `WAREHOUSE_DEV` role that has CREATE on the schemas but no ACCOUNTADMIN.
+
+## Stack
+
+| Layer | Tool |
+|---|---|
+| Source | Kaggle Olist CSVs (real, public) |
+| Warehouse | Snowflake Standard (trial — $400 credit lasts months at this scale) |
+| Ingest | Snowflake CLI + Python connector (PUT + COPY INTO) |
+| Transform | dbt Core with `dbt_utils` |
+| Tests | dbt schema tests + source freshness |
+| Presentation | Hand-coded SVG charts on this page (no third-party iframe) |
+
+## Where this goes next
+
+The honest follow-ups, in priority order:
+
+1. **Incremental materialisation on `fact_orders`.** At 112k rows the full rebuild is sub-second; at 10M it wouldn't be. Strategy: `unique_key = (order_id, order_item_id)`, partition on `purchased_at`, rebuild only the trailing 90 days.
+2. **An `accumulating_snapshot` for the order lifecycle.** Right now the lifecycle (purchase → approve → ship → deliver → review) is burned into columns on `fact_orders`. An accumulating snapshot would surface the per-stage latency story directly.
+3. **A `fact_review` at the comment grain.** Currently reviews are denormalized onto `fact_orders`. If the analysis turned toward review-text mining (sentiment, topic clustering), that grain change becomes load-bearing.
+
+The repo lives at [github.com/nathanaelhub/olist-warehouse](https://github.com/nathanaelhub/olist-warehouse). All the SQL, DDL, dbt models, and the three highlight queries are there; the README walks through standing up the trial account and running the loads.
