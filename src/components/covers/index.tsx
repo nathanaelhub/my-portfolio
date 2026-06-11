@@ -6,8 +6,8 @@ import type { ComponentType } from "react";
 import {
   AirCanvas, Airline, ApexFinance, Attrition, AudioVisualizer, Birds, BisonChat,
   Cars, Commentary, F1, FraudGuard, HumeVoice, Internet, Letterboxd, LineUp, Lyft,
-  MarvelRivals, MentalHealth, Nashville, PhysicsMuseum, Portfolio, PTAssist,
-  Restaurant, Saba,
+  MarvelRivals, MentalHealth, Nashville, OlistWarehouse, PhysicsMuseum, Portfolio,
+  PTAssist, Restaurant, Saba,
 } from "./CoverArt";
 
 export interface CoverMeta {
@@ -42,6 +42,7 @@ export const coverMeta: Record<string, CoverMeta> = {
   "lineup": { Component: LineUp, tint: "#f3eefb", accent: "#7853c4" },
   "air-canvas": { Component: AirCanvas, tint: "#eef4f9", accent: "#2a6fc4" },
   "audio-visualizer": { Component: AudioVisualizer, tint: "#0f1d1d", accent: "#5ec8c2", dark: true },
+  "olist-warehouse": { Component: OlistWarehouse, tint: "#eef4fb", accent: "#2a6fc4" },
 };
 
 const FALLBACK_ACCENT = "#d97757";

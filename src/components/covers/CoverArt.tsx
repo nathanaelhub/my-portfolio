@@ -1274,3 +1274,146 @@ export function AudioVisualizer() {
     </svg>
   );
 }
+
+// 25 — Olist Warehouse: pipeline boxes (Source → Snowflake → Marts → Charts)
+// with a small star-schema diagram tucked underneath.
+export function OlistWarehouse() {
+  const accent = "#2a6fc4";
+  const ink = "#1c1b18";
+  // pipeline node positions
+  const nodes = [
+    { x: 22, y: 60, label: "CSV", sub: "raw" },
+    { x: 110, y: 60, label: "RAW", sub: "load" },
+    { x: 198, y: 60, label: "STG", sub: "dbt" },
+    { x: 286, y: 60, label: "MART", sub: "star" },
+  ];
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      <text
+        x="22"
+        y="36"
+        fontFamily="Geist Mono, monospace"
+        fontSize="9"
+        fill={accent}
+        letterSpacing="0.18em"
+      >
+        WAREHOUSE · STAR SCHEMA
+      </text>
+      {nodes.map((n, i) => (
+        <g key={i}>
+          <rect
+            x={n.x}
+            y={n.y}
+            width="76"
+            height="46"
+            rx="4"
+            fill="none"
+            stroke={accent}
+            strokeWidth="1.2"
+            strokeOpacity="0.65"
+          />
+          <text
+            x={n.x + 38}
+            y={n.y + 22}
+            textAnchor="middle"
+            fontFamily="Geist Mono, monospace"
+            fontSize="11"
+            fill={ink}
+            letterSpacing="0.06em"
+          >
+            {n.label}
+          </text>
+          <text
+            x={n.x + 38}
+            y={n.y + 36}
+            textAnchor="middle"
+            fontFamily="Geist Mono, monospace"
+            fontSize="8"
+            fill={accent}
+            opacity="0.7"
+            letterSpacing="0.1em"
+          >
+            {n.sub}
+          </text>
+          {i < nodes.length - 1 && (
+            <g>
+              <line
+                x1={n.x + 76}
+                y1={n.y + 23}
+                x2={n.x + 82}
+                y2={n.y + 23}
+                stroke={accent}
+                strokeWidth="1.4"
+              />
+              <polygon
+                points={`${n.x + 82},${n.y + 19} ${n.x + 88},${n.y + 23} ${n.x + 82},${n.y + 27}`}
+                fill={accent}
+              />
+            </g>
+          )}
+        </g>
+      ))}
+      {/* mini star schema below */}
+      <g transform="translate(170, 180)">
+        {/* center fact */}
+        <rect x="-30" y="-14" width="60" height="28" rx="3" fill={accent} />
+        <text
+          x="0"
+          y="4"
+          textAnchor="middle"
+          fontFamily="Geist Mono, monospace"
+          fontSize="9"
+          fill="#fff"
+          letterSpacing="0.06em"
+        >
+          fact_orders
+        </text>
+        {/* 5 dimension orbits */}
+        {[
+          { x: -110, y: -50, label: "dim_date" },
+          { x: 80, y: -50, label: "dim_seller" },
+          { x: 110, y: 30, label: "dim_product" },
+          { x: -80, y: 60, label: "dim_customer" },
+          { x: 0, y: 80, label: "dim_geography" },
+        ].map((d, i) => (
+          <g key={i}>
+            <line x1="0" y1="0" x2={d.x} y2={d.y} stroke={accent} strokeOpacity="0.4" />
+            <rect
+              x={d.x - 36}
+              y={d.y - 9}
+              width="72"
+              height="18"
+              rx="3"
+              fill="none"
+              stroke={accent}
+              strokeOpacity="0.7"
+              strokeWidth="1"
+            />
+            <text
+              x={d.x}
+              y={d.y + 4}
+              textAnchor="middle"
+              fontFamily="Geist Mono, monospace"
+              fontSize="9"
+              fill={ink}
+              opacity="0.85"
+            >
+              {d.label}
+            </text>
+          </g>
+        ))}
+      </g>
+      <text
+        x="200"
+        y="290"
+        textAnchor="middle"
+        fontFamily="Geist Mono, monospace"
+        fontSize="9"
+        fill={accent}
+        letterSpacing="0.18em"
+      >
+        SNOWFLAKE · DBT · STAR SCHEMA
+      </text>
+    </svg>
+  );
+}
