@@ -49,13 +49,13 @@ The point of building a warehouse is to be able to answer questions that the raw
 
 <OlistRevenueByRegion />
 
-This is the question that almost everything else hinges on. Any growth investment has to start by accepting that **71% of revenue comes from one of Brazil's five regions**. The Norte (north) — geographically huge, sparsely populated — contributes 2%. A national growth strategy that allocates equal effort by region is allocating four-fifths of effort against one-fifth of opportunity.
+This is the question that almost everything else hinges on. Any growth investment has to start by accepting that **65% of the R$15.8M in gross revenue comes from one of Brazil's five regions** — the Sudeste, the São Paulo–Rio–Minas axis. The Norte (north) — geographically the largest region — contributes 2.6%. A national growth strategy that allocates equal effort by region is allocating four-fifths of effort against one-fifth of the opportunity.
 
-### Q2 · Are sellers churning faster than the platform is replacing them?
+### Q2 · How sticky are sellers once they start selling?
 
 <OlistSellerRetention />
 
-This is the chart that surprised me. The retention curve is brutal — under half of each cohort is still active in month 2, a third by month 3. The platform's revenue stability isn't from sellers staying; it's from new sellers arriving faster than old ones leave. That's a sustainable equilibrium only as long as acquisition holds up. The data says nothing about whether it will, but it identifies the metric that matters most.
+This is the chart that corrected an assumption. I went in expecting a churn cliff and the data pushed back — retention is *moderate*, not catastrophic. Roughly half of every cohort is still active six months after their first sale, and the strongest cohorts (Jan and Jul 2017) hold above 50% across the whole window. The real risk isn't a collapse; it's the steady ~40% who drift off in the first quarter, a leak acquisition has to keep refilling. The honest version of this finding is less dramatic than "sellers are fleeing" — and being able to say that with a cohort table behind it is the point.
 
 The query behind this one ([`sql_highlights/01_seller_retention_cohort.sql`](https://github.com/nathanaelhub/olist-warehouse/blob/main/sql_highlights/01_seller_retention_cohort.sql)) uses a `LAG()` window function over per-seller first-order timestamps to define cohorts, then cross-joins cohort × period to materialize the retention matrix in one GROUP BY. No triangular subquery, no per-period self-join. The shape Snowflake makes easy.
 
@@ -63,9 +63,9 @@ The query behind this one ([`sql_highlights/01_seller_retention_cohort.sql`](htt
 
 <OlistLateDeliveryByCategory />
 
-A naive read says "industrial categories have a 22% late rate, fix the industrial supply chain." The chart says otherwise. **Every category is roughly 3× later outside the Sudeste than inside it.** The disparity isn't about product type — it's about freight infrastructure. A category-by-category fix would chase the wrong root cause; a region-by-region one wouldn't.
+A naive read says "fashion has a 9% late rate, fix the fashion suppliers." The chart says otherwise. **Inside the Sudeste, the late rate sits near 7% almost regardless of category. Outside it, every category climbs** — and the gap widens most for fashion (5.3% → 9.1%) and health & beauty (7.4% → 11.1%). The disparity tracks geography more than product type. A category-by-category fix would chase a weaker signal; the freight-network-by-region one is where the variance actually lives.
 
-This is the value of conformed dimensions. The same `dim_geography` table that powers the regional revenue split also powers the regional delivery split — the cross-cut "wait, the late rate is geographic, not categorical" is a single join away, not a separate analysis project.
+This is the value of conformed dimensions. The same `dim_geography` table that powers the regional revenue split also powers the regional delivery split — the cross-cut "wait, the late rate is mostly geographic, not categorical" is a single join away, not a separate analysis project.
 
 ## What this project actually shows
 
