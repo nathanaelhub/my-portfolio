@@ -84,11 +84,11 @@ function Figure({ title, subtitle, caption, children, source }: FigureProps) {
 // ---- 1. Revenue by Brazilian region ---------------------------------------
 
 const REGION_REVENUE: Array<{ region: string; revenue: number; orders: number }> = [
-  { region: "Sudeste", revenue: 9_240_410, orders: 70_241 },
-  { region: "Sul", revenue: 1_876_220, orders: 14_122 },
-  { region: "Nordeste", revenue: 1_412_810, orders: 10_348 },
-  { region: "Centro-Oeste", revenue: 638_220, orders: 4_771 },
-  { region: "Norte", revenue: 280_140, orders: 2_148 },
+  { region: "Sudeste", revenue: 10_226_484, orders: 67_662 },
+  { region: "Sul", revenue: 2_295_786, orders: 14_027 },
+  { region: "Nordeste", revenue: 1_874_175, orders: 9_307 },
+  { region: "Centro-Oeste", revenue: 993_279, orders: 5_564 },
+  { region: "Norte", revenue: 409_309, orders: 1_832 },
 ];
 
 export function OlistRevenueByRegion() {
@@ -104,8 +104,8 @@ export function OlistRevenueByRegion() {
   return (
     <Figure
       subtitle="Q1 · Where is the revenue actually coming from?"
-      title="Gross revenue by Brazilian region · 2017–2018"
-      caption="Sudeste (São Paulo, Rio, Minas Gerais, Espírito Santo) drives 71% of gross revenue. The Norte region contributes 2%. Any growth strategy that doesn't account for this concentration is shooting at the wrong target."
+      title="Gross revenue by Brazilian region · 2016–2018"
+      caption="Sudeste (São Paulo, Rio, Minas Gerais, Espírito Santo) drives 65% of the R$15.8M gross revenue across 67,662 orders. The Norte region — geographically the largest — contributes 2.6%. Any growth strategy that allocates effort evenly by region is spending four-fifths of it against one-fifth of the opportunity."
       source="marts.fact_orders × marts.dim_geography"
     >
       <svg
@@ -169,14 +169,15 @@ export function OlistRevenueByRegion() {
 
 // rows = cohort month, columns = months since cohort, values = retention %.
 const COHORTS = ["2017-Jan", "2017-Apr", "2017-Jul", "2017-Oct", "2018-Jan", "2018-Apr"];
+const N = null as unknown as number;
 const RETENTION_MATRIX: number[][] = [
-  // M0  M1  M2  M3  M4  M5  M6  M7  M8  M9 M10 M11
-  [100, 38, 27, 22, 19, 17, 15, 14, 13, 12, 11, 10],
-  [100, 41, 30, 24, 21, 18, 16, 15, 13, 12, 11, 10],
-  [100, 44, 33, 26, 22, 19, 17, 15, 13, 12, 11, null as unknown as number],
-  [100, 47, 35, 28, 24, 20, 17, 15, 13, null as unknown as number, null as unknown as number, null as unknown as number],
-  [100, 49, 36, 28, 24, 20, 17, null as unknown as number, null as unknown as number, null as unknown as number, null as unknown as number, null as unknown as number],
-  [100, 51, 37, 29, null as unknown as number, null as unknown as number, null as unknown as number, null as unknown as number, null as unknown as number, null as unknown as number, null as unknown as number, null as unknown as number],
+  // M0  M1  M2  M3  M4  M5  M6  M7  M8
+  [100, 71, 70, 60, 64, 58, 50, 57, 50],
+  [100, 54, 47, 50, 49, 45, 38, 47, 38],
+  [100, 68, 62, 61, 68, 61, 57, 53, 52],
+  [100, 66, 55, 56, 48, 48, 48, 46, 37],
+  [100, 57, 50, 57, 45, 47, 40, 36, N],
+  [100, 60, 52, 53, 48, N, N, N, N],
 ];
 
 export function OlistSellerRetention() {
@@ -184,16 +185,16 @@ export function OlistSellerRetention() {
   const padL = 90;
   const padR = 16;
   const padT = 30;
-  const cols = 12;
+  const cols = 9;
   const rows = COHORTS.length;
   const cellW = (W - padL - padR) / cols;
   const cellH = 28;
   const H = padT + rows * cellH + 28;
   return (
     <Figure
-      subtitle="Q2 · Are sellers churning faster than the platform is replacing them?"
-      title="Seller retention by cohort month · % still selling N months later"
-      caption="Each row is a cohort of sellers who completed their first sale in that month. Read across to see what fraction of that cohort is still selling N months later. The pattern is brutal — over half churn by the second month and a third of each cohort is gone by month three. The platform's revenue growth depends on acquisition outrunning that drop."
+      subtitle="Q2 · How sticky are sellers once they start selling?"
+      title="Seller retention by quarterly cohort · % still selling N months later"
+      caption="Each row is a cohort of sellers who made their first sale in that month; read across for the share still selling N months later. The story is healthier than marketplace churn lore suggests — roughly half of every cohort is still active at month 6, and the Jan and Jul 2017 cohorts hold above 50% for the full window. The risk isn't a cliff; it's the steady ~40% that drift away in the first quarter, which acquisition has to keep replacing."
       source="sql_highlights/01_seller_retention_cohort.sql"
     >
       <svg
@@ -268,12 +269,12 @@ export function OlistSellerRetention() {
 // ---- 3. Late delivery rate by category × region ---------------------------
 
 const LATE_BY_CATEGORY: Array<{ category: string; sudeste: number; rest: number }> = [
-  { category: "fashion",       sudeste: 4.1, rest: 12.4 },
-  { category: "home_garden",   sudeste: 5.8, rest: 14.9 },
-  { category: "electronics",   sudeste: 7.2, rest: 18.6 },
-  { category: "health_beauty", sudeste: 3.4, rest: 9.7 },
-  { category: "sports_leisure",sudeste: 5.1, rest: 13.1 },
-  { category: "industrial",    sudeste: 8.5, rest: 22.7 },
+  { category: "health_beauty", sudeste: 7.4, rest: 11.1 },
+  { category: "electronics",   sudeste: 7.6, rest: 9.8 },
+  { category: "home_garden",   sudeste: 7.2, rest: 9.5 },
+  { category: "fashion",       sudeste: 5.3, rest: 9.1 },
+  { category: "industrial",    sudeste: 7.7, rest: 8.8 },
+  { category: "sports_leisure",sudeste: 7.1, rest: 8.1 },
 ];
 
 export function OlistLateDeliveryByCategory() {
@@ -287,9 +288,9 @@ export function OlistLateDeliveryByCategory() {
   const rowH = (H - padT - padB) / LATE_BY_CATEGORY.length;
   return (
     <Figure
-      subtitle="Q3 · Is late delivery a logistics problem or a geography problem?"
+      subtitle="Q3 · Is late delivery a logistics problem or a category problem?"
       title="Late-delivery rate by category group · Sudeste vs rest of Brazil"
-      caption="Both bars per category show the % of orders delivered after the estimated date. The Sudeste-vs-rest gap is roughly 3× across every category — meaning category-level interventions (e.g. supplier SLAs by product) won't close the gap. The disparity is structural to the freight network, not the product mix."
+      caption="Both bars per category show the % of orders delivered after the promised date. Within Sudeste the rate sits near 7% almost regardless of category — but outside it, the rate climbs, and the gap widens most for fashion (5.3% → 9.1%) and health & beauty (7.4% → 11.1%). The lever isn't product-level supplier SLAs; the late-delivery signal tracks geography far more than category. The same dim_geography that drives the revenue split surfaces this in a single join."
       source="marts.fact_orders × marts.dim_product × marts.dim_geography"
     >
       <svg
