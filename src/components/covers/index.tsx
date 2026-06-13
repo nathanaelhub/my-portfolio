@@ -4,10 +4,11 @@
  */
 import type { ComponentType } from "react";
 import {
-  AirCanvas, Airline, ApexFinance, Attrition, AudioVisualizer, Birds, BisonChat,
-  Cars, Commentary, F1, FraudGuard, HumeVoice, Internet, Letterboxd, LineUp, Lyft,
-  MarvelRivals, MentalHealth, Nashville, OlistWarehouse, PhysicsMuseum, Portfolio,
-  PTAssist, Restaurant, Saba,
+  AirCanvas, Airline, ApexFinance, Attrition, AudioVisualizer, Backprop, Birds,
+  BisonChat, Cars, CMlLibrary, Commentary, CppPhysics, F1, FraudGuard, GravitySim,
+  HumeVoice, Internet, Letterboxd, LineUp, Lyft, MarvelRivals, MentalHealth,
+  Nashville, NumpyNN, OlistWarehouse, PhysicsMuseum, Portfolio, PTAssist,
+  Restaurant, RustTui, Saba,
 } from "./CoverArt";
 
 export interface CoverMeta {
@@ -43,6 +44,12 @@ export const coverMeta: Record<string, CoverMeta> = {
   "air-canvas": { Component: AirCanvas, tint: "#eef4f9", accent: "#2a6fc4" },
   "audio-visualizer": { Component: AudioVisualizer, tint: "#0f1d1d", accent: "#5ec8c2", dark: true },
   "olist-warehouse": { Component: OlistWarehouse, tint: "#eef4fb", accent: "#2a6fc4" },
+  "gravity-sim": { Component: GravitySim, tint: "#14131c", accent: "#e8b84a", dark: true },
+  "rust-tui-dashboard": { Component: RustTui, tint: "#1a1410", accent: "#e57324", dark: true },
+  "backprop-from-scratch": { Component: Backprop, tint: "#fdf0ea", accent: "#c2563a" },
+  "numpy-neural-network": { Component: NumpyNN, tint: "#efeff8", accent: "#5b4ac4" },
+  "c-ml-library": { Component: CMlLibrary, tint: "#ececec", accent: "#0f6b5e" },
+  "cpp-physics-engine": { Component: CppPhysics, tint: "#eef3f9", accent: "#d04545" },
 };
 
 const FALLBACK_ACCENT = "#d97757";

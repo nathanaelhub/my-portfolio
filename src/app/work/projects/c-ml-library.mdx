@@ -1,0 +1,32 @@
+---
+title: "Machine Learning Library in C"
+publishedAt: "2026-06-10"
+summary: "Matrices and an MLP from malloc up — a small ML library in C with hand-rolled matrix ops and zero memory leaks."
+team:
+  - name: "Nathanael Johnson"
+    role: "Systems Programmer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/ml_lib"
+tag: "Systems / ML"
+tier: "tools"
+domains: ["Systems", "ML Foundations"]
+year: 2026
+metric: "mat_mul · malloc/free · zero leaks"
+isNew: true
+---
+
+## The brief
+
+One level below NumPy: what does a matrix *actually* cost? This library builds the ML stack from raw memory up — a matrix type over a flat `double*`, the operations an MLP needs, and the MLP itself, in C with no dependencies.
+
+## The build
+
+- **Flat-array matrix type** — one contiguous `malloc(rows * cols * sizeof(double))`, indexed as `data[i*cols + j]`; no pointer-to-pointer rows, so the whole matrix is one cache-friendly block
+- **Core ops** — `mat_mul`, transpose, element-wise map, broadcast add — each with explicit ownership rules about who frees what
+- **MLP on top** — dense layers + sigmoid/ReLU, forward and backward passes calling the same matrix ops, trained on small classification sets
+- **Valgrind-clean** — `--leak-check=full` reports zero bytes leaked across the full train/predict/free lifecycle; every constructor has a documented destructor
+
+## What I learned
+
+Manual memory management makes API design honest — every function signature has to answer "who owns this?" before it compiles into anything trustworthy. And `i*cols + j` taught me more about why NumPy is fast (contiguity, stride math) than any blog post had.
