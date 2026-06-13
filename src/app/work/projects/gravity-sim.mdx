@@ -1,0 +1,32 @@
+---
+title: "Simulating Gravity in C++"
+publishedAt: "2026-06-10"
+summary: "Newtonian n-body simulator in C++ with OpenGL/GLFW rendering — velocity Verlet integration at a locked 60 FPS."
+team:
+  - name: "Nathanael Johnson"
+    role: "Systems Programmer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/gravity-sim"
+tag: "Systems / Graphics"
+tier: "tools"
+domains: ["Systems", "Graphics"]
+year: 2026
+metric: "n-body · velocity Verlet · 60 FPS"
+isNew: true
+---
+
+## The brief
+
+I wanted to understand what physics engines actually do under the hood, starting with the simplest honest version: Newtonian gravity, no shortcuts, no engine. Every force computed pairwise, every frame.
+
+## The build
+
+- **Newtonian n-body core** — pairwise F = G·m₁m₂/r² across all bodies, O(n²) and unapologetic about it at this scale
+- **Velocity Verlet integration** — chosen over naive Euler after watching orbits visibly decay; Verlet conserves energy well enough that stable two- and three-body configurations survive indefinitely
+- **OpenGL + GLFW rendering** — immediate-mode trails showing each body's orbit history, fixed 60 FPS timestep decoupled from render
+- **Tunable scenarios** — figure-eight three-body choreography, binary star + planet, and a randomized N-body cloud
+
+## What I learned
+
+Integration choice *is* the simulation. The same forces with Euler vs. Verlet produce visibly different universes within seconds. Also: C++ ownership of GPU resources is its own curriculum — RAII wrappers around GL buffers saved me from leak-hunting.

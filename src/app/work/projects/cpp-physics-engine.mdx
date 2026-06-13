@@ -1,0 +1,32 @@
+---
+title: "2D Physics Engine in C++"
+publishedAt: "2026-06-11"
+summary: "Rigid-body 2D physics engine in C++ — circle/AABB collision detection with impulse-based resolution and restitution."
+team:
+  - name: "Nathanael Johnson"
+    role: "Systems Programmer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/physics2d"
+tag: "Systems / Graphics"
+tier: "tools"
+domains: ["Systems", "Graphics"]
+year: 2026
+metric: "impulse solver · circle vs AABB"
+isNew: true
+---
+
+## The brief
+
+The gravity sim handled forces between distant bodies; this one handles the harder problem — what happens when things *touch*. A 2D rigid-body engine with collision detection and impulse-based resolution, built to understand what Box2D does before reaching for it.
+
+## The build
+
+- **Shapes** — circles and axis-aligned bounding boxes, with all four pairwise collision tests (circle-circle, circle-AABB via closest-point clamping, AABB-AABB)
+- **Contact manifold** — each detected collision produces a contact normal and penetration depth, the two numbers everything downstream depends on
+- **Impulse resolution** — `j = −(1+e)(v·n̂) / (1/mₐ + 1/m_b)` applied along the normal, with restitution `e` tunable per body; positional correction (Baumgarte-style) to stop resting objects sinking
+- **Fixed timestep loop** — simulation at a fixed Δt with render interpolation, after watching variable timesteps make identical scenes non-deterministic
+
+## What I learned
+
+Collision *detection* is geometry; collision *response* is where the physics lives, and the impulse formula is doing more work than its one line suggests. Penetration correction is the difference between a demo and an engine — without it, every stack of boxes slowly becomes soup.

@@ -1,0 +1,32 @@
+---
+title: "Terminal Dashboard in Rust"
+publishedAt: "2026-06-10"
+summary: "System-monitoring TUI in Rust with Ratatui and crossterm — sparklines, gauges, and a panic-safe terminal restore."
+team:
+  - name: "Nathanael Johnson"
+    role: "Systems Programmer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/rust-tui-dashboard"
+tag: "Systems / Tools"
+tier: "tools"
+domains: ["Systems", "Tools"]
+year: 2026
+metric: "Ratatui · crossterm · 248ms tick"
+isNew: true
+---
+
+## The brief
+
+Learn Rust on something I'd actually keep open: a terminal dashboard for live system stats — CPU sparkline, memory bars, disk gauge — in the spirit of btop, scoped to a weekend.
+
+## The build
+
+- **Ratatui + crossterm** — layout split into header / main canvas / footer with box-drawing borders; main canvas splits into a sparkline panel and a gauge/list panel
+- **Event loop** — a 248ms tick polls `sysinfo`, redraws only on change or input; `q` quits, arrows move selection, tab cycles panels
+- **Panic-safe restore** — a custom panic hook that disables raw mode and leaves the alternate screen *before* the panic message prints, so a crash never leaves the terminal in a broken state
+- **Zero-allocation render path** — buffers reused across frames after the borrow checker made the lazy version impossible to write
+
+## What I learned
+
+The borrow checker is a design tool, not an obstacle — the panic-safe restore pattern fell out naturally from thinking about who owns the terminal state. TUI work also forces honest thinking about render invalidation that web frameworks normally hide from you.

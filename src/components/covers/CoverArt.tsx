@@ -1417,3 +1417,339 @@ export function OlistWarehouse() {
     </svg>
   );
 }
+
+// 26 — Gravity Sim (dark): three bodies on dashed elliptical orbit trails with
+// velocity vectors + F = G·m₁m₂/r² annotation.
+export function GravitySim() {
+  const A = "#e8b84a";
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      {/* barycenter cross */}
+      <g stroke={A} strokeOpacity="0.3">
+        <line x1="194" y1="150" x2="206" y2="150" />
+        <line x1="200" y1="144" x2="200" y2="156" />
+      </g>
+      {/* elliptical orbit trails — dashed */}
+      <ellipse cx="200" cy="150" rx="150" ry="92" fill="none" stroke={A} strokeOpacity="0.35" strokeDasharray="4 6" transform="rotate(-12 200 150)" />
+      <ellipse cx="200" cy="150" rx="96" ry="62" fill="none" stroke={A} strokeOpacity="0.3" strokeDasharray="3 5" transform="rotate(24 200 150)" />
+      <ellipse cx="200" cy="150" rx="52" ry="40" fill="none" stroke={A} strokeOpacity="0.25" strokeDasharray="2 4" transform="rotate(-40 200 150)" />
+      {/* bodies + velocity vectors (tangent arrows) */}
+      <circle cx="62" cy="120" r="9" fill={A} />
+      <line x1="62" y1="120" x2="84" y2="92" stroke={A} strokeWidth="1.6" />
+      <polygon points="84,92 76,96 81,101" fill={A} />
+      <circle cx="286" cy="190" r="6.5" fill={A} opacity="0.85" />
+      <line x1="286" y1="190" x2="312" y2="202" stroke={A} strokeWidth="1.4" opacity="0.85" />
+      <polygon points="312,202 303,203 305,196" fill={A} opacity="0.85" />
+      <circle cx="176" cy="116" r="4.5" fill={A} opacity="0.7" />
+      <line x1="176" y1="116" x2="158" y2="104" stroke={A} strokeWidth="1.2" opacity="0.7" />
+      <polygon points="158,104 166,104 163,110" fill={A} opacity="0.7" />
+      {/* gravitational pull line between two bodies */}
+      <line x1="70" y1="126" x2="170" y2="118" stroke={A} strokeOpacity="0.18" strokeDasharray="1 3" />
+      <text x="36" y="46" fontFamily="Geist Mono, monospace" fontSize="12" fill={A} opacity="0.75">F = G·m₁m₂/r²</text>
+      <text x="36" y="62" fontFamily="Geist Mono, monospace" fontSize="9" fill={A} opacity="0.4">Δt = 0.016s · velocity verlet</text>
+      <text x="200" y="288" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="9" fill="#5a554a" letterSpacing="0.18em">
+        N-BODY GRAVITY · F = G·M₁M₂/R² · 60 FPS
+      </text>
+    </svg>
+  );
+}
+
+// 27 — Rust TUI (dark): box-drawing terminal frame with CPU sparkline, memory
+// bars, disk gauge, crate list, and key-hint footer.
+export function RustTui() {
+  const A = "#e57324";
+  const spark = [22, 18, 26, 14, 20, 10, 16, 8, 14, 6, 12, 9, 5, 11, 7];
+  const sparkPts = spark.map((v, i) => `${118 + i * 14},${158 - v * 2.4}`).join(" ");
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      {/* outer terminal frame — box-drawing style: thin stroke + corner ticks */}
+      <rect x="36" y="38" width="328" height="222" fill="none" stroke={A} strokeOpacity="0.55" strokeWidth="1.2" />
+      {([[36, 38], [364, 38], [36, 260], [364, 260]] as const).map(([x, y], i) => (
+        <rect key={i} x={x - 2.5} y={y - 2.5} width="5" height="5" fill={A} opacity="0.8" />
+      ))}
+      {/* header strip */}
+      <line x1="36" y1="62" x2="364" y2="62" stroke={A} strokeOpacity="0.45" />
+      <text x="50" y="54" fontFamily="Geist Mono, monospace" fontSize="11" fill={A}>▍sys-dash</text>
+      <text x="350" y="54" textAnchor="end" fontFamily="Geist Mono, monospace" fontSize="9" fill={A} opacity="0.5">tick 248ms</text>
+      {/* main split: left panel (sparkline) / right panel (gauge) */}
+      <line x1="260" y1="62" x2="260" y2="232" stroke={A} strokeOpacity="0.3" strokeDasharray="2 4" />
+      <text x="50" y="80" fontFamily="Geist Mono, monospace" fontSize="9" fill={A} opacity="0.6">┤ CPU % ├</text>
+      <polyline points={sparkPts} fill="none" stroke={A} strokeWidth="1.8" />
+      {spark.map((v, i) => (
+        <circle key={i} cx={118 + i * 14} cy={158 - v * 2.4} r="1.4" fill={A} opacity="0.7" />
+      ))}
+      <line x1="50" y1="168" x2="246" y2="168" stroke={A} strokeOpacity="0.25" />
+      {/* bars under sparkline (mem) */}
+      <text x="50" y="190" fontFamily="Geist Mono, monospace" fontSize="9" fill={A} opacity="0.6">┤ MEM ├</text>
+      {[34, 58, 42, 70, 51, 64, 47, 38, 56, 44].map((h, i) => (
+        <rect key={i} x={50 + i * 20} y={224 - h * 0.4} width="12" height={h * 0.4} fill={A} opacity={0.3 + (i % 4) * 0.12} />
+      ))}
+      {/* right panel: gauge + crate list */}
+      <text x="274" y="80" fontFamily="Geist Mono, monospace" fontSize="9" fill={A} opacity="0.6">┤ DISK ├</text>
+      <rect x="274" y="92" width="76" height="12" fill="none" stroke={A} strokeOpacity="0.5" />
+      <rect x="274" y="92" width="52" height="12" fill={A} opacity="0.75" />
+      <text x="274" y="118" fontFamily="Geist Mono, monospace" fontSize="9" fill={A}>68%</text>
+      {["tokio", "ratatui", "serde", "sysinfo"].map((s, i) => (
+        <text key={s} x="274" y={142 + i * 18} fontFamily="Geist Mono, monospace" fontSize="9.5" fill={A} opacity={i === 1 ? 1 : 0.45}>
+          {i === 1 ? "▸ " : "  "}{s}
+        </text>
+      ))}
+      {/* footer strip */}
+      <line x1="36" y1="232" x2="364" y2="232" stroke={A} strokeOpacity="0.45" />
+      <text x="50" y="250" fontFamily="Geist Mono, monospace" fontSize="9" fill={A} opacity="0.6">q: quit  ·  ↑/↓: select  ·  tab: panel</text>
+      <text x="200" y="288" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="9" fill="#5a554a" letterSpacing="0.18em">
+        RATATUI · CROSSTERM · PANIC-SAFE RESTORE
+      </text>
+    </svg>
+  );
+}
+
+// 28 — Backprop: 2-3-2 network with faint forward edges, bold accent gradient
+// arrows flowing backward, ∂L/∂w label, descending loss curve in the corner.
+export function Backprop() {
+  const A = "#c2563a";
+  const L0 = [[110, 110], [110, 190]] as const;
+  const L1 = [[210, 80], [210, 150], [210, 220]] as const;
+  const L2 = [[310, 110], [310, 190]] as const;
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      <defs>
+        <marker id="bp-arrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+          <polygon points="0 0, 7 3.5, 0 7" fill={A} />
+        </marker>
+      </defs>
+      {/* forward edges — faint ink */}
+      {L0.map(([x1, y1], i) =>
+        L1.map(([x2, y2], j) => (
+          <line key={`f0-${i}-${j}`} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#1c1b18" strokeOpacity="0.13" />
+        )),
+      )}
+      {L1.map(([x1, y1], i) =>
+        L2.map(([x2, y2], j) => (
+          <line key={`f1-${i}-${j}`} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#1c1b18" strokeOpacity="0.13" />
+        )),
+      )}
+      {/* backward gradient arrows — bold accent, flowing right→left, curved */}
+      <path d="M 300 102 Q 255 84, 220 76" fill="none" stroke={A} strokeWidth="2.4" markerEnd="url(#bp-arrow)" />
+      <path d="M 300 118 Q 258 134, 220 148" fill="none" stroke={A} strokeWidth="2" opacity="0.8" markerEnd="url(#bp-arrow)" />
+      <path d="M 302 196 Q 258 212, 220 218" fill="none" stroke={A} strokeWidth="2" opacity="0.7" markerEnd="url(#bp-arrow)" />
+      <path d="M 202 84 Q 160 92, 120 104" fill="none" stroke={A} strokeWidth="2.2" opacity="0.9" markerEnd="url(#bp-arrow)" />
+      <path d="M 202 216 Q 160 206, 120 194" fill="none" stroke={A} strokeWidth="1.8" opacity="0.65" markerEnd="url(#bp-arrow)" />
+      {/* nodes */}
+      {[...L0, ...L1, ...L2].map(([x, y], i) => (
+        <g key={i}>
+          <circle cx={x} cy={y} r="13" fill="#fdf0ea" stroke="#1c1b18" strokeOpacity="0.55" strokeWidth="1.4" />
+          <circle cx={x} cy={y} r="4" fill="#1c1b18" opacity="0.25" />
+        </g>
+      ))}
+      {/* output node emphasized — where loss enters */}
+      <circle cx={310} cy={110} r="13" fill="none" stroke={A} strokeWidth="2" />
+      <text x="334" y="106" fontFamily="Geist Mono, monospace" fontSize="10" fill={A}>L</text>
+      {/* ∂L/∂w label on a backward edge */}
+      <g transform="translate(238, 100)">
+        <rect x="-6" y="-14" width="58" height="20" rx="3" fill="#fdf0ea" stroke={A} strokeOpacity="0.4" />
+        <text x="0" y="0" fontFamily="Geist Mono, monospace" fontSize="11" fill={A}>∂L/∂w</text>
+      </g>
+      {/* descending loss curve — corner */}
+      <g transform="translate(38, 36)">
+        <line x1="0" y1="0" x2="0" y2="44" stroke="#1c1b18" strokeOpacity="0.3" />
+        <line x1="0" y1="44" x2="64" y2="44" stroke="#1c1b18" strokeOpacity="0.3" />
+        <path d="M 2 4 Q 14 30, 30 36 T 62 41" fill="none" stroke={A} strokeWidth="1.6" />
+        <text x="0" y="58" fontFamily="Geist Mono, monospace" fontSize="8" fill="#8a8478" letterSpacing="0.08em">loss ↓</text>
+      </g>
+      {/* faint dashed guide under the net */}
+      <line x1="90" y1="252" x2="330" y2="252" stroke="#1c1b18" strokeOpacity="0.12" strokeDasharray="2 4" />
+      <text x="110" y="266" fontFamily="Geist Mono, monospace" fontSize="8.5" fill="#8a8478">forward →</text>
+      <text x="310" y="266" textAnchor="end" fontFamily="Geist Mono, monospace" fontSize="8.5" fill={A}>← backward</text>
+      <text x="200" y="288" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="9" fill="#8a8478" letterSpacing="0.18em">
+        CHAIN RULE BY HAND · NO AUTOGRAD
+      </text>
+    </svg>
+  );
+}
+
+// 29 — NumPy NN: pixelated MNIST "7" on a 28×28 grid fragment, arrow through
+// Dense/ReLU/Softmax layer bars, 10-class probability strip with argmax callout.
+export function NumpyNN() {
+  const A = "#5b4ac4";
+  const seven = [
+    [1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1],
+    [7, 2], [6, 3], [5, 4], [5, 5], [4, 6], [4, 7], [3, 8],
+  ] as const;
+  const cell = 9;
+  const probs = [0.02, 0.01, 0.05, 0.04, 0.02, 0.03, 0.01, 0.74, 0.05, 0.03];
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      {/* 28×28 grid fragment */}
+      <g transform="translate(36, 60)">
+        {[...Array(11)].map((_, i) => (
+          <g key={i}>
+            <line x1={i * cell} y1="0" x2={i * cell} y2={10 * cell} stroke={A} strokeOpacity="0.14" />
+            <line x1="0" y1={i * cell} x2={10 * cell} y2={i * cell} stroke={A} strokeOpacity="0.14" />
+          </g>
+        ))}
+        {/* fragment continues — dashed open edges */}
+        <line x1={10 * cell} y1="0" x2={10 * cell + 14} y2="0" stroke={A} strokeOpacity="0.2" strokeDasharray="2 3" />
+        <line x1="0" y1={10 * cell} x2="0" y2={10 * cell + 14} stroke={A} strokeOpacity="0.2" strokeDasharray="2 3" />
+        {/* digit pixels */}
+        {seven.map(([x, y], i) => (
+          <rect key={i} x={x * cell + 0.8} y={y * cell + 0.8} width={cell - 1.6} height={cell - 1.6} fill="#1c1b18" opacity={0.55 + (i % 3) * 0.15} />
+        ))}
+        <text x="0" y="-10" fontFamily="Geist Mono, monospace" fontSize="8.5" fill="#8a8478" letterSpacing="0.08em">x ∈ ℝ²⁸ˣ²⁸</text>
+      </g>
+      {/* arrow through layer bars */}
+      <g transform="translate(160, 92)">
+        <line x1="0" y1="36" x2="22" y2="36" stroke={A} strokeWidth="1.6" />
+        <polygon points="22,36 15,32 15,40" fill={A} />
+        {[
+          { label: "Dense 128", h: 72, op: 0.9 },
+          { label: "ReLU", h: 54, op: 0.6 },
+          { label: "Softmax", h: 38, op: 0.8 },
+        ].map((l, i) => (
+          <g key={l.label} transform={`translate(${30 + i * 52}, 0)`}>
+            <rect x="0" y={36 - l.h / 2} width="16" height={l.h} rx="2" fill={A} opacity={l.op * 0.35} />
+            <rect x="0" y={36 - l.h / 2} width="16" height={l.h} rx="2" fill="none" stroke={A} strokeOpacity="0.7" />
+            <text x="8" y={36 + l.h / 2 + 14} textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="8" fill="#5a554a">{l.label}</text>
+            {i < 2 && (
+              <line x1="22" y1="36" x2="46" y2="36" stroke={A} strokeWidth="1.4" strokeDasharray="3 3" opacity="0.6" />
+            )}
+          </g>
+        ))}
+        <line x1="190" y1="36" x2="212" y2="36" stroke={A} strokeWidth="1.6" />
+        <polygon points="212,36 205,32 205,40" fill={A} />
+      </g>
+      {/* 10-class probability strip */}
+      <g transform="translate(160, 196)">
+        <text x="0" y="-8" fontFamily="Geist Mono, monospace" fontSize="8.5" fill="#8a8478" letterSpacing="0.08em">p(y | x)</text>
+        {probs.map((p, i) => (
+          <g key={i}>
+            <rect x={i * 21} y={44 - p * 56} width="14" height={p * 56} fill={i === 7 ? A : "#1c1b18"} opacity={i === 7 ? 0.95 : 0.22} />
+            <text x={i * 21 + 7} y="58" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="8" fill={i === 7 ? A : "#8a8478"}>{i}</text>
+          </g>
+        ))}
+        {/* argmax callout */}
+        <text x={7 * 21 + 7} y={44 - probs[7] * 56 - 6} textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="9" fill={A}>.74</text>
+      </g>
+      <text x="200" y="288" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="9" fill="#8a8478" letterSpacing="0.18em">
+        MNIST · 784 → 128 → 10 · NUMPY ONLY
+      </text>
+    </svg>
+  );
+}
+
+// 30 — C ML Library: flat malloc'd memory cells with i*cols + j index arithmetic
+// pointing at the hot cell, small A×B=C matrix-multiply diagram, valgrind note.
+export function CMlLibrary() {
+  const A = "#0f6b5e";
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      {/* flat memory array */}
+      <g transform="translate(34, 78)">
+        <text x="0" y="-26" fontFamily="Geist Mono, monospace" fontSize="11" fill={A}>double* data</text>
+        <text x="0" y="-12" fontFamily="Geist Mono, monospace" fontSize="8.5" fill="#8a8478">malloc(rows * cols * sizeof(double))</text>
+        {[...Array(12)].map((_, i) => {
+          const highlight = i === 7;
+          return (
+            <g key={i}>
+              <rect x={i * 28} y="0" width="28" height="26" fill={highlight ? A : "#fff"} fillOpacity={highlight ? 0.9 : 0.6} stroke={A} strokeOpacity={highlight ? 1 : 0.4} />
+              <text x={i * 28 + 14} y="40" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="7.5" fill={highlight ? A : "#8a8478"}>[{i}]</text>
+            </g>
+          );
+        })}
+        {/* continuation dashes */}
+        <line x1={12 * 28 + 6} y1="13" x2={12 * 28 + 26} y2="13" stroke={A} strokeOpacity="0.4" strokeDasharray="2 3" />
+      </g>
+      {/* index arithmetic: 2D coordinate mapping down to flat cell */}
+      <g transform="translate(34, 158)">
+        <text x="0" y="0" fontFamily="Geist Mono, monospace" fontSize="11" fill="#1c1b18" opacity="0.8">m[1][3]</text>
+        <text x="62" y="0" fontFamily="Geist Mono, monospace" fontSize="11" fill={A}>= data[i*cols + j]</text>
+        <text x="62" y="16" fontFamily="Geist Mono, monospace" fontSize="9" fill="#8a8478">= data[1*4 + 3] = data[7]</text>
+      </g>
+      {/* arrow from the arithmetic up to the highlighted cell */}
+      <path d="M 160 148 Q 200 130, 238 110" fill="none" stroke={A} strokeWidth="1.4" strokeDasharray="3 3" />
+      <polygon points="238,110 230,112 233,118" fill={A} />
+      {/* small A×B=C matrix multiply diagram */}
+      <g transform="translate(34, 196)">
+        {[...Array(2)].map((_, r) =>
+          [...Array(3)].map((_, c) => (
+            <rect key={`a${r}${c}`} x={c * 16} y={r * 16} width="15" height="15" fill={r === 0 ? A : "#1c1b18"} opacity={r === 0 ? 0.5 : 0.15} />
+          )),
+        )}
+        <text x="24" y="48" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="8.5" fill="#5a554a">A 2×3</text>
+        <text x="62" y="22" fontFamily="Geist Mono, monospace" fontSize="12" fill="#1c1b18" opacity="0.6">×</text>
+        <g transform="translate(80, -8)">
+          {[...Array(3)].map((_, r) =>
+            [...Array(2)].map((_, c) => (
+              <rect key={`b${r}${c}`} x={c * 16} y={r * 16} width="15" height="15" fill={c === 1 ? A : "#1c1b18"} opacity={c === 1 ? 0.5 : 0.15} />
+            )),
+          )}
+          <text x="16" y="64" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="8.5" fill="#5a554a">B 3×2</text>
+        </g>
+        <text x="126" y="22" fontFamily="Geist Mono, monospace" fontSize="12" fill="#1c1b18" opacity="0.6">=</text>
+        <g transform="translate(142, 0)">
+          {[...Array(2)].map((_, r) =>
+            [...Array(2)].map((_, c) => (
+              <rect key={`c${r}${c}`} x={c * 16} y={r * 16} width="15" height="15" fill={r === 0 && c === 1 ? A : "#1c1b18"} opacity={r === 0 && c === 1 ? 0.95 : 0.15} />
+            )),
+          )}
+          <text x="16" y="48" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="8.5" fill="#5a554a">C 2×2</text>
+        </g>
+      </g>
+      {/* valgrind note */}
+      <text x="366" y="206" textAnchor="end" fontFamily="Geist Mono, monospace" fontSize="9" fill={A} opacity="0.7">0 bytes leaked ✓</text>
+      <text x="366" y="219" textAnchor="end" fontFamily="Geist Mono, monospace" fontSize="8" fill="#8a8478">valgrind --leak-check=full</text>
+      <text x="200" y="288" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="9" fill="#8a8478" letterSpacing="0.18em">
+        MAT_MUL · MALLOC/FREE · ZERO LEAKS
+      </text>
+    </svg>
+  );
+}
+
+// 31 — C++ Physics Engine: circle penetrating an AABB with collision normal,
+// penetration depth marker, pre/post velocity vectors, impulse equations.
+export function CppPhysics() {
+  const A = "#d04545";
+  const box = { x: 80, y: 110, w: 120, h: 110 };
+  const circ = { x: 214, y: 158, r: 34 }; // overlaps box right edge by ~14
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      {/* faint guide grid */}
+      {[...Array(5)].map((_, i) => (
+        <line key={i} x1="30" x2="370" y1={60 + i * 48} y2={60 + i * 48} stroke="#1c1b18" strokeOpacity="0.05" strokeDasharray="2 4" />
+      ))}
+      {/* AABB */}
+      <rect x={box.x} y={box.y} width={box.w} height={box.h} fill="#1c1b18" opacity="0.12" />
+      <rect x={box.x} y={box.y} width={box.w} height={box.h} fill="none" stroke="#1c1b18" strokeOpacity="0.6" strokeWidth="1.5" />
+      <text x={box.x + 10} y={box.y + 20} fontFamily="Geist Mono, monospace" fontSize="9" fill="#5a554a">AABB</text>
+      {/* circle */}
+      <circle cx={circ.x} cy={circ.y} r={circ.r} fill={A} opacity="0.14" />
+      <circle cx={circ.x} cy={circ.y} r={circ.r} fill="none" stroke={A} strokeWidth="2" />
+      <circle cx={circ.x} cy={circ.y} r="2.5" fill={A} />
+      {/* penetration depth marker — between box right edge and circle's leftmost point */}
+      <g>
+        <line x1={box.x + box.w} y1={circ.y + 52} x2={circ.x - circ.r} y2={circ.y + 52} stroke="#1c1b18" strokeWidth="1" />
+        <line x1={box.x + box.w} y1={circ.y + 46} x2={box.x + box.w} y2={circ.y + 58} stroke="#1c1b18" strokeWidth="1" />
+        <line x1={circ.x - circ.r} y1={circ.y + 46} x2={circ.x - circ.r} y2={circ.y + 58} stroke="#1c1b18" strokeWidth="1" />
+        <text x={(box.x + box.w + circ.x - circ.r) / 2} y={circ.y + 70} textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="9" fill="#5a554a">d</text>
+      </g>
+      {/* collision normal — bold accent arrow from contact point, pointing +x */}
+      <line x1={box.x + box.w} y1={circ.y} x2={box.x + box.w + 64} y2={circ.y} stroke={A} strokeWidth="3" />
+      <polygon points={`${box.x + box.w + 72},${circ.y} ${box.x + box.w + 58},${circ.y - 7} ${box.x + box.w + 58},${circ.y + 7}`} fill={A} />
+      <text x={box.x + box.w + 36} y={circ.y - 12} textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="10" fill={A}>n̂</text>
+      {/* pre velocity — dashed, coming in toward the box */}
+      <line x1={circ.x + 78} y1={circ.y - 78} x2={circ.x + 18} y2={circ.y - 22} stroke="#1c1b18" strokeOpacity="0.5" strokeWidth="1.6" strokeDasharray="5 4" />
+      <polygon points={`${circ.x + 15},${circ.y - 19} ${circ.x + 26},${circ.y - 22} ${circ.x + 20},${circ.y - 30}`} fill="#1c1b18" opacity="0.5" />
+      <text x={circ.x + 84} y={circ.y - 84} fontFamily="Geist Mono, monospace" fontSize="9" fill="#5a554a">v₀</text>
+      {/* post velocity — dashed accent, reflected away */}
+      <line x1={circ.x + 24} y1={circ.y + 18} x2={circ.x + 88} y2={circ.y + 70} stroke={A} strokeWidth="1.6" strokeDasharray="5 4" opacity="0.85" />
+      <polygon points={`${circ.x + 92},${circ.y + 73} ${circ.x + 81},${circ.y + 70} ${circ.x + 87},${circ.y + 62}`} fill={A} opacity="0.85" />
+      <text x={circ.x + 96} y={circ.y + 86} fontFamily="Geist Mono, monospace" fontSize="9" fill={A}>v₁</text>
+      {/* impulse notes — top-left free area */}
+      <text x="80" y="62" fontFamily="Geist Mono, monospace" fontSize="9" fill="#8a8478">j = −(1+e)(v·n̂) / (1/mₐ + 1/m_b)</text>
+      <text x="80" y="76" fontFamily="Geist Mono, monospace" fontSize="9" fill={A} opacity="0.8">v₁ = v₀ − (1+e)(v₀·n̂)n̂</text>
+      <text x="200" y="288" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="9" fill="#8a8478" letterSpacing="0.18em">
+        IMPULSE RESOLUTION · CIRCLE VS AABB
+      </text>
+    </svg>
+  );
+}
