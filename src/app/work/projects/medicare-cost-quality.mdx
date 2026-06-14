@@ -1,0 +1,95 @@
+---
+title: "Medicare Cost & Quality"
+publishedAt: "2026-06-20"
+summary: "What the same procedure costs across hospitals, how far charges sit above what Medicare actually pays, and whether spending more buys better outcomes — a two-fact star schema on public CMS data."
+team:
+  - name: "Nathanael Johnson"
+    role: "Analytics Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/medicare-cost-quality"
+tag: "Healthcare / Analytics Engineering"
+tier: "featured"
+domains: ["Analysis", "Healthcare"]
+year: 2026
+metric: "Snowflake · dbt · two-fact star · CMS data"
+isNew: true
+---
+
+## The brief
+
+Healthcare prices are famously incoherent. The same routine procedure can carry wildly different "charges" at two hospitals across town, and almost nobody pays the charge anyway — Medicare pays its own administered rate. So a fair question for anyone who pays for care (an insurer, an employer, a policy team) is: **does paying a hospital more actually buy better outcomes?**
+
+That question needs two datasets joined together, which is exactly the kind of work I did as a BI analyst in healthcare — so I built the warehouse to answer it from public CMS data.
+
+## The data
+
+Two extracts from the Centers for Medicare & Medicaid Services, both public, no authentication:
+
+- **Medicare Inpatient Hospitals by Provider and Service** — for every hospital and every MS-DRG (procedure group): total discharges, average covered charge (what the hospital bills), average total payment, average Medicare payment. ~150,000 hospital × DRG rows.
+- **Hospital Readmissions Reduction Program (HRRP)** — for every hospital: the risk-adjusted 30-day excess-readmission ratio across six conditions.
+
+The two files share one column under two different names: HRRP's `Facility ID` **is** the inpatient file's `Rndrng_Prvdr_CCN`, the CMS Certification Number. That single shared key is the whole project — it's what lets cost and quality be compared at the same hospital.
+
+## The pipeline
+
+<MedicareArchitecture />
+
+The fetch step resolves the inpatient file from the CMS DCAT catalog rather than a hardcoded URL (CMS rotates the download link each release year; the catalog lookup survives that). HRRP pages through the Provider Data Catalog API. Both land in Snowflake, get cast and cleaned in dbt staging, and conform into the marts.
+
+## The schema
+
+<MedicareStarSchema />
+
+This is a **two-fact** model, and that's the deliberate part. The cost data and the quality data live at genuinely different grains — one row per hospital × DRG for charges, one row per hospital × condition for readmissions. Forcing them into a single table would either explode into a meaningless DRG × condition cross-join or throw away the per-DRG charge detail.
+
+So they stay as separate facts at their natural grains, sharing a conformed `dim_provider`. A dbt `relationships` test enforces the CCN join as a contract — if a future CMS release ships an HRRP hospital that isn't in the charges file, the build fails loudly instead of silently dropping it from every cost-vs-quality comparison. The full grain/conformance reasoning is in [`docs/star_schema.md`](https://github.com/nathanaelhub/medicare-cost-quality/blob/main/docs/star_schema.md).
+
+## Three questions
+
+### Q1 · Same procedure, different price
+
+<MedicarePriceVariation />
+
+DRG 470 — major joint replacement without complications — is about as standardized as inpatient care gets. And yet the average *charge* for it swings from the mid-teens to the low-six-figures across hospitals, while the actual Medicare *payment* barely moves. The charge isn't tracking the cost of care; it's a negotiating anchor. The query behind this uses `PERCENTILE_CONT` window functions to get the distribution shape in a single pass — see [`sql_highlights/01`](https://github.com/nathanaelhub/medicare-cost-quality/blob/main/sql_highlights/01_price_variation_one_drg.sql).
+
+### Q2 · The markup gap
+
+<MedicareMarkup />
+
+Zoom out from one DRG to whole service lines, and the markup — billed charge over Medicare payment — is consistently several-fold, highest for circulatory and nervous-system procedures. The number that matters here is *discharge-weighted*: a high-volume DRG counts more than a rare one. That weighting (sum of weighted measures over sum of discharges) is the difference between a real rollup and the naïve average-of-averages that quietly lies. [`sql_highlights/02`](https://github.com/nathanaelhub/medicare-cost-quality/blob/main/sql_highlights/02_markup_by_service_line.sql) shows it.
+
+### Q3 · Does spending buy quality?
+
+<MedicareCostVsQuality />
+
+This is the join the whole schema was built for. Bucket hospitals into five groups by what Medicare pays them per discharge (the cost fact), then plot each group's average 30-day excess-readmission ratio (the quality fact), joined through the shared provider dimension. The line is flat. Paying a hospital roughly twice as much per discharge — Q5 versus Q1 — buys no measurable reduction in readmissions. A ratio of 1.0 means "exactly as expected after risk adjustment," and every quintile sits right on it.
+
+That flatness is the finding. It's the result payers and policy researchers keep arriving at, and being able to reproduce it from public data with a clean two-fact join is the point of the project.
+
+## What this shows
+
+- **Two-fact conformed-dimension modeling** — the part of dimensional modeling that's easy to describe and hard to do right.
+- **Honest aggregation** — discharge-weighting non-additive averages, dropping suppressed cells, risk-adjusted ratios used correctly.
+- **SQL that earns its keep** — percentile windows, `NTILE` bucketing, a cross-fact correlation, `QUALIFY` in the repo's highlights.
+- **dbt discipline** — staging/marts layering, a cross-fact `relationships` test that encodes the CCN contract, `accepted_range` and `accepted_values` tests, a schema-name macro for clean `MARTS`/`STG`.
+- **Healthcare-domain fluency** — DRGs, service lines, the charge/payment/Medicare-payment distinction, HRRP risk adjustment. The domain my résumé already lives in, now on the portfolio.
+
+## Stack
+
+| Layer | Tool |
+|---|---|
+| Source | CMS data.cms.gov (public API, no auth) |
+| Warehouse | Snowflake Standard (trial) |
+| Ingest | Snowflake CLI + Python (DCAT-resolved fetch) |
+| Transform | dbt Core with `dbt_utils` |
+| Tests | dbt schema tests incl. cross-fact `relationships` |
+| Presentation | Hand-coded SVG charts on this page |
+
+## Where this goes next
+
+1. **Multiple data years** — adding 2019–2023 introduces a `dim_date` and turns both facts into periodic snapshots, at which point SCD2 on `dim_provider` earns its keep (hospitals open, close, and merge across years).
+2. **Geographic cost-of-living adjustment** — Medicare already wage-indexes payments; normalizing charges the same way would separate "expensive market" from "expensive hospital."
+3. **A `fact_review`-style patient-experience fact** — CMS publishes HCAHPS survey scores keyed on the same CCN, a third fact that drops straight into the conformed model.
+
+Repo: [github.com/nathanaelhub/medicare-cost-quality](https://github.com/nathanaelhub/medicare-cost-quality).

@@ -1753,3 +1753,53 @@ export function CppPhysics() {
     </svg>
   );
 }
+
+// 32 — Medicare Cost & Quality: two fact boxes joined to a shared provider
+// node, with a flat cost-vs-quality line underneath.
+export function MedicareCostQuality() {
+  const accent = "#1f7a6b";
+  const ink = "#1c1b18";
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      <text x="22" y="34" fontFamily="Geist Mono, monospace" fontSize="9" fill={accent} letterSpacing="0.18em">
+        TWO-FACT · COST × QUALITY
+      </text>
+      {/* two fact boxes */}
+      <g>
+        <rect x="24" y="54" width="150" height="40" rx="4" fill="none" stroke={accent} strokeWidth="1.2" strokeOpacity="0.7" />
+        <text x="99" y="72" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="9" fill={ink}>fact_charges</text>
+        <text x="99" y="85" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="7.5" fill={accent} opacity="0.75">hospital × DRG</text>
+      </g>
+      <g>
+        <rect x="226" y="54" width="150" height="40" rx="4" fill="none" stroke={accent} strokeWidth="1.2" strokeOpacity="0.7" />
+        <text x="301" y="72" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="9" fill={ink}>fact_readmit</text>
+        <text x="301" y="85" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="7.5" fill={accent} opacity="0.75">hospital × cond.</text>
+      </g>
+      {/* shared provider node */}
+      <g>
+        <rect x="150" y="128" width="100" height="30" rx="4" fill={accent} />
+        <text x="200" y="147" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="8.5" fill="#fff">dim_provider·CCN</text>
+      </g>
+      <line x1="99" y1="94" x2="180" y2="128" stroke={accent} strokeOpacity="0.5" />
+      <line x1="301" y1="94" x2="220" y2="128" stroke={accent} strokeOpacity="0.5" />
+      {/* flat cost-vs-quality line */}
+      <g transform="translate(0, 12)">
+        <line x1="40" y1="240" x2="360" y2="240" stroke={ink} strokeOpacity="0.25" />
+        <line x1="40" y1="200" x2="360" y2="200" stroke={accent} strokeOpacity="0.3" strokeDasharray="2 3" />
+        <text x="364" y="203" fontFamily="Geist Mono, monospace" fontSize="7" fill={accent} opacity="0.7">1.0</text>
+        {[0, 1, 2, 3, 4].map((i) => {
+          const x = 70 + i * 65;
+          const y = 200 + (i % 2 === 0 ? 1.5 : -1.5);
+          return <circle key={i} cx={x} cy={y} r="4" fill={accent} />;
+        })}
+        <polyline points="70,201.5 135,198.5 200,201.5 265,198.5 330,201.5" fill="none" stroke={accent} strokeWidth="1.4" strokeOpacity="0.5" />
+        <text x="200" y="262" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="8" fill="#605b50" letterSpacing="0.06em">
+          PAY QUINTILE → readmit ratio (flat)
+        </text>
+      </g>
+      <text x="200" y="290" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="9" fill={accent} letterSpacing="0.18em">
+        SNOWFLAKE · DBT · CMS DATA
+      </text>
+    </svg>
+  );
+}
