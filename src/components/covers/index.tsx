@@ -6,9 +6,9 @@ import type { ComponentType } from "react";
 import {
   AirCanvas, Airline, ApexFinance, Attrition, AudioVisualizer, Backprop, Birds,
   BisonChat, Cars, CMlLibrary, Commentary, CppPhysics, F1, FraudGuard, GravitySim,
-  HumeVoice, Internet, Letterboxd, LineUp, Lyft, MarvelRivals, MentalHealth,
-  Nashville, NumpyNN, OlistWarehouse, PhysicsMuseum, Portfolio, PTAssist,
-  Restaurant, RustTui, Saba,
+  HumeVoice, Internet, Letterboxd, LineUp, Lyft, MarvelRivals, MedicareCostQuality,
+  MentalHealth, Nashville, NumpyNN, OlistWarehouse, PhysicsMuseum, Portfolio,
+  PTAssist, Restaurant, RustTui, Saba,
 } from "./CoverArt";
 
 export interface CoverMeta {
@@ -50,6 +50,7 @@ export const coverMeta: Record<string, CoverMeta> = {
   "numpy-neural-network": { Component: NumpyNN, tint: "#efeff8", accent: "#5b4ac4" },
   "c-ml-library": { Component: CMlLibrary, tint: "#ececec", accent: "#0f6b5e" },
   "cpp-physics-engine": { Component: CppPhysics, tint: "#eef3f9", accent: "#d04545" },
+  "medicare-cost-quality": { Component: MedicareCostQuality, tint: "#e9f4f1", accent: "#1f7a6b" },
 };
 
 const FALLBACK_ACCENT = "#d97757";
