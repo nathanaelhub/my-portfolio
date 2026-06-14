@@ -1,0 +1,32 @@
+---
+title: "Neural Network Framework in NumPy"
+publishedAt: "2026-06-10"
+summary: "A small layered NN framework in NumPy — Dense/ReLU/Softmax modules with a clean forward/backward API, trained on MNIST."
+team:
+  - name: "Nathanael Johnson"
+    role: "ML Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/mnist-numpy-nn"
+tag: "ML Foundations"
+tier: "tools"
+domains: ["ML Foundations"]
+year: 2026
+metric: "MNIST · 784 → 128 → 10 · NumPy only"
+isNew: true
+---
+
+## The brief
+
+The step after backprop-from-scratch: take the by-hand math and shape it into an actual framework — layers as composable modules with a forward/backward contract, the way PyTorch does it, but in NumPy where nothing is hidden.
+
+## The build
+
+- **Module API** — every layer implements `forward(x)` and `backward(grad)`; the network is a list of layers and training is a fold over it in each direction
+- **Dense / ReLU / Softmax + cross-entropy** — with the softmax-CE gradient fused into the numerically stable combined form
+- **Mini-batch SGD with momentum** — vectorized across the batch dimension; the 784 → 128 → 10 reference net trains on MNIST in under a minute per epoch on a laptop CPU
+- **He initialization** — added after watching the first version's deep variants stall at chance accuracy
+
+## What I learned
+
+The framework abstractions everyone uses (modules, forward/backward contracts, optimizers as separate objects) aren't arbitrary API taste — they fall out naturally the moment you try to compose more than two layers. Re-inventing them badly first made the real ones legible.

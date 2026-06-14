@@ -1,0 +1,32 @@
+---
+title: "Backpropagation from First Principles"
+publishedAt: "2026-06-10"
+summary: "The chain rule by hand — backprop derived and implemented in pure Python, no autograd, no NumPy in the gradient path."
+team:
+  - name: "Nathanael Johnson"
+    role: "ML Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/backprop-from-scratch"
+tag: "ML Foundations"
+tier: "tools"
+domains: ["ML Foundations", "Education"]
+year: 2026
+metric: "chain rule by hand · no autograd"
+isNew: true
+---
+
+## The brief
+
+I'd used `loss.backward()` a thousand times without being able to derive what it does on a whiteboard. This project closes that gap: backpropagation written out from the chain rule, in pure Python, where every gradient is a line of code I had to justify.
+
+## The build
+
+- **A 2-3-2 toy network** — small enough that every weight's gradient can be checked by hand on paper
+- **Forward pass as explicit composition** — each layer stores its inputs and pre-activations, because backprop is just bookkeeping about what you saw on the way forward
+- **Backward pass derived per-layer** — ∂L/∂w written out for the output layer, then the recursive delta rule for hidden layers; no vectorization until the math was right scalar-by-scalar
+- **Gradient checking** — every analytic gradient verified against central-difference numerical gradients to 1e-7 before trusting it
+
+## What I learned
+
+Backprop is not magic and it is not even hard — it's the chain rule plus disciplined caching. The thing that *is* hard is the indexing. Writing the scalar version first, then vectorizing, is the only order that worked for me.
