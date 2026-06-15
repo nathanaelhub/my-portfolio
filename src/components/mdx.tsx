@@ -30,6 +30,13 @@ import {
   OlistSellerRetention,
   OlistLateDeliveryByCategory,
 } from "@/components/charts/OlistCharts";
+import {
+  MedicareArchitecture,
+  MedicareStarSchema,
+  MedicarePriceVariation,
+  MedicareMarkup,
+  MedicareCostVsQuality,
+} from "@/components/charts/MedicareCharts";
 
 /**
  * MDX renderer for long-form pages (blog posts + project case studies).
@@ -163,6 +170,12 @@ const components = {
   OlistRevenueByRegion,
   OlistSellerRetention,
   OlistLateDeliveryByCategory,
+  // Medicare Cost & Quality project charts.
+  MedicareArchitecture,
+  MedicareStarSchema,
+  MedicarePriceVariation,
+  MedicareMarkup,
+  MedicareCostVsQuality,
 };
 
 type CustomMDXProps = MDXRemoteProps & {
