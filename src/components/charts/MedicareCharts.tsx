@@ -75,15 +75,16 @@ function Figure({ title, subtitle, caption, children, source }: FigureProps) {
 
 // ---- 1. Price variation for one DRG (470 — joint replacement) --------------
 
-// Distribution markers (placeholder — swap with percentile query output).
+// Real figures from sql_highlights/01 (DY2024, n=1,212 hospitals).
 const DRG470 = {
-  min: 14_800,
-  p10: 24_300,
-  median: 47_900,
-  p90: 96_400,
-  max: 312_000,
-  fold: 21.1,
-  medicarePayP90P10: 1.5,
+  min: 19_194,
+  p10: 42_710,
+  median: 79_947,
+  p90: 167_283,
+  max: 383_606,
+  fold: 20.0,
+  medicarePayP90P10: 1.7,
+  nHospitals: 1_212,
 };
 
 export function MedicarePriceVariation() {
@@ -92,14 +93,14 @@ export function MedicarePriceVariation() {
   const padL = 24;
   const padR = 24;
   const axisY = 92;
-  const maxScale = 130_000; // clip the long tail; max labeled separately
+  const maxScale = 190_000; // clip the long tail; max labeled separately
   const x = (v: number) => padL + ((W - padL - padR) * Math.min(v, maxScale)) / maxScale;
-  const ticks = [0, 25_000, 50_000, 75_000, 100_000, 125_000];
+  const ticks = [0, 50_000, 100_000, 150_000];
   return (
     <Figure
       subtitle="Q1 · Same procedure, different price"
-      title="Average covered charge for DRG 470 (joint replacement) across hospitals"
-      caption={`The same routine knee/hip replacement: the cheapest hospital's average charge is about $${(DRG470.min / 1000).toFixed(0)}k, the most expensive over $${(DRG470.max / 1000).toFixed(0)}k — a ${DRG470.fold}× spread. Meanwhile the actual Medicare payment varies only ~${DRG470.medicarePayP90P10}× across the same hospitals. The "charge" is a list price almost decoupled from what care actually costs.`}
+      title="Average covered charge for DRG 470 (joint replacement) across 1,212 hospitals"
+      caption={`The same routine knee/hip replacement: the cheapest hospital's average charge is about $${(DRG470.min / 1000).toFixed(0)}k, the median is $${(DRG470.median / 1000).toFixed(0)}k, and the most expensive tops $${(DRG470.max / 1000).toFixed(0)}k — a ${DRG470.fold}× spread from floor to ceiling. Meanwhile the actual Medicare payment varies only ~${DRG470.medicarePayP90P10}× across the very same hospitals. The "charge" is a list price almost decoupled from what the care costs or what anyone pays.`}
       source="sql_highlights/01_price_variation_one_drg.sql"
     >
       <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: "auto" }} role="img" aria-label="Charge distribution for DRG 470">
@@ -148,14 +149,15 @@ export function MedicarePriceVariation() {
 
 // ---- 2. Markup by service line ---------------------------------------------
 
+// Real figures from sql_highlights/02 (discharge-weighted, DY2024).
 const MARKUP: Array<{ line: string; markup: number }> = [
-  { line: "Circulatory", markup: 4.9 },
-  { line: "Nervous system", markup: 4.6 },
-  { line: "Respiratory", markup: 4.4 },
-  { line: "Musculoskeletal", markup: 4.1 },
-  { line: "Digestive", markup: 3.9 },
-  { line: "Kidney/urinary", markup: 3.6 },
-  { line: "Infectious/sepsis", markup: 3.3 },
+  { line: "Nervous system", markup: 6.4 },
+  { line: "Digestive", markup: 6.4 },
+  { line: "Musculoskeletal", markup: 6.3 },
+  { line: "Kidney/urinary", markup: 6.25 },
+  { line: "Circulatory", markup: 6.06 },
+  { line: "Respiratory", markup: 5.99 },
+  { line: "Transplants", markup: 5.64 },
 ];
 
 export function MedicareMarkup() {
@@ -171,7 +173,7 @@ export function MedicareMarkup() {
     <Figure
       subtitle="Q2 · The markup gap"
       title="Hospital charge ÷ Medicare payment, by service line (discharge-weighted)"
-      caption="Every bar is how many times higher the average billed charge is than what Medicare actually pays for that service line. Circulatory procedures are billed at roughly 4.9× the Medicare payment. Because these are discharge-weighted, a high-volume DRG counts more than a rare one — the rollup a real analyst would build, not a naïve average of averages."
+      caption="Every bar is how many times higher the average billed charge is than what Medicare actually pays for that service line. The striking part is the consistency: from nervous-system procedures down to transplants, the markup sits in a tight ~5.6–6.4× band. The list price isn't tracking the complexity or cost of the care — it's a roughly fixed multiple applied across the board. Discharge-weighted, so a high-volume DRG counts more than a rare one — the rollup a real analyst builds, not a naïve average of averages."
       source="sql_highlights/02_markup_by_service_line.sql"
     >
       <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: "auto" }} role="img" aria-label="Markup ratio by service line">
@@ -197,14 +199,15 @@ export function MedicareMarkup() {
 
 // ---- 3. Cost vs quality (the two-fact join) --------------------------------
 
+// Real figures from sql_highlights/03 (n=2,789 hospitals, DY2024).
 const COST_QUALITY: Array<{ quintile: string; pay: number; readmit: number }> = [
-  { quintile: "Q1 (lowest paid)", pay: 9_200, readmit: 1.004 },
-  { quintile: "Q2", pay: 11_400, readmit: 0.998 },
-  { quintile: "Q3", pay: 13_100, readmit: 1.001 },
-  { quintile: "Q4", pay: 15_600, readmit: 0.997 },
-  { quintile: "Q5 (highest paid)", pay: 20_800, readmit: 1.002 },
+  { quintile: "Q1 (lowest paid)", pay: 8_410, readmit: 1.0069 },
+  { quintile: "Q2", pay: 10_216, readmit: 1.0061 },
+  { quintile: "Q3", pay: 11_805, readmit: 1.0006 },
+  { quintile: "Q4", pay: 14_140, readmit: 0.9912 },
+  { quintile: "Q5 (highest paid)", pay: 21_939, readmit: 0.9942 },
 ];
-const COST_QUALITY_R = -0.02; // correlation across all hospitals
+const COST_QUALITY_R = -0.081; // correlation across all hospitals
 
 export function MedicareCostVsQuality() {
   const W = 720;
@@ -224,7 +227,7 @@ export function MedicareCostVsQuality() {
     <Figure
       subtitle="Q3 · Does spending buy quality?  (the two-fact join)"
       title="30-day excess-readmission ratio by hospital Medicare-payment quintile"
-      caption={`Hospitals bucketed into five groups by what Medicare pays them per discharge (cost fact), plotted against their average 30-day excess-readmission ratio (quality fact), joined on the shared provider dimension. The line is essentially flat — paying a hospital twice as much (Q5 vs Q1) buys no measurable drop in readmissions (overall correlation r = ${COST_QUALITY_R}). A ratio of 1.0 means "exactly as expected after risk adjustment." This is the uncomfortable answer payers keep finding.`}
+      caption={`2,789 hospitals bucketed into five groups by what Medicare pays them per discharge (cost fact), plotted against their average 30-day excess-readmission ratio (quality fact), joined on the shared provider dimension. There's a faint downward tilt — the best-paid quintile (avg $21.9k/discharge) readmits slightly below expectation while the lowest ($8.4k) sits slightly above — but it's barely there: the correlation is r = ${COST_QUALITY_R}, meaning hospital payment explains well under 1% of the variance in readmissions. A ratio of 1.0 is "exactly as expected after risk adjustment." Paying a hospital 2.6× more buys, at most, a rounding error of better outcomes. This is the answer payers keep arriving at.`}
       source="sql_highlights/03_cost_vs_quality.sql"
     >
       <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: "auto" }} role="img" aria-label="Cost versus quality by payment quintile">

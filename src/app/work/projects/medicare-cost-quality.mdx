@@ -51,21 +51,21 @@ So they stay as separate facts at their natural grains, sharing a conformed `dim
 
 <MedicarePriceVariation />
 
-DRG 470 — major joint replacement without complications — is about as standardized as inpatient care gets. And yet the average *charge* for it swings from the mid-teens to the low-six-figures across hospitals, while the actual Medicare *payment* barely moves. The charge isn't tracking the cost of care; it's a negotiating anchor. The query behind this uses `PERCENTILE_CONT` window functions to get the distribution shape in a single pass — see [`sql_highlights/01`](https://github.com/nathanaelhub/medicare-cost-quality/blob/main/sql_highlights/01_price_variation_one_drg.sql).
+DRG 470 — major joint replacement without complications — is about as standardized as inpatient care gets. And yet across 1,212 hospitals the average *charge* runs from $19k to $384k — a 20× spread, median $80k — while the actual Medicare *payment* over the same hospitals varies only ~1.7×. The charge isn't tracking the cost of care; it's a negotiating anchor. The query behind this uses `PERCENTILE_CONT` window functions to get the distribution shape in a single pass — see [`sql_highlights/01`](https://github.com/nathanaelhub/medicare-cost-quality/blob/main/sql_highlights/01_price_variation_one_drg.sql).
 
 ### Q2 · The markup gap
 
 <MedicareMarkup />
 
-Zoom out from one DRG to whole service lines, and the markup — billed charge over Medicare payment — is consistently several-fold, highest for circulatory and nervous-system procedures. The number that matters here is *discharge-weighted*: a high-volume DRG counts more than a rare one. That weighting (sum of weighted measures over sum of discharges) is the difference between a real rollup and the naïve average-of-averages that quietly lies. [`sql_highlights/02`](https://github.com/nathanaelhub/medicare-cost-quality/blob/main/sql_highlights/02_markup_by_service_line.sql) shows it.
+Zoom out from one DRG to whole service lines, and the markup — billed charge over Medicare payment — is remarkably *uniform*: nervous-system and digestive procedures top out at 6.4×, transplants sit at 5.6×, and everything else falls in between. The list price isn't tracking the complexity of the care; it's a roughly fixed multiple applied across the board. The number that matters here is *discharge-weighted*: a high-volume DRG counts more than a rare one. That weighting (sum of weighted measures over sum of discharges) is the difference between a real rollup and the naïve average-of-averages that quietly lies. [`sql_highlights/02`](https://github.com/nathanaelhub/medicare-cost-quality/blob/main/sql_highlights/02_markup_by_service_line.sql) shows it.
 
 ### Q3 · Does spending buy quality?
 
 <MedicareCostVsQuality />
 
-This is the join the whole schema was built for. Bucket hospitals into five groups by what Medicare pays them per discharge (the cost fact), then plot each group's average 30-day excess-readmission ratio (the quality fact), joined through the shared provider dimension. The line is flat. Paying a hospital roughly twice as much per discharge — Q5 versus Q1 — buys no measurable reduction in readmissions. A ratio of 1.0 means "exactly as expected after risk adjustment," and every quintile sits right on it.
+This is the join the whole schema was built for. Bucket 2,789 hospitals into five groups by what Medicare pays them per discharge (the cost fact), then plot each group's average 30-day excess-readmission ratio (the quality fact), joined through the shared provider dimension. There's a faint downward tilt — the best-paid quintile (avg $21.9k/discharge) lands just below the risk-adjusted expectation, the lowest-paid ($8.4k) just above — but the effect is barely there: the correlation is **r = −0.081**, meaning hospital payment explains well under 1% of the variance in readmissions.
 
-That flatness is the finding. It's the result payers and policy researchers keep arriving at, and being able to reproduce it from public data with a clean two-fact join is the point of the project.
+That near-flatness is the finding. Paying a hospital 2.6× more buys, at most, a rounding error of better outcomes. It's the result payers and policy researchers keep arriving at, and being able to reproduce it from public data with a clean two-fact join — rather than asserting it — is the point of the project.
 
 ## What this shows
 
