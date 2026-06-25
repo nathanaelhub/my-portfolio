@@ -193,6 +193,16 @@ export default async function ProjectPage({
                   View on GitHub ↗
                 </a>
               )}
+              {post.metadata.deck && (
+                <a
+                  className={styles.btn}
+                  href={post.metadata.deck}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  ▶ Walk through the deck
+                </a>
+              )}
               <a className={styles.btn} href="#writeup">
                 Jump to writeup ↓
               </a>

@@ -25,6 +25,7 @@ type Metadata = {
   year?: number;
   metric?: string;
   isNew?: boolean;
+  deck?: string;
   // Blog-only
   topic?: string;
   excerpt?: string;
@@ -69,6 +70,7 @@ function readMDXFile(filePath: string) {
     year: data.year || undefined,
     metric: data.metric || "",
     isNew: data.isNew || false,
+    deck: data.deck || undefined,
     topic: data.topic || undefined,
     excerpt: data.excerpt || "",
     readMins: data.readMins || undefined,
