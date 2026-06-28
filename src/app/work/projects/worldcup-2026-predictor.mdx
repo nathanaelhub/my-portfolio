@@ -1,0 +1,60 @@
+---
+title: "World Cup 2026 Predictor"
+publishedAt: "2026-06-27"
+summary: "A time-weighted Dixon-Coles model on 49k internationals that predicts win/draw/loss probabilities and full score distributions for every 2026 World Cup match — and keeps an honest, out-of-sample track record against the games already played."
+team:
+  - name: "Nathanael Johnson"
+    role: "Data Scientist & Developer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/worldcup-2026-predictor"
+tag: "Machine Learning"
+tier: "featured"
+domains: ["Production ML", "Sports"]
+year: 2026
+metric: "Dixon-Coles · RPS 0.189 · 62% out-of-sample"
+deck: "https://nathanaelhub.github.io/worldcup-2026-predictor/"
+isNew: true
+---
+
+## Overview
+
+A quant-style match predictor for the 2026 FIFA World Cup. Pick any two nations and it returns win/draw/loss probabilities and a full exact-score distribution; the dashboard predicts the remaining group-stage fixtures and keeps a running, **out-of-sample** track record against the games already played. The whole model runs **client-side in the browser** — the page is fully static and a GitHub Action refits it on fresh results every day.
+
+## How it works
+
+Each nation gets a latent **attack** and **defense** strength, fit by **time-weighted Poisson regression** (an exponential half-life so recent form dominates) with a home-advantage term and the **Dixon-Coles** low-score correction estimated by maximum likelihood:
+
+- `log λ_home = μ + home_adv·(not neutral) + attack_home − defense_away`
+- `log λ_away = μ + attack_away − defense_home`
+
+The fitted goal rates give the full `P(home = i, away = j)` score matrix, from which every market — 1X2, correct score, expected goals, over/under, both-teams-to-score — follows in closed form.
+
+## Results (honest, out-of-sample)
+
+Validation is a **walk-forward backtest**: for each tournament the model trains only on matches played *before* it, then predicts forward. Scored with the **Ranked Probability Score** (the proper scoring rule for ordered football forecasts) against an Elo model and the naive base rate:
+
+| Tournament | Matches | Model RPS | Elo | Naive | Outcome acc |
+|---|:---:|:---:|:---:|:---:|:---:|
+| World Cup 2022 | 64 | **0.214** | 0.216 | 0.236 | 53% |
+| World Cup 2026 (group stage) | 48 | **0.155** | 0.173 | 0.206 | **62%** |
+| Pooled | 112 | **0.189** | 0.197 | 0.223 | 57% |
+
+The model beats both baselines on RPS in every window and called **62% of the 2026 group games correctly** — predicted by a model frozen before the tournament kicked off.
+
+## The dashboard
+
+- **Upcoming fixtures** — the remaining group matches, each with a most-likely scoreline and an outcome-probability bar.
+- **Track record** — every settled group game scored by the pre-tournament model vs the actual result, with a running hit rate. No hindsight.
+- **Match lab** — pick any two of 200+ rated nations (with a neutral-venue toggle) for a full live forecast: probabilities, top-five scorelines, expected goals, over/under and BTTS.
+
+## Technologies Used
+
+- **Python** — data pipeline, feature engineering, and the Poisson MLE (statsmodels)
+- **pandas / NumPy / SciPy** — data wrangling and the score-matrix math
+- **JavaScript** — a faithful in-browser port of the model, so the dashboard needs no backend
+- **GitHub Actions + Pages** — refits on fresh data and redeploys daily
+
+## What I took away
+
+International football is mostly team strength and recent form, but a meaningful share of every result is genuinely random — which is exactly why a *proper scoring rule* measured against a baseline is the only honest way to judge a sports model. Building it deepened my grasp of bivariate-Poisson modeling, walk-forward validation, and shipping a model that runs entirely on the client.

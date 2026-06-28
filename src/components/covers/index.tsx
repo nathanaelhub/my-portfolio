@@ -8,7 +8,7 @@ import {
   BisonChat, Cars, CMlLibrary, Commentary, CppPhysics, F1, FraudGuard, GravitySim,
   HumeVoice, Internet, Letterboxd, LineUp, Lyft, MarvelRivals, MedicareCostQuality,
   MentalHealth, Nashville, NumpyNN, OlistWarehouse, PhysicsMuseum, Portfolio,
-  PTAssist, Restaurant, RustTui, Saba,
+  PTAssist, Restaurant, RustTui, Saba, WorldCup,
 } from "./CoverArt";
 
 export interface CoverMeta {
@@ -51,6 +51,7 @@ export const coverMeta: Record<string, CoverMeta> = {
   "c-ml-library": { Component: CMlLibrary, tint: "#ececec", accent: "#0f6b5e" },
   "cpp-physics-engine": { Component: CppPhysics, tint: "#eef3f9", accent: "#d04545" },
   "medicare-cost-quality": { Component: MedicareCostQuality, tint: "#e9f4f1", accent: "#1f7a6b" },
+  "worldcup-2026-predictor": { Component: WorldCup, tint: "#0b1322", accent: "#2ee6a6", dark: true },
 };
 
 const FALLBACK_ACCENT = "#d97757";
