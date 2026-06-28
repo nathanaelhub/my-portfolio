@@ -1,7 +1,7 @@
 ---
-title: "F1 AI Race Predictor"
+title: "F1 Race Predictor"
 publishedAt: "2024-10-01"
-summary: "Built an end-to-end race prediction platform using historical race data, weather, driver performance, and qualifying results, achieving 68.5% accuracy"
+summary: "An interactive F1 finishing-order predictor: a gradient-boosting model trained on 2014–2026 race data that beats the grid baseline on winner calls in a proper time-series backtest, served through an F1-broadcast-style web app."
 team:
   - name: "Nathanael Johnson"
     role: "Data Scientist & Developer"
@@ -11,48 +11,39 @@ link: "https://github.com/nathanaelhub/f1-race-predictor"
 tag: "Machine Learning"
 tier: "production"
 domains: ["Production ML", "Sports"]
-year: 2024
-metric: "87% prediction accuracy"
+year: 2026
+metric: "54% winner accuracy (92-race backtest)"
 ---
 
 ## Overview
 
-Developed a comprehensive Formula 1 race prediction system that combines machine learning with real-time data to predict race outcomes with high accuracy. The platform includes an interactive dashboard for exploring predictions and historical analysis.
+A machine-learning system that predicts Formula 1 finishing order, wrapped in an interactive F1-broadcast-style interface. Pick a circuit, simulate a qualifying order, and a model trained on every race from **2014 to 2026** ranks the grid with calibrated win and podium probabilities. The 2026 season is pulled live, so the field reflects reality — Cadillac and Audi on the grid, Hamilton at Ferrari.
 
-## Key Features
+## How it works
 
-- **Multi-Factor Prediction**: Integrated historical race data, weather conditions, driver performance metrics, and qualifying results
-- **Real-Time Dashboard**: Built an interactive web application for exploring predictions and race analytics
-- **High Accuracy**: Achieved 68.5% prediction accuracy across multiple racing seasons
-- **Historical Analysis**: Comprehensive analysis of racing trends and performance patterns
+- **Data** — official race results and qualifying for **259 races (5,259 driver-race rows)** from the Jolpica / Ergast F1 API, the maintained successor to Ergast.
+- **Model** — scikit-learn **HistGradientBoosting**: a finishing-position regressor for the running order, plus calibrated win and podium classifiers for the probabilities.
+- **Features** — everything is known *before* the race starts, so there's no leakage: qualifying and grid slot, rolling driver form, DNF rate, season-to-date points, constructor form, the driver's history at that circuit, and the intra-team qualifying gap.
 
-## Data Sources
+## Results (honest backtest)
 
-- **Race Results**: Historical Formula 1 race results spanning multiple seasons
-- **Weather Data**: Real-time and historical weather conditions for race circuits
-- **Driver Performance**: Individual driver statistics, career performance, and recent form
-- **Circuit Analysis**: Track-specific characteristics and historical performance data
-- **Qualifying Results**: Starting positions and qualifying session performance
+Validation is a **time-series backtest** — for each held-out season the model trains only on earlier seasons. Pooled over **2022–2025 (92 races)**, against the natural baseline of "the grid order is the result":
+
+| Metric | Model | Grid baseline |
+|---|:---:|:---:|
+| Winner — top-1 accuracy | **54.3%** | 50.0% |
+| Podium — precision@3 | **65.2%** | 64.5% |
+| Finishing order — Spearman ρ | **0.647** | 0.607 |
+
+Pole position is a famously strong predictor, so the grid baseline is hard to beat — but the model edges it on the winner call, improves the full-grid ordering, and adds calibrated probabilities the naive baseline can't provide. Permutation importance shows qualifying and grid drive ~39% of the prediction, with car and driver form together accounting for nearly half.
 
 ## Technologies Used
 
-- **Python**: Core development for data processing and machine learning
-- **Pandas & NumPy**: Data manipulation and statistical analysis
-- **Scikit-learn**: Machine learning model development and evaluation
-- **Dashboard Framework**: Interactive web application for data visualization
-- **APIs**: Integration with live racing and weather data sources
+- **Python** — data pipeline, feature engineering, and modeling
+- **scikit-learn** — gradient-boosting models and validation
+- **pandas / NumPy** — data manipulation and feature construction
+- **Flask** — interactive web app, deployed on Render
 
-## Machine Learning Approach
+## What I took away
 
-1. **Feature Engineering**: Created comprehensive features from raw racing data including driver form, circuit characteristics, and weather impact
-2. **Model Selection**: Tested multiple algorithms including Random Forest, Gradient Boosting, and Neural Networks
-3. **Ensemble Methods**: Combined multiple models to improve prediction accuracy
-4. **Validation**: Used time-series cross-validation to ensure model robustness
-
-## Results
-
-The prediction system achieved 68.5% accuracy in race outcome prediction, significantly outperforming baseline models. The dashboard provides valuable insights for racing enthusiasts and demonstrates practical applications of machine learning in sports analytics.
-
-## Impact
-
-This project showcases the application of data science in sports prediction, combining multiple data sources and advanced analytics to create actionable insights in the exciting world of Formula 1 racing.
+The honest finding is that an F1 race is mostly qualifying and car/driver form — but roughly 45% of winners are still genuinely up for grabs, which is exactly why the sport is worth watching. Building it taught me leakage-safe feature engineering, why a time-series backtest is the only fair way to validate a sports model, and how to be skeptical of any accuracy number that isn't measured against a baseline.
