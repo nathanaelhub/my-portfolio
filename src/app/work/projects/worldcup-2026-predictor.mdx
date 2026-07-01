@@ -44,7 +44,8 @@ The model beats both baselines on RPS in every window and called **62% of the 20
 
 ## The dashboard
 
-- **Upcoming fixtures** — only matches still to be played, each with a most-likely scoreline and an outcome-probability bar. During the groups it shows the remaining group games; once they finish it shows the real Round-of-32 draw (official pairings), with results auto-filling from the dataset so only predictions *ahead* remain.
+- **Predicted bracket** — the model's path to the final: it advances the favourite through every unplayed knockout tie and crowns a predicted champion, using the real result wherever a match has finished.
+- **Live bracket** — the real bracket from the official Round-of-32 draw, auto-advancing the actual winners as results land in the dataset (deeper slots stay TBD until their feeders finish). Stays current with a nightly refit, no manual updates.
 - **Track record** — every settled group game scored by the pre-tournament model vs the actual result, with a running hit rate. No hindsight.
 - **Match lab** — pick any two of 200+ rated nations (with a neutral-venue toggle) for a full live forecast: probabilities, top-five scorelines, expected goals, over/under and BTTS.
 
