@@ -123,6 +123,55 @@ export function F1() {
   );
 }
 
+// 33 — World Cup 2026: the Dixon-Coles score-probability matrix.
+export function WorldCup() {
+  const lh = 1.5,
+    la = 1.2;
+  const fact = [1, 1, 2, 6, 24, 120];
+  const pois = (k: number, l: number) => (Math.exp(-l) * Math.pow(l, k)) / fact[k];
+  const n = 6,
+    x0 = 104,
+    y0 = 48,
+    step = 32,
+    size = 28;
+  const cells: { i: number; j: number; p: number }[] = [];
+  let max = 0;
+  for (let i = 0; i < n; i++)
+    for (let j = 0; j < n; j++) {
+      const p = pois(i, lh) * pois(j, la);
+      cells.push({ i, j, p });
+      if (p > max) max = p;
+    }
+  const mid = y0 + (n * step) / 2;
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      {Array.from({ length: n }).map((_, k) => (
+        <text key={`ax${k}`} x={x0 + k * step + size / 2} y={y0 - 10} textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="8" fill="#4a6b62">
+          {k}
+        </text>
+      ))}
+      {Array.from({ length: n }).map((_, k) => (
+        <text key={`ay${k}`} x={x0 - 13} y={y0 + k * step + size / 2 + 3} textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="8" fill="#4a6b62">
+          {k}
+        </text>
+      ))}
+      {cells.map(({ i, j, p }) => (
+        <rect key={`${i}-${j}`} x={x0 + j * step} y={y0 + i * step} width={size} height={size} rx="3" fill="#2ee6a6" fillOpacity={0.05 + 0.93 * (p / max)} />
+      ))}
+      <rect x={x0 + step} y={y0 + step} width={size} height={size} rx="3" fill="none" stroke="#0b1322" strokeWidth="1.5" />
+      <text x={x0 + (n * step) / 2} y={y0 + n * step + 18} textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="8" fill="#4a6b62" letterSpacing="0.12em">
+        AWAY GOALS
+      </text>
+      <text x="80" y={mid} textAnchor="middle" transform={`rotate(-90 80 ${mid})`} fontFamily="Geist Mono, monospace" fontSize="8" fill="#4a6b62" letterSpacing="0.12em">
+        HOME GOALS
+      </text>
+      <text x="200" y="288" textAnchor="middle" fontFamily="Geist Mono, monospace" fontSize="9" fill="#7e89a3" letterSpacing="0.16em">
+        DIXON–COLES · 62% OUT-OF-SAMPLE
+      </text>
+    </svg>
+  );
+}
+
 // 04 — Nashville: river through neighborhood grid, hotspots.
 export function Nashville() {
   const river =
