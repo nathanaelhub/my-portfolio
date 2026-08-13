@@ -1,0 +1,33 @@
+---
+title: "How Movies Changed"
+publishedAt: "2026-08-10"
+summary: "An interactive data story from ~572,000 films: production quadrupled, the median runtime never budged (but blockbusters did), documentaries took over, and ratings 'declined' — mostly survivorship. Built from IMDb's public datasets, charts run in the browser."
+team:
+  - name: "Nathanael Johnson"
+    role: "Data Scientist & Developer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/how-movies-changed"
+tag: "Data Visualization"
+tier: "analysis"
+domains: ["Analysis", "Film"]
+year: 2026
+metric: "572k films · a myth, busted"
+deck: "https://nathanaelhub.github.io/how-movies-changed/"
+isNew: true
+---
+
+## The brief
+
+I wanted a data story where the point was *reading the data instead of trusting the vibe* — where at least one "obvious" trend turns out to be a myth. Movies are full of those. So I took IMDb's entire public catalogue — about 572,000 feature films — and checked four things everyone believes.
+
+## The build
+
+- **Python ETL over IMDb's bulk datasets** — `title.basics` + `title.ratings` cleaned and aggregated into four chapters, each written to a few KB of JSON so the site needs no backend
+- **Four verified findings** — production quadrupled since 2000; median runtime has been flat at ~90 minutes for seventy years while *blockbusters* grew 105 → 128; documentaries went from a rounding error to ~22% of genre tags; average ratings slid 7.0 → 6.1
+- **Honest by construction** — the runtime "trend" is a myth with a true twin (the films you *notice* did get longer), and the ratings slide is largely **survivorship bias** — both are labelled as artifacts, not sold as trends
+- **Hand-rolled SVG charts** — scrollytelling narrative, cinematic dark design, every chart drawn client-side with hover interactions; deployed static on GitHub Pages
+
+## What I learned
+
+The best data stories aren't the ones that confirm what you expected — they're the ones where a robustness check kills your headline and you follow the data instead. The runtime paradox only became interesting once I stopped trying to prove "movies got longer" and let the median and the blockbuster line disagree.
