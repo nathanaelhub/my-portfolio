@@ -1,0 +1,32 @@
+---
+title: "GPT from Scratch"
+publishedAt: "2026-08-11"
+summary: "A decoder-only transformer in NumPy only — no PyTorch, no autograd. Every gradient, including through multi-head self-attention and LayerNorm, is derived by hand and verified against finite differences, then trained to generate character-level Shakespeare."
+team:
+  - name: "Nathanael Johnson"
+    role: "ML Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/gpt-from-scratch"
+tag: "ML Foundations"
+tier: "tools"
+domains: ["ML Foundations", "NLP"]
+year: 2026
+metric: "attention backprop by hand · gradient-checked to 3e-6"
+isNew: true
+---
+
+## The brief
+
+`backprop-from-scratch` demystified the chain rule on a toy MLP. This is the same idea one architecture up: a real GPT — token embeddings, multi-head causal self-attention, LayerNorm, residual blocks — with the entire backward pass derived and coded by hand in NumPy, no autograd anywhere.
+
+## The build
+
+- **The full GPT-2 decoder block** — pre-norm attention + MLP with residuals, built from small `forward`/`backward` layer objects; the chain rule is spelled out, never delegated to a framework
+- **The hard gradients, by hand** — backprop threaded through the row-wise softmax in attention, the head split/merge, and LayerNorm's two mean-subtraction terms (the parts that are easy to get subtly wrong)
+- **Verified before trusted** — a gradient check compares every parameter's analytic gradient to central finite differences; all agree to a max relative error of **~3e-6**, so correctness doesn't depend on training happening to work
+- **It actually trains** — Adam on tiny-shakespeare drives cross-entropy from the `ln(vocab) ≈ 4.17` baseline down to ~1.9, and sampling produces speaker headings, line breaks, and mostly-real words; the gradient check runs in CI on every push
+
+## What I learned
+
+Attention is not the scary part — the softmax Jacobian collapses cleanly. The genuinely error-prone part is the bookkeeping: reshaping heads, keeping the residual gradients on the right branch, and LayerNorm's backward. The gradient check isn't a formality here; it caught exactly the indexing mistakes I'd have never found from a loss curve alone.
