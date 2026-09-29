@@ -111,6 +111,31 @@ const about: About = {
     title: "Work Experience",
     experiences: [
       {
+        company: "Handshake AI",
+        timeframe: "July 2026 – Present",
+        role: "AI Fellow, Data Analytics Evaluation",
+        achievements: [
+          <>
+            Design expert-level data analytics tasks that test where frontier AI models go wrong, pairing
+            realistic business datasets with recommendation questions the models must answer correctly.
+          </>,
+          <>
+            Build synthetic and public-data corpora in Python, pandas, and SQL, with a verified correct
+            answer and reference solution a reviewer can reproduce.
+          </>,
+          <>
+            Write grading rubrics and reference memos that score model responses on correctness, method,
+            and reasoning; four tasks passed a four-stage review, one answered wrong in all 12 graded
+            model responses.
+          </>,
+          <>
+            Built an automated test harness with Claude Code that runs candidate tasks against current
+            models before submission, screening out tasks that are ambiguous or too easy.
+          </>,
+        ],
+        images: [],
+      },
+      {
         company: "Lipscomb University",
         timeframe: "December 2025 – Present",
         role: "College of Computing Assistant",
