@@ -1,0 +1,48 @@
+---
+title: "Using Claude at a Nonprofit"
+publishedAt: "2026-11-03"
+summary: "A ready-to-run, one-hour workshop that teaches nonprofit staff who don't write code to use Claude carefully: ask well, check answers before using them, keep client information out, and know when not to use it. Built so someone else can run it without me in the room."
+team:
+  - name: "Nathanael Johnson"
+    role: "Maker"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/nonprofit-ai-workshop"
+tag: "Civic / Education"
+tier: "production"
+domains: ["Civic", "Education"]
+year: 2026
+metric: "every attendee page at grade 2.6–5.8 · not yet piloted"
+isNew: true
+---
+
+## The brief
+
+Small nonprofits are adopting AI tools without training. A one-hour session, run by someone who
+isn't a technologist, can change the four habits that matter most. See it at
+[nathanaelhub.github.io/nonprofit-ai-workshop](https://nathanaelhub.github.io/nonprofit-ai-workshop/).
+
+## The build
+
+- **Everything a facilitator needs**: a minute-by-minute guide, slides with speaker notes, four
+  exercises with answer keys, a one-page privacy sheet, a quiz to give before and after, a
+  feedback form and a runbook for keeping it current.
+- **Real stakes in the exercises**: the SNAP income limit and Tennessee's unresolved 200% question
+  from my benefits screener; fictional intake emails full of private details to practice removing.
+- **Accuracy enforced by tests**: every statement about how Anthropic handles chats is quoted from
+  its Privacy Center and checked against a cached copy; attendee pages must read at grade 8 or
+  below; the hour must add up to 60 minutes.
+- **A pre-workshop check**: `workshop check` runs each exercise through Claude three times and
+  scores the answers in code, so the facilitator knows what Claude says that week. About $0.10.
+
+## What I learned
+
+My spec predicted Claude would invent numbers when asked vaguely for a grant paragraph. It didn't:
+every time, it left blanks like "[X] households" and asked for the real figures. The answer keys now
+say what actually happened, and the lesson moved to the person filling in the blanks. My first
+scoring of those answers was wrong too, until I read them. The kit hasn't been run with real staff
+yet, and says so.
+
+## Stack
+
+Markdown and a small Python build, Claude (Sonnet through the Claude CLI), pytest, GitHub Pages.

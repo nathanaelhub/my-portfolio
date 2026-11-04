@@ -1,0 +1,46 @@
+---
+title: "Open Finance MCP"
+publishedAt: "2026-09-29"
+summary: "An MCP server that gives Claude free, citable financial data for comps and DCF work: standardized financials from SEC EDGAR XBRL, filing links, Treasury yields and FX from FRED, and market prices and beta. Every number comes back with its source. Evaluated with and without the plugin on live data."
+team:
+  - name: "Nathanael Johnson"
+    role: "ML Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/open-finance-mcp"
+tag: "Finance / LLM Tools"
+tier: "production"
+domains: ["Finance", "Tools"]
+year: 2026
+metric: "eval score 0.98 vs 0.74 · $0.13 vs $0.52 per run"
+isNew: true
+---
+
+## The brief
+
+Anthropic's financial-services plugins tell Claude to pull data from connectors first and cite
+every input, but every bundled connector is a paid terminal. Without one, the skills fall back to
+web search, which they warn against. This server fills that gap with public sources, built around
+the citation requirement.
+
+## The build
+
+- **Eight read-only tools, no API keys**: company lookup, annual and LTM financials with derived
+  EBITDA, FCF and net debt, filings, earnings releases, market data and beta, Treasury yields, FX
+  rates, and a peer comps table.
+- **Per-value citations**: the XBRL concept, the filing accession and a link for every number.
+- **Notes instead of silent guesses**: when EDGAR has a newer filing than the XBRL API, it says the
+  figures are stale; when a company reports no debt concepts, enterprise value is left empty rather
+  than assuming zero debt.
+
+## What I learned
+
+Ten eval cases, run with and without the plugin (both with web search), three runs each, on live
+data: mean score 0.98 against 0.74, and $0.13 against $0.52 per run. The clearest wins were fresh
+data, cost and consistency. An earlier, larger claimed gap on judgment questions was withdrawn after
+I read the transcripts and found it came from baseline runs that never searched. That audit is what
+led to [judge-audit](https://github.com/nathanaelhub/judge-audit).
+
+## Stack
+
+Python, MCP, SEC EDGAR XBRL API, FRED, Claude plugin evals.

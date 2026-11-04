@@ -1,0 +1,44 @@
+---
+title: "Rust Backtester"
+publishedAt: "2026-10-21"
+summary: "An event-driven daily backtester in Rust, built so its numbers can be trusted rather than so a strategy looks good: next-open fills, trading costs, dividends when they happened, walk-forward tuning, and a terminal UI that reruns the backtest as you change parameters."
+team:
+  - name: "Nathanael Johnson"
+    role: "Systems Programmer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/rust-backtester"
+tag: "Systems / Finance"
+tier: "tools"
+domains: ["Systems", "Finance"]
+year: 2026
+metric: "matches Yahoo adjusted close to 0.003%/yr over 33 years"
+isNew: true
+---
+
+## The brief
+
+Most backtests flatter the strategy: same-day fills, no costs, parameters tuned on the whole
+history. This one is built to make those mistakes impossible or visible.
+
+## The build
+
+- **No look-ahead by construction**: a strategy sees bars up to today's close and fills at the next
+  open. A test scrambles every bar after day *k* and checks nothing up to day *k* changes; an engine
+  that fills on the signal's own day fails three tests.
+- **Costs and dividends**: commission and slippage on every fill, whole shares, dividends paid in
+  cash on the ex-date to the shares held the night before.
+- **Checked against an outside source**: buy-and-hold SPY over 33.7 years comes within 0.003% a year
+  of Yahoo's independently adjusted close.
+- **A ratatui terminal UI**: arrow keys change the parameters and the backtest reruns on each key
+  press; `w` switches to walk-forward.
+
+## What I learned
+
+Tuning overstates: on average about 40% of the in-sample Sharpe didn't carry into the next year.
+Walk-forward trend-following never beat holding on return (×9.0 against ×6.6 on SPY). What it did
+deliver was smaller drawdowns, −32% against −55% on SPY. The honest result was the less exciting one.
+
+## Stack
+
+Rust, ratatui, crossterm, Yahoo Finance daily data.

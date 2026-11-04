@@ -1,0 +1,45 @@
+---
+title: "Judge Audit"
+publishedAt: "2026-10-20"
+summary: "How far can you trust an LLM judge's PASS/FAIL verdict? judge-audit grades responses whose correct verdict is known in advance and measures accuracy, self-consistency, whether repeat votes are independent, and whether rewording or reformatting changes the verdict."
+team:
+  - name: "Nathanael Johnson"
+    role: "ML Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/judge-audit"
+tag: "Research / LLM Evaluation"
+tier: "tools"
+domains: ["Research", "Tools"]
+year: 2026
+metric: "3 votes worth 1.2 independent ones · error ICC 0.80"
+isNew: true
+---
+
+## The brief
+
+In an eval audit for open-finance-mcp, a Claude Haiku judge with three votes per verdict failed
+answers that met every clause of their rubric, and did so unanimously. Adding votes is the usual
+fix. The question was whether it would have helped.
+
+## The build
+
+- **Known-answer items**: responses whose correct verdict is fixed in advance, plus paraphrases,
+  table-instead-of-prose rewrites and padded versions of each.
+- **Accuracy split by direction**: false fails (a good answer failed) and false passes.
+- **Vote independence**: the intraclass correlation of errors, and the number of independent votes
+  that *k* majority votes are actually worth.
+- **Invariance and agreement**: whether a rewording changes the verdict, and Cohen's κ between
+  judges (Haiku, Sonnet and Opus).
+
+## What I learned
+
+The unanimous errors were dataset errors. Haiku's mistakes were locked to items (error ICC 0.80), so
+three votes were worth 1.2 independent ones. Reading the judges' reasoning showed the items were at
+fault: one rubric asked for a link the response didn't give, and one item's accession numbers were
+ones I had made up. After fixing the items, all three judges reached 100%. Item-locked errors are a
+signal to check the item, not to add votes.
+
+## Stack
+
+Python, Claude (Haiku, Sonnet, Opus), statistics in NumPy.
