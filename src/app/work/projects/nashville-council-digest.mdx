@@ -1,0 +1,50 @@
+---
+title: "Nashville Council Digest"
+publishedAt: "2026-10-29"
+summary: "Every bill and resolution from Nashville's Metro Council in plain language, with what happened to it and which council district it's in. Claude writes each summary, code checks every number and name against the official text, and a second Claude reading checks the meaning before anything is published."
+team:
+  - name: "Nathanael Johnson"
+    role: "ML Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/nashville-council-digest"
+tag: "Civic / LLM Evaluation"
+tier: "featured"
+domains: ["Civic", "Research", "Tools"]
+year: 2026
+metric: "1,125 bills · second reading caught 6 real errors"
+isNew: true
+---
+
+## The brief
+
+Council agendas run to 100–170 items in legal language. The goal was a page a resident can read in
+a few minutes and filter to their district, without asking them to trust a model's reading of the
+law. Live at [nathanaelhub.github.io/nashville-council-digest](https://nathanaelhub.github.io/nashville-council-digest/).
+
+## The build
+
+- **Records from the city's Legistar API**: 21 full-council meetings, January 20 to October 20,
+  2026, 1,125 distinct bills and resolutions. Outcomes come from the recorded action, not
+  Legistar's "passed" flag, which reads "Fail" for a resolution the council adopted.
+- **Districts from Metro's parcel map**: zoning bills cite official parcels and other items give
+  addresses; that places 180 of 194 site-specific zoning bills.
+- **A fact check in code**: every dollar amount, number, district, file number and name in a
+  summary must appear in the text Claude was shown. A summary that fails shows the official title
+  instead.
+- **A second Claude reading for meaning**: it can only hold a summary back, never put one up.
+- **Zoning codes explained** in quotes from Metro Planning reports, with a test that every quote is
+  in its source.
+
+## What I learned
+
+I measured both checks on 281 planted errors. The code check caught made-up facts but none of the
+62 swapped names or 44 reversed verbs; the Claude reading caught 56 of 59 real swaps and all the
+reversals. Run on all 1,124 summaries that passed the code check, the second reading flagged 14:
+6 real errors (one made a festival firearms ban sound waivable), 4 false alarms. The official record
+had errors of its own, four of them, including an analysis naming the wrong nonprofit for a grant.
+
+## Stack
+
+Python, Claude (Sonnet through the Claude CLI), Legistar web API, Metro Nashville ArcGIS, pytest,
+Playwright, GitHub Pages.

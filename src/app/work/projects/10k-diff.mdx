@@ -1,0 +1,45 @@
+---
+title: "10-K Diff"
+publishedAt: "2026-10-20"
+summary: "What changed in a company's annual report? 10k-diff compares a 10-K with the previous year's, paragraph by paragraph, and reports what was added, removed or reworded in the risk factors, business description, legal proceedings and MD&A, with the changed words marked. Standard library only."
+team:
+  - name: "Nathanael Johnson"
+    role: "Data Scientist & Developer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/10k-diff"
+tag: "Finance / NLP"
+tier: "tools"
+domains: ["Finance", "Tools", "NLP"]
+year: 2026
+metric: "91% of borderline matches correct, checked by hand"
+isNew: true
+---
+
+## The brief
+
+Year-over-year changes in a 10-K's risk factors are where companies disclose new worries, but
+the documents are long and the edits are scattered. Demo reports for Apple, NVIDIA, JPMorgan Chase
+and Coca-Cola: [nathanaelhub.github.io/10k-diff](https://nathanaelhub.github.io/10k-diff/).
+
+## The build
+
+- **Find the filings** through EDGAR's submissions API, including heavy filers like JPMorgan whose
+  "recent" page holds one 10-K among thousands of note prospectuses.
+- **Flatten the inline-XBRL HTML** into paragraphs, dropping hidden metadata and page furniture, and
+  rejoining paragraphs a page break cut in two.
+- **Split into Items** using only headings outside tables, so the table of contents doesn't count.
+- **Align by content, not position**, so reordered risk factors aren't reported as changes:
+  unchanged, figures updated, reworded, merged or split, added or removed.
+
+## What I learned
+
+Matching is heuristic, so I checked it by hand across four companies with different formatting: 41
+of all 45 borderline rewordings (91%) and 18 of 20 random ones from the next band up (0.60–0.75) were matched correctly, with
+every error written up. For Apple's FY2025 report it found the sourcing language changing from
+"Substantially all" to "A significant majority", a new paragraph on age-verification laws, and the
+removal of the "Inclusion and Diversity" section.
+
+## Stack
+
+Python standard library, SEC EDGAR APIs, `difflib`, GitHub Pages.

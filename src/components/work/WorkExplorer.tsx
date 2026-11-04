@@ -24,6 +24,7 @@ interface WorkExplorerProps {
 const DOMAIN_FILTERS: { id: string; label: string; test: (p: WorkProject) => boolean }[] = [
   { id: "all", label: "All", test: () => true },
   { id: "featured", label: "Featured", test: (p) => p.tier === "featured" },
+  { id: "civic", label: "Civic", test: (p) => p.domains.includes("Civic") },
   { id: "research", label: "Research", test: (p) => p.domains.includes("Research") },
   { id: "production", label: "Production ML", test: (p) => p.domains.includes("Production ML") },
   { id: "tools", label: "Tools", test: (p) => p.domains.includes("Tools") },

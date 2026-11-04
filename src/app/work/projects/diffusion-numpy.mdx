@@ -1,0 +1,43 @@
+---
+title: "Diffusion in NumPy"
+publishedAt: "2026-10-20"
+summary: "A denoising diffusion model (DDPM) written from scratch in NumPy and trained on MNIST on a laptop CPU: an MLP and a convolutional U-Net, every gradient checked against finite differences, DDPM and DDIM sampling, and classifier-free guidance. No autograd, no deep-learning framework."
+team:
+  - name: "Nathanael Johnson"
+    role: "ML Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/diffusion-numpy"
+tag: "ML Foundations"
+tier: "tools"
+domains: ["ML Foundations", "Vision"]
+year: 2026
+metric: "U-Net 27× smaller than the MLP, Fréchet 42.5 vs 177.2"
+isNew: true
+---
+
+## The brief
+
+After a GPT and an MLP by hand, the next step was generation: a diffusion model where every layer's
+forward and backward pass is written out, trained on an 8 GB MacBook.
+
+## The build
+
+- **Two networks with one interface**: a 4.1M-parameter MLP and a 152k-parameter U-Net (3×3
+  convolutions by im2col, GroupNorm, skip connections), both gradient-checked in float64.
+- **v-prediction, a cosine schedule, class conditioning** with classifier-free guidance, Adam with
+  warmup and an EMA of the weights; checkpoints resume bit-for-bit.
+- **An evaluation without Inception**: a separately trained MNIST classifier (97.3% test accuracy)
+  supplies conditional accuracy and a Fréchet distance on its features.
+
+## What I learned
+
+The U-Net is 27× smaller and saw 6× fewer images, but it beat the MLP at every noise level:
+Fréchet 42.5 against 177.2 conditionally, 95.3 against 236.8 unconditionally. Guidance raises
+accuracy but past a point collapses each digit to one stereotyped shape. I also corrected my own
+README: I had called the training images' score the floor, but the classifier was trained on them,
+so held-out test images are the right reference, and two slices of them differ by 19 points.
+
+## Stack
+
+Python, NumPy, MNIST, uv, pytest.

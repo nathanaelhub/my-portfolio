@@ -1,0 +1,53 @@
+---
+title: "Tennessee Benefits Screener"
+publishedAt: "2026-10-22"
+summary: "Someone describes their household in plain words, in English or Spanish, and Claude tells them whether they might qualify for SNAP, WIC and TennCare. Claude does the conversation; plain code does the eligibility math from official sources, through MCP. Measured against Claude with web search on 40 simulated households."
+team:
+  - name: "Nathanael Johnson"
+    role: "ML Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/tn-benefits-screener"
+tag: "Civic / LLM Tools"
+tier: "featured"
+domains: ["Civic", "Tools"]
+year: 2026
+metric: "98% program calls right vs 81% with web search"
+isNew: true
+---
+
+## The brief
+
+Benefit rules are hard to pin down, and a wrong "you don't qualify" can stop a family from
+applying. The design rule: **Claude does the conversation, plain code does the arithmetic.** The
+eligibility rules live in data files, every threshold is tied to a quote from an official source,
+and tests fail if a number stops matching its source.
+
+## The build
+
+- **An MCP server with three tools**: screen a household, search the policy texts, and look up one
+  rule with its citation. Claude gathers the facts, calls the screener and explains the result.
+- **Answers that can't overreach**: results are likely, possibly, unlikely, or "a caseworker needs
+  to look at this", and it always says that only the agency decides and anyone can apply.
+- **A browser version** that runs the same Python in the page through Pyodide, so nothing entered
+  leaves the device; a browser test checks all 40 eval households get identical results.
+- **An eval harness**: 40 simulated households, each played by Claude Haiku knowing only its own
+  facts, against a helper with the screener or with web search instead.
+
+| | Screener | Web search |
+|---|---:|---:|
+| Program calls right | 155/158 (98%) | 110/135 (81%) |
+| SNAP estimate within $5 | 19/22 | 3/22 |
+| Model cost per conversation | $0.19 | $0.49 |
+
+## What I learned
+
+The official sources disagree. News reports and an advocacy guide say Tennessee moved SNAP to a
+200%-of-poverty limit; the USDA's chart of states using that rule doesn't list Tennessee, and the
+state's own policy is under revision. So the screener reports both limits and says why, and a test
+fails the day the USDA adds Tennessee. Building something honest here meant modeling the
+uncertainty instead of picking an answer.
+
+## Stack
+
+Python, MCP, Claude (Sonnet and Haiku through the Claude CLI), Pyodide, pytest, GitHub Pages and Vercel.

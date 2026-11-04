@@ -1852,3 +1852,320 @@ export function MedicareCostQuality() {
     </svg>
   );
 }
+
+const MONO = "Geist Mono, monospace";
+
+/** Deterministic pseudo-random numbers, so server and client render the same art. */
+function seeded(seed: number) {
+  let s = seed;
+  return () => {
+    s = (s * 1664525 + 1013904223) % 4294967296;
+    return s / 4294967296;
+  };
+}
+
+// 36 — TN Benefits Screener: a chat bubble feeds a code bracket, which returns
+// cited results for three programs.
+export function TnScreener() {
+  const A = "#2f7d5b";
+  const rows = [
+    ["SNAP", "likely", 1],
+    ["WIC", "possibly", 0.65],
+    ["TennCare", "unlikely", 0.4],
+  ] as const;
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      <rect x="34" y="70" width="120" height="62" rx="12" fill="#ffffff" stroke="#1c1b18" strokeOpacity="0.25" />
+      <path d="M 56 132 L 50 146 L 70 132" fill="#ffffff" stroke="#1c1b18" strokeOpacity="0.25" />
+      {[0, 1, 2].map((i) => (
+        <rect key={i} x="48" y={84 + i * 13} width={[88, 74, 60][i]} height="5" rx="2.5" fill="#1c1b18" opacity="0.22" />
+      ))}
+      <text x="40" y="60" fontFamily={MONO} fontSize="9" fill="#1c1b18" opacity="0.55">{"\u201cwe\u2019re a family of four\u2026\u201d"}</text>
+      <path d="M 160 100 L 188 100" stroke={A} strokeWidth="1.6" strokeDasharray="3 3" />
+      <text x="196" y="96" fontFamily={MONO} fontSize="22" fill={A}>{"{ }"}</text>
+      <text x="195" y="118" fontFamily={MONO} fontSize="8" fill={A} opacity="0.75">rules.json</text>
+      <path d="M 236 100 L 254 100" stroke={A} strokeWidth="1.6" strokeDasharray="3 3" />
+      {rows.map(([name, status, o], i) => (
+        <g key={name} transform={`translate(260, ${66 + i * 40})`}>
+          <rect width="112" height="30" rx="5" fill="#ffffff" stroke={A} strokeOpacity={0.25 + o * 0.5} />
+          <circle cx="13" cy="15" r="4" fill={A} opacity={o} />
+          <text x="24" y="13" fontFamily={MONO} fontSize="9" fill="#1c1b18">{name}</text>
+          <text x="24" y="24" fontFamily={MONO} fontSize="8" fill={A}>{status}</text>
+          <text x="104" y="12" textAnchor="end" fontFamily={MONO} fontSize="8" fill="#8a8478">[{i + 1}]</text>
+        </g>
+      ))}
+      <line x1="40" y1="214" x2="372" y2="214" stroke="#1c1b18" strokeOpacity="0.12" />
+      {["[1] USDA FNS · FY2027 limits", "[2] 7 CFR 246.7", "[3] TennCare reference guide"].map((t, i) => (
+        <text key={t} x="40" y={230 + i * 12} fontFamily={MONO} fontSize="8" fill="#8a8478">{t}</text>
+      ))}
+      <text x="200" y="288" textAnchor="middle" fontFamily={MONO} fontSize="9" fill="#5a7a68" letterSpacing="0.18em">
+        CLAUDE TALKS · CODE DOES THE MATH
+      </text>
+    </svg>
+  );
+}
+
+// 37 — Nashville Council Digest: an agenda list where each item passes two checks,
+// one held back, beside a district grid with a few districts lit.
+export function CouncilDigest() {
+  const A = "#2b4c7e";
+  const items = [
+    [true, true], [true, true], [true, false], [true, true], [false, true], [true, true],
+  ] as const;
+  const lit = new Set([3, 9, 10, 17, 22]);
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      <text x="36" y="52" fontFamily={MONO} fontSize="9" fill={A} opacity="0.7">AGENDA · OCT 20</text>
+      <text x="196" y="52" textAnchor="end" fontFamily={MONO} fontSize="8" fill="#8a8478">facts · meaning</text>
+      {items.map(([fact, meaning], i) => {
+        const shown = fact && meaning;
+        return (
+          <g key={i} transform={`translate(36, ${64 + i * 26})`}>
+            <rect width="122" height="18" rx="3" fill="#ffffff" stroke="#1c1b18" strokeOpacity="0.15" />
+            <rect x="8" y="7" width={shown ? 80 + (i % 3) * 10 : 60} height="4" rx="2" fill={shown ? A : "#1c1b18"} opacity={shown ? 0.55 : 0.18} />
+            {[fact, meaning].map((ok, k) => (
+              <text key={k} x={140 + k * 26} y="13" fontFamily={MONO} fontSize="11" fill={ok ? A : "#c0452f"}>
+                {ok ? "✓" : "✕"}
+              </text>
+            ))}
+          </g>
+        );
+      })}
+      {[...Array(35)].map((_, i) => {
+        const x = 236 + (i % 5) * 26;
+        const y = 64 + Math.floor(i / 5) * 22;
+        return (
+          <rect key={i} x={x} y={y} width="22" height="18" rx="3"
+            fill={lit.has(i) ? A : "#1c1b18"} opacity={lit.has(i) ? 0.75 : 0.08} />
+        );
+      })}
+      <text x="301" y="228" textAnchor="middle" fontFamily={MONO} fontSize="8" fill="#8a8478">35 council districts</text>
+      <text x="200" y="288" textAnchor="middle" fontFamily={MONO} fontSize="9" fill="#5a6a86" letterSpacing="0.18em">
+        1,125 ITEMS · TWO CHECKS
+      </text>
+    </svg>
+  );
+}
+
+// 38 — Nonprofit workshop: four habit cards around a one-hour clock face.
+export function NonprofitWorkshop() {
+  const A = "#a0661a";
+  const habits = ["ask well", "check it", "protect clients", "know when not"];
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      <circle cx="200" cy="140" r="44" fill="#ffffff" stroke={A} strokeOpacity="0.5" strokeWidth="1.4" />
+      {[...Array(12)].map((_, i) => {
+        const a = (i / 12) * Math.PI * 2;
+        return <line key={i} x1={200 + Math.sin(a) * 38} y1={140 - Math.cos(a) * 38} x2={200 + Math.sin(a) * 42} y2={140 - Math.cos(a) * 42} stroke={A} strokeOpacity="0.6" />;
+      })}
+      <circle cx="200" cy="140" r="44" fill={A} opacity="0.12" />
+      <line x1="200" y1="140" x2="200" y2="108" stroke={A} strokeWidth="2" />
+      <text x="200" y="200" textAnchor="middle" fontFamily={MONO} fontSize="9" fill={A}>60 min</text>
+      {habits.map((h, i) => {
+        const x = i % 2 === 0 ? 36 : 268;
+        const y = i < 2 ? 70 : 168;
+        return (
+          <g key={h} transform={`translate(${x}, ${y})`}>
+            <rect width="96" height="54" rx="6" fill="#ffffff" stroke="#1c1b18" strokeOpacity="0.18" />
+            <text x="10" y="20" fontFamily={MONO} fontSize="14" fill={A}>{i + 1}</text>
+            <text x="10" y="40" fontFamily={MONO} fontSize="9" fill="#1c1b18">{h}</text>
+          </g>
+        );
+      })}
+      <text x="200" y="288" textAnchor="middle" fontFamily={MONO} fontSize="9" fill="#8a7458" letterSpacing="0.18em">
+        ONE HOUR · FOUR HABITS · NO CLIENT DATA
+      </text>
+    </svg>
+  );
+}
+
+// 39 — Public-interest overview: three project nodes, each figure traced by a line
+// to a source document with a check mark.
+export function PublicInterest() {
+  const A = "#1d5c63";
+  const projects = [[90, 80], [90, 150], [90, 220]] as const;
+  const facts = [62, 96, 130, 164, 198, 232];
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      {projects.map(([x, y], i) => (
+        <g key={i}>
+          <circle cx={x} cy={y} r="20" fill="#ffffff" stroke={A} strokeWidth="1.6" />
+          <text x={x} y={y + 4} textAnchor="middle" fontFamily={MONO} fontSize="10" fill={A}>{["SNAP", "MTC", "1hr"][i]}</text>
+        </g>
+      ))}
+      {facts.map((y, i) => {
+        const [px, py] = projects[Math.floor(i / 2)];
+        return (
+          <g key={y}>
+            <path d={`M ${px + 20} ${py} C 180 ${py}, 190 ${y}, 236 ${y}`} fill="none" stroke={A} strokeOpacity="0.35" />
+            <rect x="236" y={y - 9} width="104" height="18" rx="3" fill="#ffffff" stroke="#1c1b18" strokeOpacity="0.15" />
+            <rect x="244" y={y - 2} width={44 + (i % 3) * 12} height="4" rx="2" fill="#1c1b18" opacity="0.25" />
+            <text x="352" y={y + 4} fontFamily={MONO} fontSize="11" fill={A}>✓</text>
+          </g>
+        );
+      })}
+      <text x="288" y="40" textAnchor="middle" fontFamily={MONO} fontSize="8" fill="#8a8478">facts.json → source README</text>
+      <text x="200" y="288" textAnchor="middle" fontFamily={MONO} fontSize="9" fill="#4a7a7e" letterSpacing="0.18em">
+        EVERY FIGURE TRACED TO ITS SOURCE
+      </text>
+    </svg>
+  );
+}
+
+// 40 — Open Finance MCP: a comps table whose numbers each carry a citation mark.
+export function OpenFinance() {
+  const A = "#1f5fa8";
+  const rows = [["KO", "26.2", "27.3"], ["PEP", "12.6", "16.8"], ["KDP", "18.5", "29.6"], ["MNST", "—", "19.2"]];
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      <rect x="50" y="52" width="300" height="168" rx="6" fill="#ffffff" stroke="#1c1b18" strokeOpacity="0.15" />
+      {["ticker", "EV/EBITDA", "P/E"].map((h, i) => (
+        <text key={h} x={70 + i * 110} y="76" fontFamily={MONO} fontSize="9" fill="#8a8478">{h}</text>
+      ))}
+      <line x1="62" y1="86" x2="338" y2="86" stroke="#1c1b18" strokeOpacity="0.15" />
+      {rows.map((r, i) => (
+        <g key={r[0]}>
+          {r.map((c, k) => (
+            <text key={k} x={70 + k * 110} y={110 + i * 28} fontFamily={MONO} fontSize="12" fill={k === 0 ? "#1c1b18" : A}>
+              {c}
+              {k > 0 && c !== "—" && <tspan fontSize="7" dy="-6" fill="#8a8478">{` ${i * 2 + k}`}</tspan>}
+            </text>
+          ))}
+        </g>
+      ))}
+      <text x="62" y="240" fontFamily={MONO} fontSize="8" fill="#8a8478">1 us-gaap:OperatingIncomeLoss · 0000021344-26-…</text>
+      <text x="62" y="252" fontFamily={MONO} fontSize="8" fill="#8a8478">EV left empty when no debt is reported</text>
+      <text x="200" y="288" textAnchor="middle" fontFamily={MONO} fontSize="9" fill="#5a6f8a" letterSpacing="0.18em">
+        SEC XBRL · FRED · EVERY NUMBER CITED
+      </text>
+    </svg>
+  );
+}
+
+// 41 — Judge Audit: items × five votes; scattered stray errors, and one row wrong
+// on every vote (an item-locked error).
+export function JudgeAudit() {
+  const A = "#a33a5b";
+  const rnd = seeded(41);
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      <text x="70" y="50" fontFamily={MONO} fontSize="8" fill="#8a8478">vote 1 … 5</text>
+      {[...Array(8)].map((_, r) =>
+        [...Array(5)].map((_, c) => {
+          const locked = r === 5;
+          const wrong = locked || (r === 2 && c === 3) || (r === 7 && c === 1) || rnd() < 0.02;
+          return (
+            <rect key={`${r}-${c}`} x={70 + c * 22} y={60 + r * 24} width="16" height="16" rx="3"
+              fill={wrong ? A : "#1c1b18"} opacity={wrong ? 0.85 : 0.12} />
+          );
+        }),
+      )}
+      <path d="M 186 188 L 214 188" stroke={A} strokeWidth="1.4" />
+      <text x="220" y="184" fontFamily={MONO} fontSize="10" fill={A}>wrong on 5/5</text>
+      <text x="220" y="198" fontFamily={MONO} fontSize="9" fill="#1c1b18" opacity="0.6">→ check the item</text>
+      <text x="220" y="92" fontFamily={MONO} fontSize="9" fill="#1c1b18" opacity="0.6">error ICC 0.80</text>
+      <text x="220" y="108" fontFamily={MONO} fontSize="9" fill="#1c1b18" opacity="0.6">3 votes ≈ 1.2 independent</text>
+      <text x="200" y="288" textAnchor="middle" fontFamily={MONO} fontSize="9" fill="#8a5a6a" letterSpacing="0.18em">
+        ERRORS LOCKED TO ITEMS
+      </text>
+    </svg>
+  );
+}
+
+// 42 — 10-K Diff: last year's and this year's paragraphs side by side, aligned by
+// content (crossing lines), with one removed and one added.
+export function TenKDiff() {
+  const A = "#7a4fb3";
+  const left = [70, 100, 130, 160, 190];
+  const right = [70, 100, 130, 160, 190, 220];
+  const pairs = [[0, 0], [1, 2], [2, 1], [4, 3]] as const;
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      <text x="60" y="54" fontFamily={MONO} fontSize="9" fill="#8a8478">FY2024</text>
+      <text x="260" y="54" fontFamily={MONO} fontSize="9" fill="#8a8478">FY2025</text>
+      {pairs.map(([l, r]) => (
+        <path key={`${l}-${r}`} d={`M 150 ${left[l] + 8} C 200 ${left[l] + 8}, 210 ${right[r] + 8}, 258 ${right[r] + 8}`}
+          fill="none" stroke={A} strokeOpacity="0.4" strokeWidth="1.4" />
+      ))}
+      {left.map((y, i) => (
+        <g key={y}>
+          <rect x="60" y={y} width="90" height="16" rx="3" fill="#ffffff" stroke="#1c1b18" strokeOpacity={i === 3 ? 0.35 : 0.15} strokeDasharray={i === 3 ? "3 2" : undefined} />
+          <rect x="68" y={y + 6} width="64" height="4" rx="2" fill="#1c1b18" opacity={i === 3 ? 0.12 : 0.25} />
+          {i === 3 && <line x1="66" y1={y + 8} x2="144" y2={y + 8} stroke="#c0452f" strokeWidth="1.4" />}
+        </g>
+      ))}
+      {right.map((y, i) => (
+        <g key={y}>
+          <rect x="258" y={y} width="90" height="16" rx="3" fill={i === 4 || i === 5 ? "#f2eef8" : "#ffffff"} stroke={i >= 4 ? A : "#1c1b18"} strokeOpacity={i >= 4 ? 0.7 : 0.15} />
+          <rect x="266" y={y + 6} width={i === 2 ? 40 : 64} height="4" rx="2" fill={i >= 4 ? A : "#1c1b18"} opacity={i >= 4 ? 0.6 : 0.25} />
+          {i === 2 && <rect x="308" y={y + 5} width="24" height="6" rx="2" fill={A} opacity="0.45" />}
+        </g>
+      ))}
+      <text x="352" y="240" textAnchor="end" fontFamily={MONO} fontSize="8" fill={A}>+ added</text>
+      <text x="60" y="226" fontFamily={MONO} fontSize="8" fill="#c0452f">− removed</text>
+      <text x="200" y="288" textAnchor="middle" fontFamily={MONO} fontSize="9" fill="#7a6a8a" letterSpacing="0.18em">
+        ALIGN BY CONTENT, NOT POSITION
+      </text>
+    </svg>
+  );
+}
+
+// 43 — Diffusion: six 14×14 frames going from noise to a clean "7" as t → 0.
+export function Diffusion() {
+  const A = "#7fd1ff";
+  const seven = (x: number, y: number) =>
+    (y >= 3 && y <= 4 && x >= 3 && x <= 10) || (y >= 5 && y <= 11 && Math.abs(x - (10 - (y - 4) * 0.55)) < 1.2);
+  const frames = [1, 0.8, 0.6, 0.4, 0.2, 0];
+  const rnd = seeded(43);
+  const cell = 3.6;
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      {frames.map((noise, f) => {
+        const ox = 22 + f * 62;
+        return (
+          <g key={f}>
+            {[...Array(14)].map((_, y) =>
+              [...Array(14)].map((_, x) => {
+                const v = (seven(x, y) ? 1 : 0) * (1 - noise) + rnd() * noise;
+                return <rect key={`${x}-${y}`} x={ox + x * cell} y={104 + y * cell} width={cell} height={cell} fill={A} opacity={Math.max(0.04, Math.min(1, v))} />;
+              }),
+            )}
+            <text x={ox + 25} y="172" textAnchor="middle" fontFamily={MONO} fontSize="8" fill={A} opacity="0.7">
+              t={Math.round(noise * 999)}
+            </text>
+          </g>
+        );
+      })}
+      <text x="22" y="82" fontFamily={MONO} fontSize="9" fill={A} opacity="0.75">DDIM · 50 steps · v-prediction</text>
+      <text x="22" y="214" fontFamily={MONO} fontSize="9" fill={A} opacity="0.55">U-Net 152k params · gradient-checked</text>
+      <text x="200" y="288" textAnchor="middle" fontFamily={MONO} fontSize="9" fill="#6f8a9a" letterSpacing="0.18em">
+        NOISE → DIGIT · NO AUTOGRAD
+      </text>
+    </svg>
+  );
+}
+
+// 44 — Rust Backtester: strategy vs buy-and-hold on a log axis, with the
+// drawdowns underneath (holding falls further).
+export function RustBacktester() {
+  const A = "#b4532a";
+  const hold = "M 50 180 C 90 160, 110 150, 140 140 S 170 175, 190 165 S 230 120, 260 110 S 280 140, 300 100 S 340 60, 360 52";
+  const strat = "M 50 180 C 90 165, 110 158, 140 150 S 170 155, 190 152 S 230 128, 260 120 S 280 122, 300 108 S 340 82, 360 76";
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      <line x1="50" y1="40" x2="50" y2="190" stroke="#1c1b18" strokeOpacity="0.25" />
+      <line x1="50" y1="190" x2="360" y2="190" stroke="#1c1b18" strokeOpacity="0.25" />
+      <path d={hold} fill="none" stroke="#1c1b18" strokeOpacity="0.45" strokeWidth="1.6" />
+      <path d={strat} fill="none" stroke={A} strokeWidth="2" />
+      <text x="364" y="52" fontFamily={MONO} fontSize="8" fill="#1c1b18" opacity="0.6">hold</text>
+      <text x="364" y="78" fontFamily={MONO} fontSize="8" fill={A}>sma</text>
+      <path d="M 50 206 L 140 206 L 175 246 L 205 210 L 290 210 L 300 236 L 315 206 L 360 206" fill="#1c1b18" opacity="0.1" />
+      <path d="M 50 206 L 140 206 L 175 228 L 205 208 L 290 208 L 300 222 L 315 206 L 360 206" fill={A} opacity="0.3" />
+      <text x="56" y="256" fontFamily={MONO} fontSize="8" fill="#8a8478">drawdown: −55% hold · −32% walk-forward</text>
+      <text x="56" y="48" fontFamily={MONO} fontSize="8" fill="#8a8478">growth of 1 (log)</text>
+      <text x="200" y="288" textAnchor="middle" fontFamily={MONO} fontSize="9" fill="#8a7a6a" letterSpacing="0.18em">
+        NEXT-OPEN FILLS · COSTS · WALK-FORWARD
+      </text>
+    </svg>
+  );
+}

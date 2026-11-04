@@ -1,0 +1,42 @@
+---
+title: "Public-Interest Projects with Claude"
+publishedAt: "2026-11-03"
+summary: "One page connecting the benefits screener, the council digest and the nonprofit workshop around a single idea: Claude handles the language, and code checks the facts. Every figure on it traces to the README line it came from, and a live test fails if a source stops saying it."
+team:
+  - name: "Nathanael Johnson"
+    role: "Maker"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/public-interest-ai"
+tag: "Civic / Overview"
+tier: "tools"
+domains: ["Civic"]
+year: 2026
+metric: "27 figures, each checked live against its source"
+isNew: true
+---
+
+## The brief
+
+Three civic projects, three repos: a reviewer shouldn't have to piece the story together. This is
+one page with each project's audience, results, findings and limits. See it at
+[nathanaelhub.github.io/public-interest-ai](https://nathanaelhub.github.io/public-interest-ai/).
+
+## The build
+
+- **One static page** with light and dark themes and print styles.
+- **`facts.json`**: every figure on the page, with the repo, file and exact text it comes from.
+- **Three tests**: the page says every listed fact; no number appears on the page that isn't listed;
+  and, live, each source file on GitHub still contains its text. The site deploys only if all three
+  pass.
+
+## What I learned
+
+A summary page is where numbers quietly drift from their sources. Tying each one to the exact line
+it came from, and checking that line on every deploy, costs a few minutes and keeps the page honest
+as the projects change. Planting a wrong figure on the page, and a wrong quote from a source, both
+failed the tests.
+
+## Stack
+
+HTML and CSS, Python and pytest, GitHub Pages.

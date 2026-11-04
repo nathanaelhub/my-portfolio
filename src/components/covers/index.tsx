@@ -9,6 +9,8 @@ import {
   HumeVoice, Internet, Letterboxd, LineUp, Lyft, MarvelRivals, MedicareCostQuality,
   MentalHealth, Nashville, NumpyNN, OlistWarehouse, PhysicsMuseum, Portfolio,
   PTAssist, Restaurant, RustTui, Saba, WorldCup,
+  TnScreener, CouncilDigest, NonprofitWorkshop, PublicInterest, OpenFinance,
+  JudgeAudit, TenKDiff, Diffusion, RustBacktester,
 } from "./CoverArt";
 
 export interface CoverMeta {
@@ -52,6 +54,15 @@ export const coverMeta: Record<string, CoverMeta> = {
   "cpp-physics-engine": { Component: CppPhysics, tint: "#eef3f9", accent: "#d04545" },
   "medicare-cost-quality": { Component: MedicareCostQuality, tint: "#e9f4f1", accent: "#1f7a6b" },
   "worldcup-2026-predictor": { Component: WorldCup, tint: "#0b1322", accent: "#2ee6a6", dark: true },
+  "tn-benefits-screener": { Component: TnScreener, tint: "#edf5ef", accent: "#2f7d5b" },
+  "nashville-council-digest": { Component: CouncilDigest, tint: "#eef2f8", accent: "#2b4c7e" },
+  "nonprofit-ai-workshop": { Component: NonprofitWorkshop, tint: "#fbf3e4", accent: "#a0661a" },
+  "public-interest-ai": { Component: PublicInterest, tint: "#e3efef", accent: "#1d5c63" },
+  "open-finance-mcp": { Component: OpenFinance, tint: "#eef3fa", accent: "#1f5fa8" },
+  "judge-audit": { Component: JudgeAudit, tint: "#f8edf1", accent: "#a33a5b" },
+  "10k-diff": { Component: TenKDiff, tint: "#f2eef8", accent: "#7a4fb3" },
+  "diffusion-numpy": { Component: Diffusion, tint: "#15151c", accent: "#7fd1ff", dark: true },
+  "rust-backtester": { Component: RustBacktester, tint: "#f3f1ea", accent: "#b4532a" },
 };
 
 const FALLBACK_ACCENT = "#d97757";
