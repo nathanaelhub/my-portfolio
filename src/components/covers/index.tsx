@@ -11,6 +11,7 @@ import {
   PTAssist, Restaurant, RustTui, Saba, WorldCup,
   TnScreener, CouncilDigest, NonprofitWorkshop, PublicInterest, OpenFinance,
   JudgeAudit, TenKDiff, Diffusion, RustBacktester,
+  NearMe, WegoOnTime, AccessCheck, PlainBench,
 } from "./CoverArt";
 
 export interface CoverMeta {
@@ -63,6 +64,10 @@ export const coverMeta: Record<string, CoverMeta> = {
   "10k-diff": { Component: TenKDiff, tint: "#f2eef8", accent: "#7a4fb3" },
   "diffusion-numpy": { Component: Diffusion, tint: "#15151c", accent: "#7fd1ff", dark: true },
   "rust-backtester": { Component: RustBacktester, tint: "#f3f1ea", accent: "#b4532a" },
+  "nashville-near-me": { Component: NearMe, tint: "#f1f6e8", accent: "#4d7c0f" },
+  "wego-on-time": { Component: WegoOnTime, tint: "#fbf0e8", accent: "#c2571a" },
+  "access-check": { Component: AccessCheck, tint: "#ecf3f9", accent: "#1e6091" },
+  "plain-language-bench": { Component: PlainBench, tint: "#eef0f8", accent: "#44559c" },
 };
 
 const FALLBACK_ACCENT = "#d97757";

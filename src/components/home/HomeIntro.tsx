@@ -21,6 +21,7 @@ export interface HomePost {
 }
 
 interface HomeIntroProps {
+  latest?: string;
   projects: HomeProject[];
   totalCount: number;
   recentPosts: HomePost[];
@@ -129,11 +130,11 @@ function PostTeaser({ post }: { post: HomePost }) {
   );
 }
 
-export function HomeIntro({ projects, totalCount, recentPosts, totalPosts }: HomeIntroProps) {
+export function HomeIntro({ projects, latest, totalCount, recentPosts, totalPosts }: HomeIntroProps) {
   const feat = projects[0];
   const rest = projects.slice(1, 6);
   const remaining = Math.max(0, totalCount - 1 - rest.length);
-  const justShipped = projects.find((p) => p.tier === "featured") ?? projects[0];
+  const justShipped = latest ?? (projects.find((p) => p.tier === "featured") ?? projects[0])?.title;
 
   return (
     <section className={styles.page}>
@@ -143,7 +144,7 @@ export function HomeIntro({ projects, totalCount, recentPosts, totalPosts }: Hom
           {justShipped && (
             <span className={styles.pill}>
               <span className={`${styles.pillDot} ${styles.pillDotAccent}`} />
-              Just shipped — {justShipped.title}
+              Just shipped — {justShipped}
             </span>
           )}
         </div>

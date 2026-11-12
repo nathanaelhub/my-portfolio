@@ -1,0 +1,47 @@
+---
+title: "WeGo On Time"
+publishedAt: "2026-11-09"
+summary: "Are Nashville's buses on time? A collector reads WeGo's live GPS feed every 30 seconds, works out when each bus actually left each timepoint, and compares it with the published schedule, route by route, with the method and raw counts open."
+team:
+  - name: "Nathanael Johnson"
+    role: "ML Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/wego-on-time"
+tag: "Civic / Data Pipeline"
+tier: "analysis"
+domains: ["Civic", "Analysis"]
+year: 2026
+metric: "first-stop false early departures 9.7% → 2.1% · collecting since Nov 9"
+isNew: true
+---
+
+## The brief
+
+Riders know their bus is "always late", and the agency reports one systemwide number. This measures
+punctuality route by route from WeGo Public Transit's own public data, so the number can be checked
+rather than argued about. Live at
+[nathanaelhub.github.io/wego-on-time](https://nathanaelhub.github.io/wego-on-time/).
+
+## The build
+
+- **Collection**: WeGo's GTFS-Realtime vehicle positions every 30 seconds, in four GitHub Actions
+  shifts a day that commit each day's scored departures and redeploy the site.
+- **Matching**: each trip's reports are walked against its scheduled timepoints in stop order, so a
+  loop route passing the same corner twice gets the right visit.
+- **Scoring**: on time means no more than 1 minute early and 5 minutes late (the range a
+  Transportation Research Board study found most US agencies use). Results carry 95% Wilson ranges,
+  and routes or stops with fewer than 100 departures aren't ranked.
+
+## What I learned
+
+The first version said buses left up to 54 minutes early. Every one of those was traced back to its
+GPS track. Buses carry the next trip's label before the trip starts: waiting at a layover spot 83 m
+from the bay, GPS wobbling across the stop's radius, or driving empty past downtown timepoints. Two
+rules fixed it (a bus has only left once it's 300 m away, and a trip starts at its last visit to its
+first stop). False early departures from first stops fell from 9.7% to 2.1%. Findings stay
+unpublished until a few weeks of data have settled.
+
+## Stack
+
+Python, GTFS and GTFS-Realtime (protobuf), GitHub Actions, pytest, GitHub Pages.

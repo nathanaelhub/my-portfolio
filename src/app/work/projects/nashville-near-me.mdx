@@ -1,0 +1,48 @@
+---
+title: "Nashville Near Me"
+publishedAt: "2026-11-09"
+summary: "Type a Nashville address and see the rezonings, zoning appeals and building permits around it, straight from Metro Nashville's public records, with upcoming hearings first. No AI-written text: Metro's own words, on one page for one address."
+team:
+  - name: "Nathanael Johnson"
+    role: "ML Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/nashville-near-me"
+tag: "Civic / Public Data"
+tier: "production"
+domains: ["Civic", "Tools"]
+year: 2026
+metric: "4 Metro record layers · one address · no owner data requested"
+isNew: true
+---
+
+## The brief
+
+Most residents learn about a rezoning from a sign in a yard, a week before the hearing. The records
+are public, but they're spread across Metro Planning's Development Tracker, the Board of Zoning
+Appeals and Metro Codes, each with its own map. This puts them on one page for one address. Live at
+[nathanaelhub.github.io/nashville-near-me](https://nathanaelhub.github.io/nashville-near-me/), with a
+mirror on [Vercel](https://nashville-near-me.vercel.app).
+
+## The build
+
+- **Address to parcel** through Metro's parcel layer, then four public ArcGIS layers queried around
+  it: open planning cases, zoning appeals, permit applications in review and permits issued in the
+  last year.
+- **Upcoming Planning Commission and zoning-appeal hearings first**, soonest at the top, with dates
+  shown in Nashville time.
+- **Linked to the [Nashville Council Digest](https://nathanaelhub.github.io/nashville-council-digest/)**: a planning case that
+  became a council bill links to that bill's fact-checked, plain-language page.
+- **Static site, no dependencies**: plain HTML and ES modules, tested with Node's built-in test runner.
+
+## What I learned
+
+The privacy rules matter more than the features. The page never requests owner, appellant or contact
+fields from Metro's layers, and a test fails if a query asks for one. Phone numbers and emails in
+free-text permit notes are blanked, which first also blanked 10-digit permit numbers until the
+pattern required separators. And a section that's usually empty (about 50 zoning appeals a year
+countywide) needed checking to show it was the data, not a bug.
+
+## Stack
+
+JavaScript (ES modules), Metro Nashville ArcGIS REST services, Node test runner, GitHub Pages, Vercel.

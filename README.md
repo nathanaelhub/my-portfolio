@@ -1,148 +1,112 @@
-# Nathanael Johnson's Portfolio
+# Nathanael Johnson — Portfolio
 
-This is Nathanael Johnson's personal portfolio website, built on the Magic Portfolio template. It showcases his work as an Applied AI graduate student, research projects, and technical skills.
+Personal portfolio of Nathanael Johnson, an applied AI and data science engineer based in Nashville,
+originally from Saba. 48 projects, each with a case study and a link to its source, plus a blog and a
+photo gallery.
 
-**Live Site:** [nathanaelhub.github.io/my-portfolio](https://nathanaelhub.github.io/my-portfolio)
+**Live site:** [nathanaeljohnson.net](https://www.nathanaeljohnson.net)
 
-![Portfolio Homepage](public/images/portfolio-homepage.png)
+![Portfolio homepage](public/images/portfolio-homepage.jpg)
 
-## About This Portfolio
+## What's on it
 
-This portfolio features:
-- **Mental Health LLM Evaluation** - Research on bias and fairness in Large Language Models for mental health applications
-- **AI/ML Projects** - Including airline revenue optimization, F1 race prediction, portfolio optimization, and Airbnb analysis
-- **Personal Information** - About page with education, experience, and technical skills
-- **Photo Gallery** - Collection of personal photography and interests
+- **Work** (`/work`): every project, filterable by domain (Civic, Research, Production ML, Tools,
+  Systems, ML Foundations, Analysis, Healthcare, Finance, Sports) and sortable by tier, date or domain.
+  Recent highlights:
+  - **Civic tools with Claude**, built in fall 2026: a fact-checked digest of Nashville's Metro Council
+    ([Nashville Council Digest](https://nathanaelhub.github.io/nashville-council-digest/)), a cited
+    Tennessee benefits screener, an address lookup for nearby rezonings and permits
+    ([Nashville Near Me](https://nathanaelhub.github.io/nashville-near-me/)), a WeGo bus on-time
+    tracker, an accessibility report for nonprofit websites, and a benchmark of what plain-language
+    rewrites of federal letters lose ([Plain Language Bench](https://nathanaelhub.github.io/plain-language-bench/)).
+  - **LLM evaluation research**: mental health LLM bias evaluation, and judge-audit, which measures how
+    far an LLM judge's verdicts can be trusted.
+  - **ML from scratch**: a GPT, a diffusion model and backpropagation in NumPy; a C++ N-body
+    simulation; a Rust backtester.
+- **About** (`/about`): education, experience and skills.
+- **Blog** (`/blog`): six posts on ethics, statistics and data engineering.
+- **Gallery** (`/gallery`): photography.
 
-## Technical Stack
+## Stack
 
-Built with:
-- **Next.js 15.5.2** - React framework with static export for GitHub Pages
-- **Once UI** - Design system and components
-- **MDX** - Content management for projects and blog posts
-- **TypeScript** - Type-safe development
-- **GitHub Pages** - Static hosting with automated deployment
+- **Next.js 15** (App Router) with static export (`output: "export"`)
+- **Once UI** (Magic Portfolio template) and CSS modules
+- **MDX** for project case studies and blog posts
+- **TypeScript**
+- **GitHub Pages** with a custom domain, deployed by GitHub Actions
 
-## Getting Started
+## Run
 
-**1. Clone the repository**
 ```bash
 git clone https://github.com/nathanaelhub/my-portfolio.git
 cd my-portfolio
-```
-
-**2. Install dependencies**
-```bash
 npm install
+npm run dev        # → http://localhost:3000
 ```
 
-**3. Run development server**
+To check the production build (static export, so `next start` doesn't apply):
+
 ```bash
-npm run dev
+npm run build                          # writes out/
+cd out && python3 -m http.server 8000  # → http://localhost:8000/work.html
 ```
 
-**4. Build for production**
-```bash
-npm run build
-```
+## Adding a project
 
-## Configuration
+1. **Case study:** `src/app/work/projects/<slug>.mdx`, with frontmatter:
 
-### Content Configuration
-Edit personal information and content:
-```
-src/resources/content.tsx
-```
+   ```yaml
+   title: "Project Name"
+   publishedAt: "2026-11-11"
+   summary: "One or two sentences on what it is and why it matters."
+   link: "https://github.com/nathanaelhub/<repo>"
+   tag: "Civic / LLM Evaluation"
+   tier: "featured"            # featured | production | tools | analysis
+   domains: ["Civic", "Tools"] # drive the filters on /work
+   year: 2026
+   metric: "the one number that sums it up"
+   isNew: true
+   ```
 
-### Site Configuration
-Update site settings and styling:
-```
-src/resources/once-ui.config.ts
-```
+   The body follows the same four sections as the others: The brief, The build, What I learned, Stack.
 
-### Creating New Projects
-Add new project pages:
-```
-src/app/work/projects/[your-project].mdx
-```
+2. **Cover art:** an SVG component in `src/components/covers/CoverArt.tsx`, registered with its tint
+   and accent colors in `src/components/covers/index.tsx` under the same slug. A project without one
+   shows a blank cover.
 
-### Creating Blog Posts
-Add new blog posts:
-```
-src/app/blog/posts/[your-post].mdx
-```
+3. **New filter (only if needed):** filters live in `src/components/work/WorkExplorer.tsx`.
 
-## GitHub Pages Deployment
+The homepage's "Just shipped" label names the most recently published project; the top project on the
+homepage is pinned with `MARQUEE_SLUG` in `src/app/page.tsx`.
 
-This portfolio is configured for automatic deployment to GitHub Pages:
+## Other content
 
-1. **Static Export**: The site uses Next.js static export (`output: "export"`) for GitHub Pages compatibility
-2. **Base Path**: Production builds include `/my-portfolio` base path for GitHub Pages subdirectory
-3. **GitHub Actions**: Automated deployment workflow in `.github/workflows/deploy.yml`
-4. **Image Handling**: Custom image path utility for proper asset loading on GitHub Pages
+| What | Where |
+|---|---|
+| Name, role, bio, experience, social links | `src/resources/content.tsx` |
+| Theme and site settings | `src/resources/once-ui.config.ts` |
+| Blog posts | `src/app/blog/posts/<slug>.mdx` |
+| Avatar | `public/images/avatar.jpg` |
+| Gallery photos | `public/images/gallery/` |
 
-### Manual Deployment
+## Deployment
 
-To deploy manually:
-```bash
-npm run build
-git add .
-git commit -m "Update portfolio"
-git push origin main
-```
+Every push to `main` runs `.github/workflows/simple-deploy.yml`: it builds the static export, checks
+that the key pages and images are present, and deploys `out/` to GitHub Pages (about 5 minutes).
+`public/CNAME` serves the site at nathanaeljohnson.net from the root, so there's no base path. The
+other two workflows (`deploy.yml`, `custom-crawl-deploy.yml`) are older methods kept for manual use
+only.
 
-The GitHub Action will automatically build and deploy to the `gh-pages` branch.
+## Links
 
-## Image Management
+- **GitHub:** [nathanaelhub](https://github.com/nathanaelhub)
+- **LinkedIn:** [nathanaeljdjohnson](https://www.linkedin.com/in/nathanaeljdjohnson/)
+- **Medium:** [@nathanaeljdj](https://medium.com/@nathanaeljdj)
+- **X:** [@Natex07](https://x.com/Natex07)
+- **Email:** nathanaeljdj@gmail.com
 
-- **Avatar**: Replace `public/images/avatar.jpg` with your profile photo
-- **Project Images**: Add project images to `public/images/projects/[project-name]/`
-- **Gallery Images**: Add personal photos to `public/images/gallery/`
-- **Favicon**: Update `public/favicon.png` with your personal icon
+## Credits and license
 
-All images automatically include the correct base path for GitHub Pages deployment.
-
-## Project Structure
-
-```
-src/
-├── app/                 # Next.js app directory
-│   ├── about/          # About page
-│   ├── blog/           # Blog posts
-│   ├── work/           # Project showcase
-│   └── gallery/        # Photo gallery
-├── components/         # Reusable UI components
-├── resources/          # Content and configuration
-└── utils/              # Utility functions
-```
-
-## Personal Branding
-
-This portfolio represents Nathanael Johnson:
-- **Role**: Applied AI Graduate Student at Lipscomb University
-- **Location**: Saba, Netherlands Antilles
-- **Interests**: AI applications in healthcare, finance, and data science
-- **Contact**: njjohnson1@mail.lipscomb.edu
-
-## Social Links
-
-- **GitHub**: [nathanaelhub](https://github.com/nathanaelhub)
-- **LinkedIn**: [nathanaeljdjohnson](https://www.linkedin.com/in/nathanaeljdjohnson/)
-- **Medium**: [@nathanaeljdj](https://medium.com/@nathanaeljdj)
-- **Twitter**: [@Natex07](https://x.com/Natex07)
-
-## Credits
-
-Built on the Magic Portfolio template by [Once UI](https://once-ui.com) for [Next.js](https://nextjs.org).
-
-Original template creators:
-- Lorant One: [Threads](https://www.threads.net/@lorant.one) / [LinkedIn](https://www.linkedin.com/in/lorant-one/)
-
-## License
-
-This portfolio follows the CC BY-NC 4.0 License from the original Magic Portfolio template.
-- Attribution is required
-- Commercial usage is not allowed
-- Extends to [Dopler CC](https://dopler.app/license) with [Once UI Pro](https://once-ui.com/pricing) license
-
-See `LICENSE.txt` for more information.
+Built on the [Magic Portfolio](https://github.com/once-ui-system/magic-portfolio) template by
+[Once UI](https://once-ui.com), created by Lorant One. Licensed CC BY-NC 4.0, as the template is:
+attribution required, no commercial use. See `LICENSE.txt`.
