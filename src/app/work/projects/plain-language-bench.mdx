@@ -1,0 +1,51 @@
+---
+title: "Plain Language Bench"
+publishedAt: "2026-11-11"
+summary: "What gets lost when a government letter is rewritten in plain language? 18 federal notices (IRS, Medicare, VA) rewritten 8 ways by Claude, every deadline, amount, right and condition checked by a judge tested against planted errors, plus a tool that checks a rewrite before it's sent."
+team:
+  - name: "Nathanael Johnson"
+    role: "ML Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/plain-language-bench"
+tag: "Civic / LLM Evaluation"
+tier: "featured"
+domains: ["Civic", "Research", "Tools"]
+year: 2026
+metric: "grade 4 costs 6 points of critical facts vs grade 6 (95% range 2–10)"
+isNew: true
+---
+
+## The brief
+
+Nonprofits rewrite official letters for the people they serve, and reading-level scores reward
+cutting. Earlier work in this portfolio found that AI judges catch a changed number but miss a dropped
+condition. This measures what plain language costs, letter by letter. Results at
+[nathanaelhub.github.io/plain-language-bench](https://nathanaelhub.github.io/plain-language-bench/).
+
+## The build
+
+- **18 public-domain federal notices** with placeholders filled in, and 571 facts (448 a reader
+  needs to act) written to a rule and frozen by hash before any rewrite ran.
+- **Eight setups**: Haiku, Sonnet and Opus at grade 6, Sonnet at grades 4 and 8, a "keep every fact"
+  prompt, the rewrite tool, and the original letter as a control.
+- **A judge tested before it was trusted**: errors planted into real rewrites with labels set by
+  construction, pass marks set in advance, and the one error type that missed its mark (must to may,
+  6 of 9 caught) published with a warning.
+- **A rewrite tool** (`plainbench rewrite`) that extracts the letter's facts, rewrites, checks
+  every one, revises once, and reports a checklist; it caught 31 of 35 planted losses. `--redact`
+  removes Social Security, claim and case numbers and addresses before anything is sent.
+
+## What I learned
+
+At grade 6 Claude kept about 95–96% of the critical facts. Pushing to grade 4 cost 6 more points,
+and 93% of grade-4 letters lost at least one; that's the only difference clearly larger than chance.
+Bigger models, the careful prompt and the tool all scored a little better, but by less than the 4.6
+points the same setup varies between runs. The judge has limits I published next to every number: it
+agreed with only 1 of 5 subtle real changes I found by hand, such as an appeal that had to be "in
+writing". A person's blind labels on 40 items are the next check. About $26 of Claude usage in all.
+
+## Stack
+
+Python, Claude (Haiku, Sonnet, Opus through the Claude CLI), pytest, bootstrap and Wilson
+intervals, GitHub Pages.

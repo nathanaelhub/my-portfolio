@@ -2169,3 +2169,340 @@ export function RustBacktester() {
     </svg>
   );
 }
+
+// 45 — Nashville Near Me: a pin on a parcel grid, rings around it, and the
+// records found nearby tagged by kind.
+export function NearMe() {
+  const A = "#4d7c0f";
+  const rnd = seeded(45);
+  const found = [
+    [118, 92, "rezoning"],
+    [262, 104, "permit"],
+    [236, 196, "BZA"],
+    [150, 210, "permit"],
+  ] as const;
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      {[...Array(60)].map((_, i) => {
+        const x = 40 + (i % 10) * 33 + rnd() * 4;
+        const y = 40 + Math.floor(i / 10) * 33 + rnd() * 4;
+        return (
+          <rect key={i} x={x} y={y} width="27" height="27" rx="2" fill="#1c1b18" opacity="0.06" />
+        );
+      })}
+      {[46, 84, 122].map((r, i) => (
+        <circle
+          key={r}
+          cx="196"
+          cy="150"
+          r={r}
+          fill="none"
+          stroke={A}
+          strokeOpacity={0.5 - i * 0.13}
+          strokeDasharray="3 4"
+        />
+      ))}
+      {found.map(([x, y, label]) => (
+        <g key={`${x}-${y}`}>
+          <rect x={x - 6} y={y - 6} width="12" height="12" rx="2" fill={A} opacity="0.7" />
+          <rect
+            x={x + 10}
+            y={y - 9}
+            width={label.length * 6 + 10}
+            height="17"
+            rx="3"
+            fill="#ffffff"
+            stroke="#1c1b18"
+            strokeOpacity="0.15"
+          />
+          <text x={x + 15} y={y + 3} fontFamily={MONO} fontSize="9" fill="#1c1b18">
+            {label}
+          </text>
+        </g>
+      ))}
+      <path
+        d="M 196 152 C 184 136, 182 126, 182 120 A 14 14 0 1 1 210 120 C 210 126, 208 136, 196 152 Z"
+        fill={A}
+      />
+      <circle cx="196" cy="120" r="5" fill="#ffffff" />
+      <text
+        x="200"
+        y="288"
+        textAnchor="middle"
+        fontFamily={MONO}
+        fontSize="9"
+        fill="#5f7a3a"
+        letterSpacing="0.18em"
+      >
+        ONE ADDRESS · METRO&apos;S OWN RECORDS
+      </text>
+    </svg>
+  );
+}
+
+// 46 — WeGo On Time: departures along four routes, each dot placed by its delay;
+// the band from 1 minute early to 5 late is "on time".
+export function WegoOnTime() {
+  const A = "#c2571a";
+  const rnd = seeded(46);
+  const x0 = 120;
+  const perMin = 18; // px per minute of delay
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      <rect x={x0 - perMin} y="50" width={perMin * 6} height="190" fill={A} opacity="0.1" />
+      <line
+        x1={x0}
+        y1="46"
+        x2={x0}
+        y2="244"
+        stroke="#1c1b18"
+        strokeOpacity="0.3"
+        strokeDasharray="2 3"
+      />
+      <text x={x0 - perMin} y="40" fontFamily={MONO} fontSize="8" fill="#8a8478">
+        −1
+      </text>
+      <text x={x0 - 4} y="40" fontFamily={MONO} fontSize="8" fill="#8a8478">
+        0
+      </text>
+      <text x={x0 + perMin * 5 - 4} y="40" fontFamily={MONO} fontSize="8" fill="#8a8478">
+        +5 min
+      </text>
+      {["A", "B", "C", "D"].map((route, r) => (
+        <g key={route}>
+          <text x="40" y={84 + r * 46} fontFamily={MONO} fontSize="10" fill="#1c1b18">
+            route {route}
+          </text>
+          <line
+            x1={x0 - perMin * 3}
+            y1={80 + r * 46}
+            x2="372"
+            y2={80 + r * 46}
+            stroke="#1c1b18"
+            strokeOpacity="0.08"
+          />
+          {[...Array(14)].map((_, i) => {
+            const delay = -1.5 + rnd() * (4 + r * 2.2);
+            const on = delay >= -1 && delay <= 5;
+            return (
+              <circle
+                key={i}
+                cx={x0 + delay * perMin}
+                cy={80 + r * 46 + (rnd() - 0.5) * 14}
+                r="4"
+                fill={on ? A : "#1c1b18"}
+                opacity={on ? 0.75 : 0.3}
+              />
+            );
+          })}
+        </g>
+      ))}
+      <text
+        x="200"
+        y="288"
+        textAnchor="middle"
+        fontFamily={MONO}
+        fontSize="9"
+        fill="#9a6a4a"
+        letterSpacing="0.18em"
+      >
+        GPS EVERY 30 S · SCHEDULE VS ACTUAL
+      </text>
+    </svg>
+  );
+}
+
+// 47 — access-check: a web page with flagged elements, each finding turned into
+// a plain-language card, and a hand-check list below.
+export function AccessCheck() {
+  const A = "#1e6091";
+  const flags = [
+    [56, 78, 120, 14],
+    [56, 128, 60, 44],
+    [56, 196, 90, 12],
+  ] as const;
+  const cards = ["Image has no description", "Text is hard to read", "Link says only “click”"];
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      <rect
+        x="40"
+        y="44"
+        width="160"
+        height="186"
+        rx="6"
+        fill="#ffffff"
+        stroke="#1c1b18"
+        strokeOpacity="0.2"
+      />
+      <rect x="40" y="44" width="160" height="16" rx="6" fill="#1c1b18" opacity="0.07" />
+      {[0, 1, 2].map((i) => (
+        <circle key={i} cx={50 + i * 8} cy="52" r="2.4" fill="#1c1b18" opacity="0.25" />
+      ))}
+      {[100, 108, 180, 214].map((y, i) => (
+        <rect
+          key={y}
+          x={56}
+          y={y}
+          width={[128, 100, 110, 70][i]}
+          height="4"
+          rx="2"
+          fill="#1c1b18"
+          opacity="0.15"
+        />
+      ))}
+      <rect x="126" y="128" width="58" height="44" rx="2" fill="#1c1b18" opacity="0.08" />
+      {flags.map(([x, y, w, h], i) => (
+        <g key={i}>
+          <rect
+            x={x - 3}
+            y={y - 3}
+            width={w + 6}
+            height={h + 6}
+            rx="3"
+            fill="none"
+            stroke={A}
+            strokeWidth="1.5"
+            strokeDasharray="3 2"
+          />
+          <circle cx={x + w + 3} cy={y - 3} r="7" fill={A} />
+          <text
+            x={x + w + 3}
+            y={y}
+            textAnchor="middle"
+            fontFamily={MONO}
+            fontSize="8"
+            fill="#ffffff"
+          >
+            {i + 1}
+          </text>
+        </g>
+      ))}
+      {cards.map((c, i) => (
+        <g key={c} transform={`translate(218, ${52 + i * 44})`}>
+          <rect width="150" height="34" rx="5" fill="#ffffff" stroke={A} strokeOpacity="0.35" />
+          <text x="10" y="14" fontFamily={MONO} fontSize="8" fill={A}>
+            {i + 1}
+          </text>
+          <text x="22" y="14" fontFamily={MONO} fontSize="8" fill="#1c1b18">
+            {c}
+          </text>
+          <rect x="22" y="21" width={90 - i * 14} height="4" rx="2" fill="#1c1b18" opacity="0.15" />
+        </g>
+      ))}
+      {["keyboard only", "focus visible", "page titles"].map((t, i) => (
+        <g key={t} transform={`translate(218, ${196 + i * 13})`}>
+          <rect width="8" height="8" rx="1.5" fill="none" stroke="#1c1b18" strokeOpacity="0.4" />
+          <text x="14" y="7.5" fontFamily={MONO} fontSize="8" fill="#8a8478">
+            {t}
+          </text>
+        </g>
+      ))}
+      <text
+        x="200"
+        y="288"
+        textAnchor="middle"
+        fontFamily={MONO}
+        fontSize="9"
+        fill="#4a6a86"
+        letterSpacing="0.18em"
+      >
+        AXE FINDS · CLAUDE EXPLAINS · CODE CHECKS
+      </text>
+    </svg>
+  );
+}
+
+// 48 — Plain Language Bench: the original letter with its facts marked, beside
+// the rewrite, each fact traced across; one is lost.
+export function PlainBench() {
+  const A = "#44559c";
+  const rows = [70, 96, 122, 148, 174, 200];
+  const lost = 3;
+  return (
+    <svg viewBox="0 0 400 300" style={fill} aria-hidden="true">
+      <g transform="translate(0, 14)">
+        <rect
+          x="36"
+          y="44"
+          width="128"
+          height="184"
+          rx="4"
+          fill="#ffffff"
+          stroke="#1c1b18"
+          strokeOpacity="0.2"
+        />
+        <rect
+          x="236"
+          y="44"
+          width="128"
+          height="184"
+          rx="4"
+          fill="#ffffff"
+          stroke="#1c1b18"
+          strokeOpacity="0.2"
+        />
+        <text x="100" y="38" textAnchor="middle" fontFamily={MONO} fontSize="8" fill="#8a8478">
+          letter · grade 8.7
+        </text>
+        <text x="300" y="38" textAnchor="middle" fontFamily={MONO} fontSize="8" fill="#8a8478">
+          rewrite · grade 6
+        </text>
+        {rows.map((y, i) => (
+          <g key={y}>
+            <rect
+              x="48"
+              y={y - 3}
+              width={[96, 84, 104, 72, 92, 80][i]}
+              height="6"
+              rx="2"
+              fill={A}
+              opacity="0.45"
+            />
+            {i !== lost && (
+              <rect
+                x="248"
+                y={y - 3}
+                width={[70, 64, 80, 0, 66, 58][i]}
+                height="6"
+                rx="2"
+                fill={A}
+                opacity="0.45"
+              />
+            )}
+            <path
+              d={`M 166 ${y} C 196 ${y}, 206 ${y}, ${i === lost ? 214 : 234} ${y}`}
+              fill="none"
+              stroke={i === lost ? "#c0452f" : A}
+              strokeOpacity={i === lost ? 0.8 : 0.35}
+              strokeDasharray={i === lost ? "3 3" : undefined}
+            />
+            <text
+              x="356"
+              y={y + 4}
+              textAnchor="end"
+              fontFamily={MONO}
+              fontSize="10"
+              fill={i === lost ? "#c0452f" : A}
+            >
+              {i === lost ? "✕" : "✓"}
+            </text>
+          </g>
+        ))}
+        <text x="200" y="248" textAnchor="middle" fontFamily={MONO} fontSize="8" fill="#c0452f">
+          appeal within 60 days “in writing” — lost
+        </text>
+      </g>
+      <text
+        x="200"
+        y="288"
+        textAnchor="middle"
+        fontFamily={MONO}
+        fontSize="9"
+        fill="#5a6488"
+        letterSpacing="0.18em"
+      >
+        18 NOTICES · 448 CRITICAL FACTS · CHECKED
+      </text>
+    </svg>
+  );
+}

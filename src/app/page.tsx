@@ -32,6 +32,7 @@ const MARQUEE_SLUG = "mental-health-llm-evaluation";
 
 function getHomeData(): {
   selected: HomeProject[];
+  latest?: string;
   totalCount: number;
   recentPosts: HomePost[];
   totalPosts: number;
@@ -56,6 +57,12 @@ function getHomeData(): {
     })
     .slice(0, 6);
 
+  // "Just shipped" names the most recently published project, not the pinned one.
+  const latest = [...projectsRaw].sort(
+    (a, b) =>
+      new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime(),
+  )[0]?.metadata.title;
+
   const postsRaw = getPosts(["src", "app", "blog", "posts"]);
   const sortedPosts = [...postsRaw].sort(
     (a, b) =>
@@ -70,6 +77,7 @@ function getHomeData(): {
 
   return {
     selected,
+    latest,
     totalCount: projects.length,
     recentPosts,
     totalPosts: postsRaw.length,
@@ -77,7 +85,7 @@ function getHomeData(): {
 }
 
 export default function Home() {
-  const { selected, totalCount, recentPosts, totalPosts } = getHomeData();
+  const { selected, latest, totalCount, recentPosts, totalPosts } = getHomeData();
 
   return (
     <Column maxWidth="l" paddingY="12" horizontal="center" fillWidth>
@@ -97,6 +105,7 @@ export default function Home() {
 
       <HomeIntro
         projects={selected}
+        latest={latest}
         totalCount={totalCount}
         recentPosts={recentPosts}
         totalPosts={totalPosts}

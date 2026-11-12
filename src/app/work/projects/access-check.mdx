@@ -1,0 +1,47 @@
+---
+title: "access-check"
+publishedAt: "2026-11-09"
+summary: "A plain-language accessibility report for a small nonprofit's website: standard automated checks (axe-core), each problem explained by Claude for whoever edits the site, every explanation checked by code, and a ten-minute list of the checks no tool can do."
+team:
+  - name: "Nathanael Johnson"
+    role: "ML Engineer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/nathanaeljdjohnson/"
+link: "https://github.com/nathanaelhub/access-check"
+tag: "Civic / Accessibility"
+tier: "tools"
+domains: ["Civic", "Tools"]
+year: 2026
+metric: "automated checks found 26% of W3C-documented barriers, so the report says so"
+isNew: true
+---
+
+## The brief
+
+Automated accessibility checkers report problems in developer language, with a CSS selector. Small
+organizations rarely have a developer. This turns each finding into who it affects, which element on
+which page, and what to change in WordPress, Squarespace or Wix, without inventing problems the
+checker didn't find. [Sample report](https://nathanaelhub.github.io/access-check/w3c-bad-before.html)
+on W3C's deliberately inaccessible demo site.
+
+## The build
+
+- **axe-core 4.14.0**, vendored and hash-pinned, run in a real browser through Playwright on a site's
+  main pages; it respects robots.txt and checks at most 10 pages by default.
+- **Claude explains each finding**, given only that finding and its markup.
+- **Code checks every explanation**: quotes must be exact substrings of the element's markup, no WCAG
+  criterion axe didn't report, no legal claims, no color codes or menu paths, reading grade 9 or
+  below. One retry, then axe's own wording.
+- **A manual checklist** for the barriers axe can't detect, from W3C's Easy Checks.
+
+## What I learned
+
+Measured against W3C's own evaluation reports for its demo site, axe flagged 20 of 77 documented
+failures (26%) and none of the keyboard, focus or heading problems, so the report calls itself a
+starting point, not an audit. All 40 explanations passed the code checks on the first try, but reading
+them found about 8 unverifiable menu paths, an unchecked color suggestion and an overstated epilepsy
+risk. Those are now blocked by code or the prompt. Reports on real organizations stay private.
+
+## Stack
+
+Python, axe-core, Playwright, Claude (Sonnet through the Claude CLI), pytest, GitHub Pages.
